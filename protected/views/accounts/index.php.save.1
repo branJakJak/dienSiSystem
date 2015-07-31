@@ -1,0 +1,692 @@
+<?php
+/* @var $this AccountsController */
+/* @var $dataProvider CActiveDataProvider */
+
+$isInternetExlporer = false;
+if(preg_match('/(?i)msie [1-8]/',$_SERVER['HTTP_USER_AGENT']))
+{
+	$isInternetExlporer = true;
+}
+
+$dataProvider->pagination->pageSize = 100;
+
+
+
+
+$this->menu=array(
+	array('label'=>'Create Accounts', 'url'=>array('create')),
+	array('label'=>'Manage Accounts', 'url'=>array('admin')),
+);
+
+
+Yii::app()->clientScript->registerScriptFile('http://88.208.237.252/claimdatastorage/js/moment.min.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerScriptFile('http://88.208.237.252/claimdatastorage/js/daterangepicker.js', CClientScript::POS_HEAD);
+Yii::app()->clientScript->registerCssFile('http://88.208.237.252/claimdatastorage/css/daterangepicker-bs2.css');
+
+
+
+
+
+/*refresh content every 10 seconds*/
+$pingerScript = <<<EOL1
+window.pingRefreshrate = 10000;//
+var pingrefresh = window.setInterval(function(){
+  $.fn.yiiListView.update('yw0');//@
+  updateWebsiteStatus();
+}, window.pingRefreshrate);
+EOL1;
+Yii::app()->clientScript->registerScript("pingerScript", $pingerScript, CClientScript::POS_READY);
+
+
+
+/*date range javascript code*/
+$dateRangeField = <<<EOL
+if (jQuery("#dateRangeField").size()) {
+	jQuery('#dateRangeField').daterangepicker(
+		{
+			format: 'MM/DD/YYYY h:mm A'
+		}, 
+		function(start, end, label) {
+			jQuery("#dateFrom").val(start.format('MM/DD/YYYY'));
+			jQuery("#dateTo").val(end.format('MM/DD/YYYY'));
+			jQuery("#dateRangeField").val(start.format('MM/DD/YYYY')+' - '+end.format('MM/DD/YYYY'));
+		}
+	);
+}
+EOL;
+Yii::app()->clientScript->registerScript($dateRangeField, $dateRangeField, CClientScript::POS_READY);
+
+
+
+/*update account ID field value*/
+$updateAccountIDScript = <<<EOL
+jQuery(".rangeButton").live('click',function(e){
+	var accountID = jQuery(this).data("accountid");
+	console.log(accountID);
+	jQuery("#inputAccountID").val(accountID);
+
+});
+EOL;
+Yii::app()->clientScript->registerScript('updateAccountIDScript', $updateAccountIDScript, CClientScript::POS_READY);
+
+
+
+
+/*add update form script*/
+$updateAjaxFormScript = <<<EOL
+jQuery("#settingsForm").submit(function(event) {
+	jQuery("#submitButtonSettings").button("loading");
+	var formData = jQuery("#settingsForm").serialize();
+
+	jQuery.post('http://claimdatastorage.ezfastloans4u.com/claimsettings/updateAjax', formData, function(data, textStatus, xhr){
+	jQuery.post('/claimdatastorage/claimsettings/updateAjax', formData, function(data, textStatus, xhr){
+
+	  	if (data.type == 'success') {
+	  		/*show settingsFormAlertSuccess*/
+	  		jQuery("#settingsFormAlertSuccess").removeClass('hidden');
+	  		/*hide settingsFormAlert*/
+	  		jQuery("#settingsFormAlert").addClass('hidden');
+	  		/*add message*/
+	  		jQuery("#successMessage").text(data.message);
+	  	}else{
+	  		/*hide settingsFormAlertSuccess*/
+	  		jQuery("#settingsFormAlertSuccess").addClass('hidden');
+	  		/*show settingsFormAlert*/
+	  		jQuery("#settingsFormAlert").removeClass('hidden');
+	  		/*add message*/
+	  		jQuery("#errorMessage").text(data.message);  		
+	  	}
+	  	jQuery("#submitButtonSettings").button("reset");
+	});
+	event.preventDefault();
+	});
+});
+EOL;
+Yii::app()->clientScript->registerScript('updateAjaxFormScript', $updateAjaxFormScript, CClientScript::POS_READY);
+
+
+
+
+$loadSettings = <<<EOL
+/*Finds all settings of these accountID*/
+function loadSettings(accountID) {
+	  jQuery("input[name='settingsUsername']").val("");
+      jQuery("input[name='settingsPassword']").val("");
+
+      /*change placeholder*/
+   	  jQuery("input[name='settingsUsername']").attr("placeholder","Loading username...");
+      jQuery("input[name='settingsPassword']").attr("placeholder","Loading password...");
+
+
+	jQuery.get('/claimdatastorage/claimsettings/getSettings', {'accountID': accountID}, function(data, textStatus, xhr) {
+		/*iterate through data*/
+
+	  if (data.type == 'success') {
+	  	console.log(data);
+	  	if(   data.data[0]  ) {
+	  		jQuery('input[name="canExport"][value="'+data.data[0].settings_val+'"]').click();
+	  	}
+	  	/*set username and password*/
+	  	if(   data.data[1] && data.data[1]['settings_key']  && data.data[1]['settings_key'] == "exportUsername") {
+
+	  		jQuery("input[name='settingsUsername']").attr('disabled',null);
+	  		jQuery("input[name='settingsUsername']").val(data.data[1].settings_val);
+	  	}else if(   data.data[2] && data.data[2]['settings_key']  && data.data[2]['settings_key'] == "exportUsername") {
+	  		jQuery("input[name='settingsUsername']").attr('disabled',null);
+	  		jQuery("input[name='settingsUsername']").val(data.data[2].settings_val);
+	  	}
+	  	if(  data.data[2] && data.data[2]['settings_key'] && data.data[2]['settings_key'] == "exportPassword" ) {
+	  		jQuery("input[name='settingsPassword']").attr('disabled',null);
+	  		jQuery("input[name='settingsPassword']").val(data.data[2].settings_val);
+	  	}else if(  data.data[3] && data.data[3]['settings_key'] && data.data[3]['settings_key'] == "exportPassword" ) {
+	  		jQuery("input[name='settingsPassword']").attr('disabled',null);
+	  		jQuery("input[name='settingsPassword']").val(data.data[3].settings_val);
+	  	}
+	  }else if (data.type == 'error') {
+        jQuery("input[name='settingsUsername']").attr("placeholder","no settings specified");
+        jQuery("input[name='settingsPassword']").attr("placeholder","no settings specified");
+
+	  	console.log(data.message);
+	  }
+	});
+}
+EOL;
+Yii::app()->clientScript->registerScript('loadSettings', $loadSettings, CClientScript::POS_END);
+
+
+
+
+
+/* AUTOMATICALLY RELOADS the content of currenttly loaded live stat*/
+$autoRefreshLiveStats = <<<EOL
+function updateCurrentReport(){
+		jQuery.post('/claimsettings/analyticsCode', {"accountID": window.selectedAccountID}, function(data, textStatus, xhr) {
+			jQuery("#liveStatsModal .modal-body").html(data);// append the result
+			// jQuery("#liveStatsModal .modal-body div:first").remove(); //remove first 
+			// jQuery("#liveStatsModal .modal-body div:gt(0)").addClass('hidden');// hide the rest
+			// jQuery("#liveStatsModal .modal-body div:first").removeClass("hidden"); // show only first
+			// jQuery("#liveStatsModal .modal-body div:last").addClass('hidden')//hide last content
+		});
+}
+/*prepare auto update interval*/
+function initializeUpdateCurrentReportInterval(){
+	window.updateCurrentReportInterval = window.setInterval(  updateCurrentReport , 20000 ); /*refresh every 5 seconds*/
+}
+EOL;
+Yii::app()->clientScript->registerScript('autoRefreshLiveStats', $autoRefreshLiveStats, CClientScript::POS_READY);
+
+
+
+
+/*LOAD live stats script for every accounts on click*/
+$liveStatHandler = <<<EOL
+jQuery(".liveStatsModalButton").live('click', function(event) {
+		/* clear that interval*/
+		clearInterval(window.updateCurrentReportInterval);
+
+
+
+		var accountID = jQuery(this).data()['accountid'];
+		window.selectedAccountID = accountID;
+		/*get the accountname of these accountid*/
+		accountName = "";
+		$.each(window.accountMap, function(index, val) {
+			if (val[accountID]) {
+				accountName = val[accountID];
+				jQuery("#currentLivestatAccountName").html(accountName);
+			}
+		});
+		console.log(accountName);		
+		jQuery("#liveStatsModal .modal-body").html("<h1>Loading...</h1>");
+
+		/*request for the analyticsCode of the current account*/
+		jQuery.post('/claimsettings/analyticsCode', {"accountID": accountID}, function(data, textStatus, xhr) {
+			jQuery("#liveStatsModal .modal-body").html(data);
+		});
+
+		// for (var i = 0; i < 3; i++) {
+		// 	jQuery.post('/claimsettings/analyticsCode', {"accountID": accountID}, function(data, textStatus, xhr) {
+		// 		jQuery("#liveStatsModal .modal-body").append(data);
+		// 		/*then hide the rest*/
+		// 		jQuery("#liveStatsModal .modal-body div:gt(0)").addClass('hidden');
+		// 	});
+		// };
+
+		/*initlialize / re initialize*/
+		initializeUpdateCurrentReportInterval();
+
+});
+EOL;
+Yii::app()->clientScript->registerScript('liveStatHandler', $liveStatHandler, CClientScript::POS_READY);
+
+
+
+
+
+/*removed site checker*/
+/* javascript function for site checking  */
+//$siteCheckerFunc = <<<EOL
+//function siteChecker (currentElement) {
+//	var hostname = currentElement.attr('href');
+//	jQuery.ajax({
+//	  url: '/site/checker',
+//	  type: 'GET',
+//	  dataType: 'json',
+//	  data: {"website": hostname},
+//	  success: function(data, textStatus, xhr) {
+//	  	if (data.status == "online") {
+//	  		currentElement.parent().find('.site-availability-indicator').removeClass("site-offline").addClass("site-online");
+//	  	}else if(data.status == "offline"){
+//	  		currentElement.parent().find('.site-availability-indicator').removeClass("site-online").addClass("site-offline");
+//	  	}else{
+//	  		console.log("ajax error");
+//	  		console.log(xhr);
+//	  	}
+//  		console.log(data);
+//	  },
+//	  error: function(xhr, textStatus, errorThrown) {
+//	  	console.log('network failure');
+//	     console.log(xhr);
+//	  }
+//	});
+//}
+//
+//EOL;
+//Yii::app()->clientScript->registerScript('siteCheckerFunc', $siteCheckerFunc, CClientScript::POS_END);
+
+
+$getClaimReporturl = $this->createAbsoluteUrl("records/getClaimReport");
+$updateClaimReportScript = <<<EOL
+//updates the claim report 
+function  updateClaimReport(currentElement) {
+	var hostname = currentElement.attr('href');
+	jQuery.ajax({
+	  url: '$getClaimReporturl',
+	  type: 'POST',
+	  dataType: 'json',
+	  data: {
+	  	'hostname': hostname
+	  },
+	  complete: function(xhr, textStatus) {
+	    //called when complete
+	  },
+	  success: function(data, textStatus, xhr) {
+	    if (data.success) {
+	    	currentElement.parent().parent().find(".totalNumofEntriesToday").html(data.totalEntriesToday);
+	    	currentElement.parent().parent().find(".totalEntriesThisWeek").html(data.totalTheseWeek);
+	    	currentElement.parent().parent().find(".totalNumberOfEntries").html(data.totalNumEntries);
+	    }else{
+	    	console.log("something went wrong on data sync");
+	    	console.log(data);
+	    	console.log(textStatus);
+	    	console.log(xhr);
+	    }
+	  },
+	  error: function(xhr, textStatus, errorThrown) {
+	    //called when there is an error
+	  }
+	});
+}
+EOL;
+Yii::app()->clientScript->registerScript('updateClaimReportScript', $updateClaimReportScript, CClientScript::POS_END);
+
+
+/* update website status and claim report */
+$updateWebsiteStatusScript = <<<EOL
+function updateWebsiteStatus(){
+	jQuery("#yw0 > div.items > div > h3 > a").each(function(index, el) {
+		var currentElement = jQuery(el);
+		//siteChecker(currentElement);//disable site checker , transfered to cron job
+		//updateClaimReport(currentElement);
+	});
+}
+EOL;
+Yii::app()->clientScript->registerScript('updateWebsiteStatusScript', $updateWebsiteStatusScript, CClientScript::POS_END);
+
+
+
+
+/*total number of online sites*/
+$criteria = new CDbCriteria;
+$criteria->compare("application_status" , Accounts::OK);
+$numOfOnlineSites = Accounts::model()->count($criteria);
+
+
+/*total number of offline sites*/
+$criteria2 = new CDbCriteria;
+$criteria2->compare("application_status" , Accounts::ERROR);
+$numOfOfflineSites = Accounts::model()->count($criteria2);
+
+// var_dump($numOfOfflineSites);
+// var_dump($numOfOnlineSites);
+// die();
+
+$numOfOnlineSitesPercent =  $numOfOnlineSites / ($numOfOnlineSites + $numOfOfflineSites);
+$numOfOfflineSitesPercent = $numOfOfflineSites / ($numOfOnlineSites + $numOfOfflineSites);
+
+$websiteAvailabilityScript = <<<EOL
+ var data = [
+		    { label: "$numOfOnlineSites ONLINE site(s)",  data: $numOfOnlineSitesPercent, color: "#88bbc8"},
+		    { label: "$numOfOfflineSites OFFLINE site(s)",  data: $numOfOfflineSitesPercent, color: "#ed7a53"}
+		];
+
+		
+		$.plot(
+			$(".websiteAvailability"), 
+			data, 
+			{
+				series: {
+					pie: { 
+						show: true,
+						highlight: {
+							opacity: 0.1
+						},
+						stroke: {
+							color: '#fff',
+							width: 3
+						},
+						startAngle: 2,
+						label: {
+							radius:1
+						}
+					},
+					grow: {	active: false}
+				},
+				legend: { 
+		        	position: "ne", 
+		        	labelBoxBorderColor: null
+		    	},
+				grid: {
+		            hoverable: true,
+		            clickable: true
+		        },
+		        tooltip: true, //activate tooltip
+				tooltipOpts: {
+					content: "%s : %y.1",
+					shifts: {
+						x: -30,
+						y: -50
+					}
+				}
+		});
+EOL;
+Yii::app()->clientScript->registerScript('websiteAvailabilityScript', $websiteAvailabilityScript, CClientScript::POS_READY);
+
+
+?>
+
+
+
+
+
+<script type="text/javascript">
+<?php 
+		$allaccounts = Accounts::model()->findAll(); 
+		echo "window.accountMap = [";
+		$javascriptmapstr = "";
+			foreach ($allaccounts as $currentAccount) {
+				$javascriptmapstr .= "{\"$currentAccount->account_id\" : \"$currentAccount->claimAccountName\"},";
+			}
+		ltrim($javascriptmapstr,",");
+		echo $javascriptmapstr."]";
+?>
+</script>
+
+
+
+
+
+
+
+<div class="modal fade" id="liveStatsModal" style="width: 700px;left: 600px;">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">&times;</a>
+		<h3>Live Visit Statistics : <strong id="currentLivestatAccountName"></strong></h3>
+	</div>
+	<div class="modal-body">
+
+		<h1>Loading...</h1>
+
+
+	</div>
+	<div class="modal-footer">
+		<a data-loading-text="Loading..." href="#" class="btn" data-dismiss="modal">Close</a>
+	</div>
+</div>
+
+
+<div class="row-fluid">
+
+
+	<div class="span6">
+		<?php
+			$this->beginWidget('zii.widgets.CPortlet', array(
+				'title'=>'<i class="fa fa-cut"></i> DNC module',
+			));
+		?>
+		<div class="summary">
+          <ul>
+          	<li style="margin: 25px 0px;">
+          		<span class="summary-icon">
+          			<h2 style="margin-top: 1px;margin-left: 6px;">
+          				<i class="fa fa-plus"></i>
+          			</h2>
+                </span>
+                <a href="<?php echo $this->createUrl('/blacklist/default') ?>">
+	                <span class="summary-number">Add DNC</span>
+	                <span class="summary-title"> Add records to DNC</span>
+                </a>
+            </li>
+            <li style="margin: 35px 0px;">
+            	<span class="summary-icon">
+          			<h2 style="margin-top: 0px;margin-left: 4px;">
+          				<i class="fa fa-cut"></i>
+          			</h2>
+                </span>
+                <a href="<?php echo $this->createUrl('/whitelist/default') ?>">
+	                <span class="summary-number">
+	                	De-dupe Records
+	                </span>
+	                <span class="summary-title">De duplicate records againts DNC record</span>
+                </a>
+            </li>
+          </ul>
+        </div>
+		<?php
+			$this->endWidget();
+		?>		
+	</div>
+	<div class="span6">
+nWidget('zii.widgets.CPortlet', array(
+				'title'=>'<i class="fa fa-download"></i> Export Claim Module',
+			));
+		?>
+		<div class="summary">
+          <ul>
+          	<li>
+          		<span class="summary-icon">
+          			<h2 style="margin-top: 1px;margin-left: 6px;">
+          				<i class="fa fa-arrow-circle-o-down"></i>
+          			</h2>
+                </span>
+                <a href="<?php echo $this->createUrl('/export/exportpi') ?>">
+	                <span class="summary-number">Export PI</span>
+	                <span class="summary-title"> Export all personal injury sites</span>
+                </a>
+            </li>
+            <li>
+            	<span class="summary-icon">
+          			<h2 style="margin-top: 0px;margin-left: 4px;">
+          				<i class="fa fa-arrow-circle-o-down"></i>
+          			</h2>
+                </span>
+                <a href="<?php echo $this->createUrl('/export/exportAllData') ?>">
+	                <span class="summary-number">
+	                	Export All
+	                </span>
+	                <span class="summary-title">Exports all claims</span>
+                </a>
+            </li>            
+            <li>
+            	<span class="summary-icon">
+          			<h2 style="margin-top: 0px;margin-left: 4px;">
+          				<i class="fa fa-arrow-circle-o-down"></i>
+          			</h2>
+                </span>
+                <a href="<?php echo $this->createUrl('/export/allMobile') ?>">
+	                <span class="summary-number">
+	                	Export All Mobile
+	                </span>
+	                <span class="summary-title">Exports all claims</span>
+                </a>
+            </li>
+          </ul>
+        </div>
+		<?php
+			$this->endWidget();
+		?>
+	</div>
+</div>
+
+
+<!-- middle panel -->
+<div class="row-fluid">
+	<div class="span12">
+	<?php
+		$this->beginWidget('zii.widgets.CPortlet', array(
+			'title'=>'<h4><i class="fa fa-dot-circle-o"></i> Duplicate IP Summary</h4>',
+		));
+	?>
+		<div class="span4 offset1">
+			<h3>
+				<i class="fa fa-calendar-o"></i>
+				Submitted Today 
+				<span class="badge badge-info" style="padding: 3px 7px;">
+					<?php echo number_format( DuplicateSummaryUtility::getTotalNum("DIPSubmittedToday")   ) ?>
+				</span>
+				<br>
+				<small>
+					Total number of duplicate records submitted today
+				</small>
+			</h3>
+		</div>
+		<div class="span4 ">
+			<h3>
+				<i class="fa fa-calendar"></i>
+				Total This Week
+				<span class="badge badge-info" style="padding: 3px 7px;">
+					<?php echo number_format( DuplicateSummaryUtility::getTotalNum("DIPThisWeek")   ) ?>
+				</span>
+				<br>
+				<small>
+					Total number of duplicate records submitted this week
+				</small>
+			</h3>
+		</div>
+		<div class="span3 ">
+			<h3>
+				<i class="fa fa-history"></i>
+				Total Entries
+				<span class="badge badge-info" style="padding: 3px 7px;">
+					<?php echo number_format( DuplicateSummaryUtility::getTotalNum("DIPAll")   ) ?>
+				</span>
+				<br>
+				<small>
+					Total number of duplicate records submitted
+				</small>
+
+			</h3>
+		</div>
+		<div class="clearfix"></div>
+	<?php
+		$this->endWidget();
+	?>
+	</div>
+</div>
+
+<hr>
+
+<!-- end of middle panel -->
+
+
+<div class="modal fade hide" id="myModal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">&times;</a>
+		<h3>Search : Date Range</h3>
+	</div>
+	<div class="modal-body">
+		<p>
+			<?php echo CHtml::beginForm(array('export/range'), 'post'); ?>
+			<?php if ($isInternetExlporer): ?>
+				<label>Date From</label>
+				<?php 
+					$this->widget('zii.widgets.jui.CJuiDatePicker',
+						array(
+							'name'=>'dateFrom',
+							'options' => array(
+								'dateFormat'=>'mm/dd/yy',
+								'changeMonth' => 'true',
+								'changeYear' => 'true',
+							),
+						)
+					);
+				?>
+
+				<label>Date To</label>
+				<?php 
+					$this->widget('zii.widgets.jui.CJuiDatePicker',
+						array(
+							'name'=>'dateTo',
+							'options' => array(
+								'dateFormat'=>'mm/dd/yy',
+								'changeMonth' => 'true',
+								'changeYear' => 'true',
+							),
+						)
+					);
+				?>
+				<input type="hidden" name="accountID" id="inputAccountID" class="form-control" value="">
+			<?php endif ?>
+			<?php if (!$isInternetExlporer): ?>
+				<label>Date From - To</label>
+				<div class="input-prepend input-group">
+					<span class="add-on input-group-addon"><i class="icon icon-calendar"></i></span><input type="text" style="width: 200px" name="tempDate" id="dateRangeField" class="form-control" placeholder="mm/dd/yyyy - mm/dd/yyyy"> 
+				</div>
+
+				<input type="hidden" name="dateFrom" id="dateFrom" class="form-control" value="">
+				<input type="hidden" name="dateTo" id="dateTo" class="form-control" value=""><br>
+				<input type="hidden" name="accountID" id="inputAccountID" class="form-control" value="">
+			<?php endif ?>
+			
+			<button id='' type="submit" class="btn btn-primary">Submit</button>
+			<?php echo CHtml::endForm(); ?>
+
+		</p>
+	</div>
+	<div class="modal-footer">
+		<a href="#" class="btn"  data-dismiss="modal">Close</a>
+	</div>
+</div>
+
+
+
+
+
+<!-- Settings modal -->
+<div class="modal fade hide" id="settingsModal">
+	<div class="modal-header">
+		<a class="close" data-dismiss="modal">&times;</a>
+		<h3> Setting </h3>
+	</div>
+	<div class="modal-body">
+		<p>
+			<form action="" method="POST" role="form" id='settingsForm'>
+				<div class="row">
+					<div class="hidden alert alert-success span5" id="settingsFormAlertSuccess">
+						<!-- <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> -->
+						<strong>Success!</strong> <p id='successMessage'></p>
+					</div>
+					<div class="hidden alert alert-warning span5" id="settingsFormAlert">
+						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+						<strong>Error!</strong>	<p id='errorMessage'></p>
+					</div>
+
+
+					<table class="span4">
+						<tr>
+							<td style="width: 150px;"><label for="">Export Page</label></td>
+							<td style="width: 100px;"></td>
+							<td>
+								<input value="yes" name="canExport" type="radio" class="form-control" id="">Enable
+								<input value="no" name="canExport" type="radio" class="form-control" id="">Disable
+							</td>
+						</tr>
+						<tr>
+							<td style="width: 150px;">Username : </td>
+							<td style="width: 100px;"></td>
+							<td> <input type='text' placeholder='Username @TODO' name='settingsUsername'>   </td>
+						</tr>
+						<tr>
+							<td style="width: 150px;">Password : </td>
+							<td style="width: 100px;"></td>
+							<td> <input type='text' placeholder='Password  @TODO' name='settingsPassword'>   </td>
+						</tr>
+					</table>
+					<input type="hidden" name="accountID" id="settingsAccountID" class="form-control" >
+					<div class="row">
+						<div class="span3"></div>
+						<div class="span3">
+							<button data-loading-text="Updating...." id='submitButtonSettings' type="submit" class="btn btn-primary span2">Submit</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</p>
+	</div>
+	<div class="modal-footer">
+		<a data-dismiss="modal" href="#" class="btn">Close</a>
+	</div>
+</div>
+
+
+

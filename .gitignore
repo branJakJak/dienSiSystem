@@ -1,0 +1,17 @@
+protected/runtime/*
+protected/data/*
+!assets/.gitignore
+assets/*
+!protected/runtime/.gitignore
+*.bat
+protected/data/*
+.idea/
+protedted/uploaded_files/*
+error_log
+.phpintel/
+*.tmp
+netbeans
+.netbeans
+/nbproject/private/
+ip/*
+ip

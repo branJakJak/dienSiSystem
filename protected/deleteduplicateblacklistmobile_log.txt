@@ -1,0 +1,14 @@
+exception 'CDbException' with message 'CDbCommand failed to execute the SQL statement: SQLSTATE[HY093]: Invalid parameter number: number of bound variables does not match number of tokens. The SQL statement executed was: SELECT * FROM `black_listed_mobile` `t` WHERE (mobile_number=:ycp0) AND (rec_id != :rec_id)' in /home/server5/yii/framework/db/CDbCommand.php:543
+Stack trace:
+#0 /home/server5/yii/framework/db/CDbCommand.php(396): CDbCommand->queryInternal('fetchAll', Array, Array)
+#1 /home/server5/yii/framework/db/ar/CActiveRecord.php(1351): CDbCommand->queryAll()
+#2 /home/server5/yii/framework/db/ar/CActiveRecord.php(1470): CActiveRecord->query(Object(CDbCriteria), true)
+#3 /home/server5/public_html/claimdatastorage/protected/commands/DeleteDuplicateBlacklistMobileCommand.php(18): CActiveRecord->findAll(Object(CDbCriteria))
+#4 [internal function]: DeleteDuplicateBlacklistMobileCommand->actionIndex()
+#5 /home/server5/yii/framework/console/CConsoleCommand.php(172): ReflectionMethod->invokeArgs(Object(DeleteDuplicateBlacklistMobileCommand), Array)
+#6 /home/server5/yii/framework/console/CConsoleCommandRunner.php(71): CConsoleCommand->run(Array)
+#7 /home/server5/yii/framework/console/CConsoleApplication.php(92): CConsoleCommandRunner->run(Array)
+#8 /home/server5/yii/framework/base/CApplication.php(180): CConsoleApplication->processRequest()
+#9 /home/server5/yii/framework/yiic.php(33): CApplication->run()
+#10 /home/server5/public_html/claimdatastorage/protected/yiic.php(8): require_once('/home/server5/y...')
+#11 {main}
