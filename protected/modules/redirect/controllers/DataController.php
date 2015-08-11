@@ -8,8 +8,8 @@ class DataController extends CController
 	{
 		Yii::import('application.modules.dnc.components.*');
 		$jsonMessage = array();
-		if ( (  isset($_GET['status']) && !empty($_GET['status'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
-			$status = $_GET['status'];
+		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
+			$status = $_GET['dispo'];
 			$status = strtolower($status);
 			$phone_number = $_GET['phone_number'];
 			if ( $status == 'dnc' ) {
