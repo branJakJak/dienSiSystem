@@ -229,10 +229,10 @@ $totalBlackListedCount += intval($sundayCount);
                     array('name' => 'rec_id', 'header' => '#'),
                     array('name' => 'mobile_number', 'header' => 'Mobile Number'),
                     array('name' => 'date_created', 'header' => 'Date Submitted'),
-                    array(
-                        'class' => 'bootstrap.widgets.TbButtonColumn',
-                        'htmlOptions' => array('style' => 'width: 50px'),
-                    ),
+//                    array(
+//                        'class' => 'bootstrap.widgets.TbButtonColumn',
+//                        'htmlOptions' => array('style' => 'width: 50px'),
+//                    ),
                 ),
             ));
 
