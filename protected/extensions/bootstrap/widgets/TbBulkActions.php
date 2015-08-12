@@ -8,15 +8,15 @@
  */
 
 Yii::import('zii.widgets.grid.CCheckBoxColumn');
-Yii::import('booster.widgets.TbButton');
+Yii::import('bootstrap.widgets.TbButton');
 
 /**
  * Bulk actions widget.
  *
  * @package booster.widgets.grids.columns
  */
-class TbBulkActions extends CComponent {
-	
+class TbBulkActions extends CComponent
+{
     /**
      * @var TbGridView The grid view object that owns this column.
      */
@@ -29,7 +29,7 @@ class TbBulkActions extends CComponent {
      * <pre>
      * 'actions' => array(
      *      array(
-     *          'context'=> 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+     *          'type'=> 'primary', // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
      *          'size'=> 'large', // '', 'large', 'small', 'mini'
      *          'label'=>'...',     // text label of the button or dropdown label
      *          'click'=> // the js function that will be called
@@ -48,6 +48,11 @@ class TbBulkActions extends CComponent {
      */
     public $checkBoxColumnConfig = array();
     
+    /**
+     * @var bool
+     */
+    public $selectableRows;
+	
 	/**
 	 * @var string
 	 */
@@ -77,14 +82,14 @@ class TbBulkActions extends CComponent {
      *
      * @return string id of the widget.
      */
-    public function getId($autoGenerate = true) {
-    	
+    public function getId($autoGenerate = true)
+    {
         if ($this->_id !== null) {
             return $this->_id;
         } else if ($autoGenerate) {
             return $this->_id = 'egw' . self::$_counter++;
         } else {
-	        return ''; // why getId can sometimes return nothing ? because it is used in the jquery selector, so null is not an acceptable value 
+	        return ''; // FIXME: why getId can sometimes return nothing?!
         }
     }
 
@@ -110,8 +115,8 @@ class TbBulkActions extends CComponent {
      *
      * @param CGridView $grid the grid view that owns this column.
      */
-    public function __construct($grid) {
-    	
+    public function __construct($grid)
+    {
         $this->grid = $grid;
     }
 
@@ -120,8 +125,8 @@ class TbBulkActions extends CComponent {
      *
      * Component's initialization method
      */
-    public function init() {
-    	
+    public function init()
+    {
         $this->align = $this->align == 'left' ? 'pull-left' : 'pull-right';
         $this->initColumn();
         $this->initButtons();
@@ -132,8 +137,8 @@ class TbBulkActions extends CComponent {
      *
      * @return bool checks whether they are
      */
-    public function initColumn() {
-    	
+    public function initColumn()
+    {
         if (!is_array($this->checkBoxColumnConfig)) {
             $this->checkBoxColumnConfig = array();
         }
@@ -170,8 +175,8 @@ class TbBulkActions extends CComponent {
      *
      * initializes the buttons to be render
      */
-    public function initButtons() {
-    	
+    public function initButtons()
+    {
         if (empty($this->columnName) || empty($this->actionButtons))
             return;
 
@@ -185,8 +190,8 @@ class TbBulkActions extends CComponent {
      *
      * @return bool renders all initialized buttons
      */
-    public function renderButtons() {
-    	
+    public function renderButtons()
+    {
         if ($this->buttons === array())
             return false;
 
@@ -198,7 +203,8 @@ class TbBulkActions extends CComponent {
         foreach ($this->buttons as $actionButton)
             $this->renderButton($actionButton);
 
-        echo '<div style="position:absolute;top:0;left:0;height:100%;width:100%;display:block;" class="bulk-actions-blocker"></div>';
+        if (!$this->selectableRows)
+            echo '<div style="position:absolute;top:0;left:0;height:100%;width:100%;display:block;" class="bulk-actions-blocker"></div>';
 
         echo CHtml::closeTag('div');
 
@@ -211,24 +217,39 @@ class TbBulkActions extends CComponent {
      *
      * Registers client script
      */
-    public function registerClientScript() {
-		$id = $this->grid->id;
+    public function registerClientScript()
+    {
+       
         $js = '';
-        $js .= "$.fn.yiiGridView.initBulkActions('{$id}');";
+        if(!$this->selectableRows)
+        {
+        $js .= <<<EOD
+$(document).on("click", "#{$this->grid->id} input[type=checkbox]", function(){
+	var grid = $("#{$this->grid->id}");
+	if ($("input[name='{$this->columnName}']:checked", grid).length)
+	{
 
+		$(".bulk-actions-btn", grid).removeClass("disabled");
+		$("div.bulk-actions-blocker",grid).hide();
+	}
+	else
+	{
+		$(".bulk-actions-btn", grid).addClass("disabled");
+		$("div.bulk-actions-blocker",grid).show();
+	}
+});
+EOD;
+}
         foreach ($this->events as $buttonId => $handler) {
-            $js .= "\n
-            $(document).on('click','#{$buttonId}', function() {
-	            var checked = $.fn.yiiGridView.getCheckedRowsIds('$id');
-	            if (!checked.length) {
-	                alert('".$this->noCheckedMessage."');
-	                return false;
-	            }
-				var fn = $handler;
-	            if ($.isFunction(fn)){ fn(checked); } \n
-	            return false;
-        	}); \n
-            ";
+            $js .= "\n$(document).on('click','#{$buttonId}', function(){
+            var grid = $(\"#{$this->grid->id}\");
+            if (!$(\"input[name='{$this->columnName}']:checked\", grid).length)
+            {
+                alert('".$this->noCheckedMessage."');
+                return false;
+            }
+            var checked = $('input[name=\"{$this->columnName}\"]:checked');\n
+			var fn = $handler; if ($.isFunction(fn)){fn(checked);}\nreturn false;});\n";
         }
         Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $this->getId(), $js);
     }
@@ -240,14 +261,17 @@ class TbBulkActions extends CComponent {
      *
      * @param array $actionButton the configuration to create the TbButton
      */
-    protected function renderButton($actionButton) {
-    	
-    	if (isset($actionButton['htmlOptions']['class']))
+    protected function renderButton($actionButton)
+    {
+        // create widget and display
+        if (isset($actionButton['htmlOptions']['class']) && !$this->selectableRows)
             $actionButton['htmlOptions']['class'] .= ' disabled bulk-actions-btn';
+        elseif (isset($actionButton['htmlOptions']['class']) && $this->selectableRows)
+            $actionButton['htmlOptions']['class'] .= 'bulk-actions-btn';
         else
             $actionButton['htmlOptions']['class'] = 'disabled bulk-actions-btn';
-        
-        $action = null;
+            $action = null;
+
         if (isset($actionButton['click'])) {
             $action = CJavaScript::encode($actionButton['click']);
             unset($actionButton['click']);
@@ -268,8 +292,8 @@ class TbBulkActions extends CComponent {
      *
      * Adds a checkbox column to the grid. It is called when
      */
-    protected function attachCheckBoxColumn() {
-    	
+    protected function attachCheckBoxColumn()
+    {
         $dataProvider = $this->grid->dataProvider;
         $columnName = null;
 
@@ -300,6 +324,7 @@ class TbBulkActions extends CComponent {
             array(
                 'class' => 'CCheckBoxColumn',
                 'name' => $columnName,
+                'selectableRows' => 2
             ),
             $this->checkBoxColumnConfig
         );
@@ -315,8 +340,8 @@ class TbBulkActions extends CComponent {
 	 * @return array
 	 * @throws CException
 	 */
-	private function convertToTbButtonConfig($action) {
-		
+	private function convertToTbButtonConfig($action)
+	{
 		if (!isset($action['id'])) {
 			throw new CException(Yii::t(
 				'zii',
@@ -325,10 +350,10 @@ class TbBulkActions extends CComponent {
 		}
 		// button configuration is a regular TbButton
 		$buttonConfig = array(
-			'class' => 'booster.widgets.TbButton',
+			'class' => 'bootstrap.widgets.TbButton',
 			'id' => $action['id'], // we must ensure this
 			'buttonType' => isset($action['buttonType']) ? $action['buttonType'] : TbButton::BUTTON_LINK,
-			'context' => isset($action['context']) ? $action['context'] : '',
+			'type' => isset($action['type']) ? $action['type'] : '',
 			'size' => isset($action['size']) ? $action['size'] : TbButton::SIZE_SMALL,
 			'icon' => isset($action['icon']) ? $action['icon'] : null,
 			'label' => isset($action['label']) ? $action['label'] : null,

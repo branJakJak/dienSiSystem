@@ -1,4 +1,5 @@
 <?php
+use Codeception\Util\Stub;
 
 require(__DIR__ . '/../../helpers/TbHtml.php');
 
@@ -10,7 +11,7 @@ class Dummy extends CModel
     public $email = 'christoffer.niska@gmail.com';
     public $number = 42;
     public $range = 3.33;
-    public $date = '2013-08-28';
+    public $date = '2013-07-27';
     public $file = '';
     public $radio = true;
     public $checkbox = false;
@@ -462,7 +463,7 @@ class TbHtmlTest extends TbTestCase
         $I = $this->codeGuy;
         $html = TbHtml::dateField(
             'date',
-            '2013-08-28',
+            '2013-07-27',
             array(
                 'class' => 'input',
             )
@@ -474,7 +475,7 @@ class TbHtmlTest extends TbTestCase
                 'class' => 'input',
                 'id' => 'date',
                 'name' => 'date',
-                'value' => '2013-08-28',
+                'value' => '2013-07-27',
             )
         );
     }
@@ -679,9 +680,9 @@ class TbHtmlTest extends TbTestCase
             null,
             array('Option 1', 'Option 2', 'Option 3')
         );
-        $span = $I->createNode($html, 'span');
-        $I->seeNodeNumChildren($span, 3);
-        $I->seeNodeChildren($span, array('label.radio.inline', 'label.radio.inline', 'label.radio.inline'));
+        $container = $I->createNode($html, 'body');
+        $I->seeNodeNumChildren($container, 3);
+        $I->seeNodeChildren($container, array('label.radio.inline', 'label.radio.inline', 'label.radio.inline'));
     }
 
     public function testCheckboxList()
@@ -725,9 +726,8 @@ class TbHtmlTest extends TbTestCase
             $span,
             array('input[type=checkbox]', 'label.checkbox', 'label.checkbox', 'label.checkbox', 'label.checkbox')
         );
-        $label = $span->filter('label')->first();
-        $input = $label->filter('input');
-        $I->seeNodeAttribute($input, 'name', 'checkboxList_all');
+        $first = $span->filter('label')->first();
+        $I->seeNodeAttribute($first, 'for', 'checkboxList_all');
 
         $html = TbHtml::checkBoxList(
             'checkboxList',
@@ -743,9 +743,8 @@ class TbHtmlTest extends TbTestCase
             $span,
             array('label.checkbox', 'label.checkbox', 'label.checkbox', 'label.checkbox', 'input[type=checkbox]')
         );
-        $label = $span->filter('label')->last();
-        $input = $label->filter('input');
-        $I->seeNodeAttribute($input, 'name', 'checkboxList_all');
+        $last = $span->filter('label')->last();
+        $I->seeNodeAttribute($last, 'for', 'checkboxList_all');
     }
 
     public function testInlineCheckBoxList()
@@ -1277,7 +1276,7 @@ class TbHtmlTest extends TbTestCase
                 'class' => 'input',
                 'id' => 'Dummy_date',
                 'name' => 'Dummy[date]',
-                'value' => '2013-08-28',
+                'value' => '2013-07-27',
             )
         );
     }
@@ -1315,8 +1314,10 @@ class TbHtmlTest extends TbTestCase
                 'label' => 'Label text',
             )
         );
-        $body = $I->createNode($html, 'body');
-        $hidden = $body->filter('input[type=hidden]');
+        $label = $I->createNode($html, 'label');
+        $I->seeNodeCssClass($label, 'radio');
+        $I->seeNodeChildren($label, array('input[type=hidden]', 'input[type=radio]'));
+        $hidden = $label->filter('input[type=hidden]');
         $I->seeNodeAttributes(
             $hidden,
             array(
@@ -1325,8 +1326,6 @@ class TbHtmlTest extends TbTestCase
                 'value' => '0',
             )
         );
-        $label = $body->filter('label');
-        $I->seeNodeCssClass($label, 'radio');
         $radio = $label->filter('input[type=radio]');
         $I->seeNodeAttributes(
             $radio,
@@ -1352,8 +1351,10 @@ class TbHtmlTest extends TbTestCase
                 'label' => 'Label text',
             )
         );
-        $body = $I->createNode($html, 'body');
-        $hidden = $body->filter('input[type=hidden]');
+        $label = $I->createNode($html, 'label');
+        $I->seeNodeCssClass($label, 'checkbox');
+        $I->seeNodeChildren($label, array('input[type=hidden]', 'input[type=checkbox]'));
+        $hidden = $label->filter('input[type=hidden]');
         $I->seeNodeAttributes(
             $hidden,
             array(
@@ -1362,8 +1363,6 @@ class TbHtmlTest extends TbTestCase
                 'value' => '0',
             )
         );
-        $label = $body->filter('label');
-        $I->seeNodeCssClass($label, 'checkbox');
         $checkbox = $label->filter('input[type=checkbox]');
         $I->seeNodeAttributes(
             $checkbox,
@@ -1639,9 +1638,8 @@ class TbHtmlTest extends TbTestCase
         $I = $this->codeGuy;
         $html = TbHtml::activeRadioButtonControlGroup(new Dummy, 'radio');
         $group = $I->createNode($html, 'div.control-group');
-        $I->seeNodeChildren($group, array('input[type=hidden]', 'label.radio'));
         $label = $group->filter('label.radio');
-        $I->seeNodeChildren($label, array('input[type=radio]'));
+        $I->seeNodeChildren($label, array('input[type=hidden]', 'input[type=radio]'));
     }
 
     public function testActiveCheckBoxControlGroup()
@@ -1649,9 +1647,8 @@ class TbHtmlTest extends TbTestCase
         $I = $this->codeGuy;
         $html = TbHtml::activeCheckBoxControlGroup(new Dummy, 'checkbox');
         $group = $I->createNode($html, 'div.control-group');
-        $I->seeNodeChildren($group, array('input[type=hidden]', 'label.checkbox'));
         $label = $group->filter('label.checkbox');
-        $I->seeNodeChildren($label, array('input[type=checkbox]'));
+        $I->seeNodeChildren($label, array('input[type=hidden]', 'input[type=checkbox]'));
     }
 
     public function testActiveDropDownListControlGroup()
@@ -1810,8 +1807,10 @@ class TbHtmlTest extends TbTestCase
         $group = $I->createNode($html, 'div.control-group');
         $I->seeNodeChildren($group, array('div.controls'));
         $controls = $group->filter('div.controls');
-        $I->seeNodeChildren($controls, array('input[type=hidden]', 'label.radio'));
-        $hidden = $controls->filter('input[type=hidden]');
+        $label = $controls->filter('label.radio');
+        $I->seeNodePattern($label, '/> Radio$/');
+        $I->seeNodeChildren($label, array('input[type=hidden]', 'input[type=radio]'));
+        $hidden = $label->filter('input[type=hidden]');
         $I->seeNodeAttributes(
             $hidden,
             array(
@@ -1820,8 +1819,6 @@ class TbHtmlTest extends TbTestCase
                 'value' => '0',
             )
         );
-        $label = $controls->filter('label.radio');
-        $I->seeNodePattern($label, '/> Radio$/');
         $radio = $label->filter('input[type=radio]');
         $I->seeNodeAttributes(
             $radio,
@@ -2003,7 +2000,6 @@ class TbHtmlTest extends TbTestCase
                 'name' => 'button',
                 'data-loading-text' => 'Loading text',
                 'data-toggle' => 'button',
-                'disabled' => 'disabled',
             )
         );
         $I->seeNodeChildren($button, array('i.icon-check'));
@@ -2075,6 +2071,7 @@ class TbHtmlTest extends TbTestCase
             array(
                 'name' => 'button',
                 'src' => 'image.png',
+                'value' => 'submit',
             )
         );
     }
@@ -2106,7 +2103,7 @@ class TbHtmlTest extends TbTestCase
                 'class' => 'button',
             )
         );
-        $a = $I->createNode($html, 'a');
+        $a = $I->createNode($html, 'a.btn');
         $I->seeNodeCssClass($a, 'button');
         $I->seeNodeAttributes(
             $a,
@@ -2587,7 +2584,6 @@ class TbHtmlTest extends TbTestCase
         $items = array(
             array('label' => 'Header text'),
             array('label' => 'Link', 'url' => '#'),
-            TbHtml::menuDivider(),
         );
 
         $html = TbHtml::navList(
@@ -2604,11 +2600,9 @@ class TbHtmlTest extends TbTestCase
             if ($i === 0) {
                 $I->seeNodeCssClass($li, 'nav-header');
                 $I->seeNodeText($li, 'Header text');
-            } else if ($i === 1) {
+            } else {
                 $a = $li->filter('a');
                 $I->seeNodeText($a, $items[$i]['label']);
-            } else if ($i === 2) {
-                $I->seeNodeCssClass($li, 'divider');
             }
         }
     }
@@ -3706,7 +3700,7 @@ class TbHtmlTest extends TbTestCase
                 'class' => 'link',
                 'animation' => true,
                 'html' => true,
-                'selector' => '.selector',
+                'selector' => true,
                 'placement' => TbHtml::TOOLTIP_PLACEMENT_RIGHT,
                 'trigger' => TbHtml::TOOLTIP_TRIGGER_CLICK,
                 'delay' => 350,
@@ -3718,9 +3712,9 @@ class TbHtmlTest extends TbTestCase
             $a,
             array(
                 'title' => 'Tooltip text',
-                'data-animation' => 'true',
-                'data-html' => 'true',
-                'data-selector' => '.selector',
+                'data-animation' => '1',
+                'data-html' => '1',
+                'data-selector' => '1',
                 'data-placement' => 'right',
                 'data-trigger' => 'click',
                 'data-delay' => '350',

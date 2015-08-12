@@ -7,6 +7,8 @@
  * @package bootstrap.widgets
  */
 
+Yii::import('bootstrap.behaviors.TbWidget');
+
 /**
  * Bootstrap affix widget.
  * @see http://twitter.github.com/bootstrap/javascript.html#affix
@@ -41,7 +43,9 @@ class TbAffix extends CWidget
 
             if (is_array($this->offset) && count($this->offset) === 2) {
                 list($position, $offset) = $this->offset;
-                $this->htmlOptions['data-offset-' . $position] = $offset;
+                if (!empty($position)) {
+                    $this->options['data-offset-' . $position] = $offset;
+                }
             }
         }
         echo TbHtml::openTag($this->tagName, $this->htmlOptions);

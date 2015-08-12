@@ -82,7 +82,7 @@ class WhRangeSlider extends CInputWidget
      * Example:
      * ```
      *   'formater'=>'js:function(val){
-    var value = Math.round(val * 5) / 5,
+     * var value = Math.round(val * 5) / 5,
      *      decimal = value - Math.round(val);
      *      return decimal == 0 ? value.toString() + ".0" : value.toString();
      *   }'
@@ -123,10 +123,10 @@ class WhRangeSlider extends CInputWidget
     public $inputType = 'text';
 
     /**
-     * @var string lets you specify a display mode for value labels: `hidden`, `shown`, or only shown when moving.
+     * @var string lets you specify a display mode for value labels: `hidden`, `show`, or only shown when moving.
      * Possible values are: show, hide and change.
      */
-    public $valueLabels = 'shown';
+    public $valueLabels = 'show';
 
     /**
      * @var string allows to use the mouse wheel to `scroll` (translate) or `zoom` (enlarge/shrink) the selected area in
@@ -221,6 +221,10 @@ class WhRangeSlider extends CInputWidget
     public $theme = 'iThing';
 
     /**
+     * @var array
+     */
+    public $pluginOptions = array();
+    /**
      * @var array the options to pass to the jQSlider
      */
     protected $options;
@@ -235,12 +239,11 @@ class WhRangeSlider extends CInputWidget
 
         $this->checkOptionAttribute($this->inputType, array('text', 'number'), 'inputType');
 
-        $this->checkOptionAttribute($this->valueLabels, array('shown', 'hidden'), 'valueLabels');
+        $this->checkOptionAttribute($this->valueLabels, array('show', 'hide', 'change'), 'valueLabels');
 
         $this->checkOptionAttribute($this->theme, array('iThing', 'classic'), 'theme');
 
-        if($this->wheelMode)
-        {
+        if ($this->wheelMode) {
             $this->checkOptionAttribute($this->wheelMode, array('zoom', 'scroll'), 'wheelMode');
         }
         $this->attachBehavior('ywplugin', array('class' => 'yiiwheels.behaviors.WhPlugin'));
@@ -311,8 +314,8 @@ class WhRangeSlider extends CInputWidget
             $orig = '';
         }
         $this->events['valuesChanged'] = "js: function(id, data) {
-			$inputValSet $orig
-		}";
+        $inputValSet $orig
+        }";
 
         ob_start();
         echo "jQuery('#slider_{$id}').{$this->type}Slider({$options})";
@@ -328,17 +331,18 @@ class WhRangeSlider extends CInputWidget
      */
     protected function buildOptions()
     {
-        $options       = array(
-            'arrows'      => $this->arrows,
-            'delayOut'    => $this->delayOut,
-            'durationIn'  => $this->durationIn,
+        $options = array(
+            'arrows' => $this->arrows,
+            'delayOut' => $this->delayOut,
+            'durationIn' => $this->durationIn,
             'durationOut' => $this->durationOut,
             'valueLabels' => $this->valueLabels,
-            'formatter'   => $this->formatter,
-            'step'        => $this->step,
-            'wheelMode'   => $this->wheelMode,
-            'wheelSpeed'  => $this->wheelSpeed,
-            'type'        => ($this->type == 'dateRange' ? null : $this->inputType)
+            'formatter' => $this->formatter,
+            'step' => $this->step,
+            'wheelMode' => $this->wheelMode,
+            'wheelSpeed' => $this->wheelSpeed,
+            'scales' => $this->scales,
+            'type' => ($this->type == 'dateRange' ? null : $this->inputType)
         );
         $this->options = array_filter($options);
 
@@ -365,19 +369,24 @@ class WhRangeSlider extends CInputWidget
                 )
             );
         }
+        if(!empty($this->pluginOptions))
+        {
+            $this->options = CMap::mergeArray($this->pluginOptions, $this->options);
+        }
     }
 
     /**
      * Checks whether the option set is supported by the plugin
+     *
      * @param mixed $attribute attribute
      * @param array $availableOptions the possible values
      * @param string $name the name of the attribute
+     *
      * @throws CException
      */
     protected function checkOptionAttribute($attribute, $availableOptions, $name)
     {
-        if(!in_array($attribute, $availableOptions))
-        {
+        if (!in_array($attribute, $availableOptions)) {
             throw new CException(Yii::t(
                 'zii',
                 'Unsupported "{attribute}" setting.',

@@ -53,6 +53,8 @@ class WhTypeAhead extends CInputWidget
         TbArray::defaultValue('id', $id, $this->htmlOptions);
         TbArray::defaultValue('name', $name, $this->htmlOptions);
 
+        TbHtml::addCssClass('form-control', $this->htmlOptions);
+
         if ($this->hasModel()) {
             echo CHtml::activeTextField($this->model, $this->attribute, $this->htmlOptions);
         } else {

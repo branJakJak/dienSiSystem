@@ -66,7 +66,7 @@ class TbCKEditor extends CInputWidget
 	 */
 	public function registerClientScript($id)
 	{
-        Booster::getBooster()->cs->registerPackage('ckeditor');
+		Yii::app()->bootstrap->registerAssetJs('ckeditor/ckeditor.js');
 
 		$options = !empty($this->editorOptions) ? CJavaScript::encode($this->editorOptions) : '{}';
 

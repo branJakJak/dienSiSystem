@@ -10,7 +10,7 @@
  * @author         antonio ramirez <antonio@clevertech.biz>
  */
 
-Yii::import('booster.widgets.TbGridView');
+Yii::import('bootstrap.widgets.TbGridView');
 
 /**
  *## TbGroupGridView widget
@@ -95,57 +95,6 @@ class TbGroupGridView extends TbGridView
 			$this->extraRowHtmlOptions['class'] = $this->extraRowCssClass;
 		}
 	}
-	
-	/**
-	 * Registers necessary client scripts.
-	 */
-	public function registerClientScript()
-	{
-		$id=$this->getId();
-	
-		if($this->ajaxUpdate===false)
-			$ajaxUpdate=false;
-		else
-			$ajaxUpdate=array_unique(preg_split('/\s*,\s*/',$this->ajaxUpdate.','.$id,-1,PREG_SPLIT_NO_EMPTY));
-		$options=array(
-				'ajaxUpdate'=>$ajaxUpdate,
-				'ajaxVar'=>$this->ajaxVar,
-				'pagerClass'=>$this->pagerCssClass,
-				'loadingClass'=>$this->loadingCssClass,
-				'filterClass'=>$this->filterCssClass,
-				'tableClass'=>$this->itemsCssClass,
-				'selectableRows'=>$this->selectableRows,
-				'enableHistory'=>$this->enableHistory,
-				'updateSelector'=>$this->updateSelector,
-				'filterSelector'=>$this->filterSelector
-		);
-		if($this->ajaxUrl!==null)
-			$options['url']=CHtml::normalizeUrl($this->ajaxUrl);
-		if($this->ajaxType!==null)
-			$options['ajaxType']=strtoupper($this->ajaxType);
-		if($this->enablePagination)
-			$options['pageVar']=$this->dataProvider->getPagination()->pageVar;
-		foreach(array('beforeAjaxUpdate', 'afterAjaxUpdate', 'ajaxUpdateError', 'selectionChanged') as $event)
-		{
-			if($this->$event!==null)
-			{
-				if($this->$event instanceof CJavaScriptExpression)
-					$options[$event]=$this->$event;
-				else
-					$options[$event]=new CJavaScriptExpression($this->$event);
-			}
-		}
-	
-		$options=CJavaScript::encode($options);
-		$cs=Yii::app()->getClientScript();
-		$cs->registerCoreScript('jquery');
-		$cs->registerCoreScript('bbq');
-		if($this->enableHistory)
-			$cs->registerCoreScript('history');
-		// $cs->registerScriptFile($this->baseScriptUrl.'/jquery.yiigridview.js',CClientScript::POS_END);
-		$cs->registerPackage('group-grid-view');
-		$cs->registerScript(__CLASS__.'#'.$id,"jQuery('#$id').yiiGroupGridView($options);");
-	}
 
 	/**
 	 * Renders the table body.
@@ -199,8 +148,7 @@ class TbGroupGridView extends TbGridView
 		}
 
 		//iterate data
-		$rowcount = count($data);
-		for ($i = 1; $i < $rowcount; $i++) {
+		for ($i = 1; $i < count($data); $i++) {
 			//save row values in array
 			$current = $this->getRowValues($groupColumns, $data[$i], $i);
 
@@ -392,7 +340,7 @@ class TbGroupGridView extends TbGridView
 
 		$colspan = count($this->columns);
 
-		echo '<tr class="extrarow">';
+		echo '<tr>';
 		$this->extraRowHtmlOptions['colspan'] = $colspan;
 		echo CHtml::openTag('td', $this->extraRowHtmlOptions);
 		echo $content;

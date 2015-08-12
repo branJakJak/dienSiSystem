@@ -7,7 +7,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
-Yii::import('booster.widgets.TbDataColumn');
+Yii::import('bootstrap.widgets.TbDataColumn');
 
 /**
  *## TbJsonGridColumn class
@@ -17,7 +17,7 @@ Yii::import('booster.widgets.TbDataColumn');
  *
  * @property TbJsonGridView $grid
  *
- * @package booster.widgets.grids.columns.json
+ * @package booster.widgets.grids.columns
  */
 class TbJsonGridColumn extends TbDataColumn
 {

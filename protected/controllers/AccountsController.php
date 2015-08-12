@@ -111,12 +111,9 @@ class AccountsController extends Controller {
      * Lists all models.
      */
     public function actionIndex() {
-        Yii::import('ext.YiiMailer.YiiMailer');
-        $dataProvider = new CActiveDataProvider('Accounts');
+        $model = new BlackListedMobile;
         $this->layout = "column1";
-        $this->render('index', array(
-            'dataProvider' => $dataProvider,
-        ));
+        $this->render('index', compact("model"));
     }
 
     /**

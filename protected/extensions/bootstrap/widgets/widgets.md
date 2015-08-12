@@ -1,12 +1,10 @@
-Legend: `+` sign means availability of end-user documentation page.
-
 # Decoration
+ HeroUnit
+ Badge
+ Progress
+ Label
+ Alert
 
- + HeroUnit
- + Badge
- + Progress
- + Label
- + Alert
 
 # Content Grouping
 
@@ -38,13 +36,14 @@ Legend: `+` sign means availability of end-user documentation page.
 # Charts
 
  GoogleVisualizationChart
- + HighCharts
+ HighCharts
 
 
 # Editable
 
- + EditableField
+ EditableField
  EditableDetailView
+
 
 # Grids
 
@@ -55,25 +54,23 @@ Legend: `+` sign means availability of end-user documentation page.
 
 ## Columns
 
+ JsonButtonColumn
  DataColumn
  RelationalColumn
  GroupButtonColumn
  ImageColumn
+ JsonGridColumn
+ JsonCheckBoxColumn
  ButtonColumn
+ JsonDataColumn
  EditableColumn
+ JsonPickerColumn
  ToggleColumn
  TotalSumColumn
  ButtonGroupColumn
  PickerColumn
  BulkActions
 
-### Json
-
- JsonGridColumn
- JsonDataColumn
- JsonButtonColumn
- JsonCheckBoxColumn
- JsonPickerColumn
 
 # Forms
 
@@ -89,9 +86,8 @@ Legend: `+` sign means availability of end-user documentation page.
  Select2
  FileUpload
  Tags
- + TimePicker
+ TimePicker
  FormInputElement
- DateTimePicker
 
 ### WYSIWYG Editors
 
@@ -108,7 +104,7 @@ Legend: `+` sign means availability of end-user documentation page.
  FormButtonElement
 
 
-# Support stuff
+# Support shit
 
  JsonPager
  EditableSaver
@@ -116,3 +112,6 @@ Legend: `+` sign means availability of end-user documentation page.
  ScrollSpy
  ExtendedFilter
 
+# Broken
+
+ ExtendedTooltip

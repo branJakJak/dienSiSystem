@@ -1,217 +1,161 @@
 <?php
 /**
- *## TbPager class file.
- *
- * @author Christoffer Niska <ChristofferNiska@gmail.com>
- * @copyright Copyright &copy; Christoffer Niska 2011-
- * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+ * TbPager class file.
+ * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2013-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package bootstrap.widgets
  */
+
+Yii::import('bootstrap.helpers.TbHtml');
+Yii::import('bootstrap.behaviors.TbWidget');
 
 /**
- *## Bootstrap pager.
- *
- * @see <http://twitter.github.com/bootstrap/components.html#pagination>
- *
- * @package booster.widgets.supplementary
+ * Bootstrap pager widget.
+ * http://twitter.github.com/bootstrap/components.html#pagination
  */
-class TbPager extends CLinkPager {
-	
-	// Pager alignments.
-	const ALIGNMENT_CENTER = 'centered';
-	const ALIGNMENT_RIGHT = 'right';
+class TbPager extends CBasePager
+{
+    /**
+     * @var string the pager size.
+     */
+    public $size;
+    /**
+     * @var integer maximum number of page buttons that can be displayed.
+     */
+    public $maxButtonCount = 5;
+    /**
+     * @var string the text label for the next page button.
+     */
+    public $nextPageLabel = '&rsaquo;';
+    /**
+     * @var string the text label for the previous page button.
+     */
+    public $prevPageLabel = '&lsaquo;';
+    /**
+     * @var string the text label for the first page button.
+     */
+    public $firstPageLabel = '&laquo;';
+    /**
+     * @var string the text label for the last page button.
+     */
+    public $lastPageLabel = '&raquo;';
 
-	/**
-	 * @var string attributes for the pager container tag.
-	 */
-	public $containerTag = 'div';
-	
-	/**
-	 * @var array HTML attributes for the pager container tag.
-	 */
-	public $containerHtmlOptions = array();
-	
-	/**
-	 * @var string the pager alignment.
-	 * Valid values are 'centered' and 'right'.
-	 */
-	public $alignment = self::ALIGNMENT_RIGHT;
+    /**
+     * @var boolean whether the "first" and "last" buttons should be hidden.
+     * Defaults to false.
+     */
+    public $hideFirstAndLast = false;
+    /**
+     * @var array HTML attributes for the pager container tag.
+     */
+    public $htmlOptions = array();
 
-	/**
-	 * @var string the text shown before page buttons.
-	 * Defaults to an empty string, meaning that no header will be displayed.
-	 */
-	public $header = '';
-	
-	/**
-	 * @var string the URL of the CSS file used by this pager.
-	 * Defaults to false, meaning that no CSS will be included.
-	 */
-	public $cssFile = false;
+    /**
+     * Initializes the widget.
+     */
+    public function init()
+    {
+        $this->attachBehavior('TbWidget', new TbWidget);
+        $this->copyId();
+        if (isset($this->size)) {
+            TbArray::defaultValue('size', $this->size, $this->htmlOptions);
+        }
+    }
 
-	/**
-	 * @var boolean whether to display the first and last items.
-	 */
-	public $displayFirstAndLast = false;
+    /**
+     * Runs the widget.
+     */
+    public function run()
+    {
+        $links = $this->createPageLinks();
+        if (!empty($links)) {
+            echo TbHtml::pagination($links, $this->htmlOptions);
+        }
+    }
 
-	/**
-	 *### .init()
-	 *
-	 * Initializes the pager by setting some default property values.
-	 */
-	public function init() {
-		
-		if ($this->nextPageLabel === null) {
-			$this->nextPageLabel = '&raquo;';
-		}
+    /**
+     * Creates the page buttons.
+     * @return array a list of page buttons (in HTML code).
+     */
+    protected function createPageLinks()
+    {
+        if (($pageCount = $this->getPageCount()) <= 1) {
+            return array();
+        }
 
-		if ($this->prevPageLabel === null) {
-			$this->prevPageLabel = '&laquo;';
-		}
+        list($beginPage, $endPage) = $this->getPageRange();
 
-		$classes = array('pagination');
+        $currentPage = $this->getCurrentPage(false); // currentPage is calculated in getPageRange()
+        $links = array();
 
-		/* TODO: move these to styles files! */
-		$style = '';
-		$containerStyle = '';
-		
-		$validAlignments = array(self::ALIGNMENT_CENTER, self::ALIGNMENT_RIGHT);
+        // first page
+        if (!$this->hideFirstAndLast) {
+            $links[] = $this->createPageLink($this->firstPageLabel, 0, $currentPage <= 0, false);
+        }
 
-		if (in_array($this->alignment, $validAlignments)) {
-			if($this->alignment == self::ALIGNMENT_RIGHT)
-				$classes[] = 'pull-right';
-			
-			if($this->alignment == self::ALIGNMENT_CENTER) {
-				// $style = 'margin-left: auto; margin-right: auto;'; // not needed!
-				$containerStyle = 'text-align: center;';
-			}
-		}
+        // prev page
+        if (($page = $currentPage - 1) < 0) {
+            $page = 0;
+        }
 
-		if (!empty($classes)) {
-			$classes = implode(' ', $classes);
-			if (isset($this->htmlOptions['class'])) {
-				$this->htmlOptions['class'] = ' ' . $classes;
-			} else {
-				$this->htmlOptions['class'] = $classes;
-			}
-		}
-		
-		if(!empty($style)) {
-			if(isset($this->htmlOptions['style']) && !empty($this->htmlOptions['style']))
-				$this->htmlOptions['style'] .= ' '.$style;
-			else 
-				$this->htmlOptions['style'] = $style;
-		}
-		
-		if(!empty($containerStyle)) {
-			if(isset($this->containerHtmlOptions['style']) && !empty($this->containerHtmlOptions['style']))
-				$this->containerHtmlOptions['style'] .= ' '.$containerStyle;
-			else
-				$this->containerHtmlOptions['style'] = $containerStyle;
-		}
+        $links[] = $this->createPageLink($this->prevPageLabel, $page, $currentPage <= 0, false);
 
-		parent::init();
-	}
-	
-	/**
-	 * Executes the widget.
-	 * This overrides the parent implementation by displaying the generated page buttons.
-	 */
-	public function run() {
-		
-		$this->registerClientScript();
-		$buttons=$this->createPageButtons();
-		if(empty($buttons))
-			return;
-		echo CHtml::openTag($this->containerTag, $this->containerHtmlOptions);
-		echo $this->header;
-		echo CHtml::tag('ul',$this->htmlOptions,implode("\n",$buttons));
-		echo '<div style="clear: both;"></div>';
-		echo $this->footer;
-		echo CHtml::closeTag($this->containerTag);
-	}
+        // internal pages
+        for ($i = $beginPage; $i <= $endPage; ++$i) {
+            $links[] = $this->createPageLink($i + 1, $i, false, $i == $currentPage);
+        }
 
-	/**
-	 *### .createPageButtons()
-	 *
-	 * Creates the page buttons.
-	 * @return array a list of page buttons (in HTML code).
-	 */
-	protected function createPageButtons() {
+        // next page
+        if (($page = $currentPage + 1) >= $pageCount - 1) {
+            $page = $pageCount - 1;
+        }
 
-		if (($pageCount = $this->getPageCount()) <= 1) {
-			return array();
-		}
+        $links[] = $this->createPageLink($this->nextPageLabel, $page, $currentPage >= $pageCount - 1, false);
 
-		list ($beginPage, $endPage) = $this->getPageRange();
+        // last page
+        if (!$this->hideFirstAndLast) {
+            $links[] = $this->createPageLink(
+                $this->lastPageLabel,
+                $pageCount - 1,
+                $currentPage >= $pageCount - 1,
+                false
+            );
+        }
 
-		$currentPage = $this->getCurrentPage(false); // currentPage is calculated in getPageRange()
+        return $links;
+    }
 
-		$buttons = array();
+    /**
+     * Creates a page link.
+     * @param string $label the link label text.
+     * @param integer $page the page number.
+     * @param boolean $visible whether the link is disabled.
+     * @param boolean $active whether the link is active.
+     * @return string the generated link.
+     */
+    protected function createPageLink($label, $page, $disabled, $active)
+    {
+        return array(
+            'label' => $label,
+            'url' => $this->createPageUrl($page),
+            'disabled' => $disabled,
+            'active' => $active,
+        );
+    }
 
-		// first page
-		if ($this->displayFirstAndLast) {
-			$buttons[] = $this->createPageButton($this->firstPageLabel, 0, 'first', $currentPage <= 0, false);
-		}
-
-		// prev page
-		if (($page = $currentPage - 1) < 0) {
-			$page = 0;
-		}
-
-		$buttons[] = $this->createPageButton($this->prevPageLabel, $page, 'previous', $currentPage <= 0, false);
-
-		// internal pages
-		for ($i = $beginPage; $i <= $endPage; ++$i) {
-			$buttons[] = $this->createPageButton($i + 1, $i, '', false, $i == $currentPage);
-		}
-
-		// next page
-		if (($page = $currentPage + 1) >= $pageCount - 1) {
-			$page = $pageCount - 1;
-		}
-
-		$buttons[] = $this->createPageButton(
-			$this->nextPageLabel,
-			$page,
-			'next',
-			$currentPage >= ($pageCount - 1),
-			false
-		);
-
-		// last page
-		if ($this->displayFirstAndLast) {
-			$buttons[] = $this->createPageButton(
-				$this->lastPageLabel,
-				$pageCount - 1,
-				'last',
-				$currentPage >= ($pageCount - 1),
-				false
-			);
-		}
-
-		return $buttons;
-	}
-
-	/**
-	 *### .createPageButton()
-	 *
-	 * Creates a page button.
-	 * You may override this method to customize the page buttons.
-	 *
-	 * @param string $label the text label for the button
-	 * @param integer $page the page number
-	 * @param string $class the CSS class for the page button. This could be 'page', 'first', 'last', 'next' or 'previous'.
-	 * @param boolean $hidden whether this page button is visible
-	 * @param boolean $selected whether this page button is selected
-	 *
-	 * @return string the generated button
-	 */
-	protected function createPageButton($label, $page, $class, $hidden, $selected)
-	{
-		if ($hidden || $selected) {
-			$class .= ' ' . ($hidden ? 'disabled' : 'active');
-		}
-
-		return CHtml::tag('li', array('class' => $class), CHtml::link($label, $this->createPageUrl($page)));
-	}
+    /**
+     * @return array the begin and end pages that need to be displayed.
+     */
+    protected function getPageRange()
+    {
+        $currentPage = $this->getCurrentPage();
+        $pageCount = $this->getPageCount();
+        $beginPage = max(0, $currentPage - (int)($this->maxButtonCount / 2));
+        if (($endPage = $beginPage + $this->maxButtonCount - 1) >= $pageCount) {
+            $endPage = $pageCount - 1;
+            $beginPage = max(0, $endPage - $this->maxButtonCount + 1);
+        }
+        return array($beginPage, $endPage);
+    }
 }

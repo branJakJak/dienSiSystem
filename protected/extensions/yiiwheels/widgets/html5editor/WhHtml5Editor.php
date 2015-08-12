@@ -42,6 +42,20 @@ class WhHtml5Editor extends CInputWidget
      */
     public $height = '400px';
 
+    public function init()
+    {
+    
+    	$this->attachBehavior('ywplugin', array('class' => 'yiiwheels.behaviors.WhPlugin'));
+    
+    	if (!$style = TbArray::popValue('style', $this->htmlOptions, '')) {
+    		$this->htmlOptions['style'] = $style;
+    	}
+    
+    	$width                      = TbArray::getValue('width', $this->htmlOptions, '100%');
+    	$height                     = TbArray::popValue('height', $this->htmlOptions, '450px');
+    	$this->htmlOptions['style'] = "width:{$width};height:{$height};" . $this->htmlOptions['style'];
+    }
+
     /**
      * Display editor
      */
@@ -50,9 +64,9 @@ class WhHtml5Editor extends CInputWidget
 
         list($name, $id) = $this->resolveNameID();
 
-        $this->registerClientScript($id);
-
         $this->htmlOptions['id'] = $id;
+
+        $this->registerClientScript();
 
         if (!array_key_exists('style', $this->htmlOptions))
             $this->htmlOptions['style'] = "width:{$this->width};height:{$this->height};";
@@ -65,9 +79,8 @@ class WhHtml5Editor extends CInputWidget
 
     /**
      * Register required script files
-     * @param string $id
      */
-    public function registerClientScript($id)
+    public function registerClientScript()
     {
         /* publish assets dir */
         $path      = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets';

@@ -4,7 +4,7 @@
  *
  * @author Christoffer Niska <ChristofferNiska@gmail.com>
  * @copyright Copyright &copy; Christoffer Niska 2011-
- * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
+ * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php) 
  */
 
 /**
@@ -24,7 +24,6 @@ abstract class TbInput extends CInputWidget
 	const TYPE_DROPDOWN = 'dropdownlist';
 	const TYPE_FILE = 'filefield';
 	const TYPE_PASSWORD = 'password';
-	const TYPE_PASSFIELD = 'passfield';
 	const TYPE_RADIO = 'radiobutton';
 	const TYPE_RADIOLIST = 'radiobuttonlist';
 	const TYPE_RADIOLIST_INLINE = 'radiobuttonlist_inline';
@@ -35,7 +34,6 @@ abstract class TbInput extends CInputWidget
 	const TYPE_CAPTCHA = 'captcha';
 	const TYPE_UNEDITABLE = 'uneditable';
 	const TYPE_DATEPICKER = 'datepicker';
-	const TYPE_DATETIMEPICKER = 'datetimepicker';
 	const TYPE_REDACTOR = 'redactor';
 	const TYPE_MARKDOWNEDITOR = 'markdowneditor';
 	const TYPE_HTML5EDITOR = 'wysihtml5';
@@ -47,7 +45,6 @@ abstract class TbInput extends CInputWidget
 	const TYPE_SELECT2 = 'select2';
 	const TYPE_TYPEAHEAD = 'typeahead';
 	const TYPE_NUMBER = 'numberfield';
-	const TYPE_CUSTOM = 'custom';
 
 	/**
 	 * @var TbActiveForm the associated form widget.
@@ -267,10 +264,6 @@ abstract class TbInput extends CInputWidget
 				$this->passwordField();
 				break;
 
-			case self::TYPE_PASSFIELD:
-				$this->passfieldField();
-				break;
-
 			case self::TYPE_RADIO:
 				$this->radioButton();
 				break;
@@ -310,10 +303,6 @@ abstract class TbInput extends CInputWidget
 
 			case self::TYPE_DATEPICKER:
 				$this->datepickerField();
-				break;
-
-			case self::TYPE_DATETIMEPICKER:
-				$this->datetimepickerField();
 				break;
 
 			case self::TYPE_REDACTOR:
@@ -358,10 +347,6 @@ abstract class TbInput extends CInputWidget
 
 			case self::TYPE_NUMBER:
 				$this->numberField();
-				break;
-
-			case self::TYPE_CUSTOM:
-				$this->customField();
 				break;
 
 			default:
@@ -522,7 +507,8 @@ abstract class TbInput extends CInputWidget
 	 */
 	protected function getContainerCssClass()
 	{
-		return $this->model->hasErrors($this->attribute) ? CHtml::$errorCss : '';
+		$attribute = $this->attribute;
+		return $this->model->hasErrors(CHtml::resolveName($this->model, $attribute)) ? CHtml::$errorCss : '';
 	}
 
 	/**
@@ -638,16 +624,6 @@ abstract class TbInput extends CInputWidget
 	abstract protected function passwordField();
 
 	/**
-	 *### .passfieldField()
-	 *
-	 * Renders a Pass*Field field.
-	 *
-	 * @return string the rendered content
-	 * @abstract
-	 */
-	abstract protected function passfieldField();
-
-	/**
 	 *### .radioButton()
 	 *
 	 * Renders a radio button.
@@ -748,16 +724,6 @@ abstract class TbInput extends CInputWidget
 	abstract protected function datepickerField();
 
 	/**
-	 *### .datetimepicketField()
-	 *
-	 * Renders a datetimepicker field.
-	 *
-	 * @return string the rendered content
-	 * @abstract
-	 */
-	abstract protected function datetimepickerField();
-
-	/**
 	 *### .redactorJs()
 	 *
 	 * Renders a redactorJS wysiwyg field.
@@ -851,53 +817,4 @@ abstract class TbInput extends CInputWidget
 	 * @abstract
 	 */
 	abstract protected function numberField();
-
-	/**
-	 *### . customField()
-	 *
-	 * Renders a pre-rendered custom field.
-	 *
-	 * @return string the rendered content
-	 * @abstract
-	 */
-	abstract protected function customField();
-
-	/**
-	 * Obtain separately hidden and visible field
-	 * @see TbInputVertical::checkBox
-	 * @see TbInputHorizontal::checkBox
-	 * @see TbInputVertical::radioButton
-	 * @see TbInputHorizontal::radioButton
-	 * @throws CException
-	 * @return array
-	 */
-	protected function getSeparatedSelectableInput()
-	{
-		switch ($this->type)
-		{
-			case self::TYPE_CHECKBOX:
-				$method = 'checkBox';
-				break;
-			case self::TYPE_RADIO:
-				$method = 'radioButton';
-				break;
-			default:
-				throw new CException('This method can be used with only selectable control', E_USER_ERROR);
-		}
-
-		$control = $this->form->{$method}($this->model, $this->attribute, $this->htmlOptions);
-		$hidden  = '';
-
-		$hasHiddenField = (array_key_exists('uncheckValue', $this->htmlOptions) && $this->htmlOptions['uncheckValue'] === null)
-			? false
-			: true;
-
-		if ($hasHiddenField && preg_match('/\<input .*?type="hidden".*?\/\>/', $control, $matches))
-		{
-			$hidden = $matches[0];
-			$control = str_replace($hidden, '', $control);
-		}
-
-		return array($hidden, $control);
-	}
 }

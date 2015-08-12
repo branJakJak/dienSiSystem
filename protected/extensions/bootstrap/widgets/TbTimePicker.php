@@ -7,25 +7,19 @@
  *## TbTimePicker widget.
  *
  * @see http://jdewit.github.com/bootstrap-timepicker/
- * @see https://github.com/jdewit/bootstrap-timepicker
  *
  * @since 1.0.3
  * @package booster.widgets.forms.inputs
  */
-
-Yii::import('booster.widgets.TbBaseInputWidget');
-
-class TbTimePicker extends TbBaseInputWidget {
-	
+class TbTimePicker extends CInputWidget
+{
 	/**
-	 * @var TbActiveForm If we're called from the form, here lies the reference to it.
+	 * @var TbActiveForm
 	 */
 	public $form;
 
 	/**
-	 * @var array The options for the "bootstrap-timepicker" plugin.
-	 * @see http://jdewit.github.com/bootstrap-timepicker/
-	 *
+	 * @var array the options for the Bootstrap JavaScript plugin.
 	 * Available options:
 	 * template    string
 	 *      'dropdown' (default), Show picker in a dropdown
@@ -52,49 +46,26 @@ class TbTimePicker extends TbBaseInputWidget {
 
 	/**
 	 * @var string[] the JavaScript event handlers.
-	 * @deprecated 2.0.0 You have the ability to set unique ID and/or class to this element.
-	 * Define Javascript handlers inside Javascript files, not here.
-	 * You can generate the Javascript files from PHP, too, there's no need in hand-crafted snippets of Javascript polluting view files.
 	 */
 	public $events = array();
 
 	/**
-	 * @var array HTML attributes for the wrapper "div" tag.
+	 * @var array the HTML attributes for the widget container.
 	 */
-	public $wrapperHtmlOptions = array();
-
-	/**
-	 * @var boolean Whether to not append the time icon at end of input.
-	 * NOTE that the timepicker is opening after click on this icon if it's present!
-	 */
-	public $noAppend = false;
+	public $htmlOptions = array();
 
 	/**
 	 * Runs the widget.
 	 */
-	public function run() {
-		
+	public function run()
+	{
 		list($name, $id) = $this->resolveNameID();
 
-		// TODO: what is this?
 		// Add a class of no-user-select to widget
 		$this->htmlOptions['class'] = empty($this->htmlOptions['class'])
 			? 'no-user-select'
 			: 'no-user-select ' . $this->htmlOptions['class'];
 
-		// We are overriding the result of $this->resolveNameID() here, because $id which it emits is not unique through the page.
-		if (empty($this->htmlOptions['id'])) {
-			$this->htmlOptions['id'] = $this->id;
-		}
-
-		// Adding essential class for timepicker to work.
-		$this->wrapperHtmlOptions = $this->injectClass($this->wrapperHtmlOptions, 'bootstrap-timepicker');
-
-		if (!$this->noAppend)
-			$this->wrapperHtmlOptions = $this->injectClass($this->wrapperHtmlOptions, 'input-group');
-
-
-		echo CHtml::openTag('div', $this->wrapperHtmlOptions);
 		if ($this->hasModel()) {
 			if ($this->form) {
 				echo $this->form->textField($this->model, $this->attribute, $this->htmlOptions);
@@ -104,11 +75,9 @@ class TbTimePicker extends TbBaseInputWidget {
 		} else {
 			echo CHtml::textField($name, $this->value, $this->htmlOptions);
 		}
-		if (!$this->noAppend)
-			$this->echoAppend();
-		echo CHtml::closeTag('div');
 
-		$this->registerClientScript($this->id);
+		$this->registerClientScript($id);
+
 	}
 
 	/**
@@ -116,9 +85,10 @@ class TbTimePicker extends TbBaseInputWidget {
 	 *
 	 * @param string $id
 	 */
-	public function registerClientScript($id) {
-		
-        Booster::getBooster()->cs->registerPackage('timepicker');
+	public function registerClientScript($id)
+	{
+		Yii::app()->bootstrap->registerAssetCss('bootstrap-timepicker.css');
+		Yii::app()->bootstrap->registerAssetJs('bootstrap.timepicker.js');
 
 		$options = !empty($this->options) ? CJavaScript::encode($this->options) : '';
 
@@ -130,36 +100,5 @@ class TbTimePicker extends TbBaseInputWidget {
 		}
 
 		Yii::app()->getClientScript()->registerScript(__CLASS__ . '#' . $id, ob_get_clean() . ';');
-	}
-
-	/**
-	 * @param array $valueset
-	 * @param string $className
-	 *
-	 * @return array
-	 */
-	private function injectClass($valueset, $className) {
-		
-		if (array_key_exists('class', $valueset) and is_string($valueset['class'])) {
-			$valueset['class'] = implode(
-				' ',
-				array_merge(
-					explode(
-						' ',
-						$valueset['class']
-					),
-					array($className)
-				)
-			);
-		} else {
-			$valueset['class'] = $className;
-		}
-
-		return $valueset;
-	}
-
-	private function echoAppend() {
-		
-		echo CHtml::tag('span', array('class' => 'input-group-addon'), CHtml::tag('i', array('class' => 'glyphicon glyphicon-time'), ''));
 	}
 }

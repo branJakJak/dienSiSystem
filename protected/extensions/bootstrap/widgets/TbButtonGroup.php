@@ -6,12 +6,9 @@
  * @copyright Copyright &copy; Christoffer Niska 2011-
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php) 
  * @since 0.9.10
- * 
- * @author Amr Bedair <amr.bedair@gmail.com>
- * @since v4.0.0 - upgraded to bootstrap 3.1.1
  */
 
-Yii::import('booster.widgets.TbButton');
+Yii::import('bootstrap.widgets.TbButton');
 
 /**
  *## Bootstrap button group widget.
@@ -20,8 +17,8 @@ Yii::import('booster.widgets.TbButton');
  *
  * @package booster.widgets.forms.buttons
  */
-class TbButtonGroup extends CWidget {
-	
+class TbButtonGroup extends CWidget
+{
 	// Toggle options.
 	const TOGGLE_CHECKBOX = 'checkbox';
 	const TOGGLE_RADIO = 'radio';
@@ -30,18 +27,13 @@ class TbButtonGroup extends CWidget {
 	 * @var string the button callback type.
 	 * @see BootButton::buttonType
 	 */
-	public $buttonType = TbButton::BUTTON_BUTTON;
+	public $buttonType = TbButton::BUTTON_LINK;
 
 	/**
 	 * @var string the button type.
 	 * @see BootButton::type
 	 */
-	public $context = TbButton::CTX_DEFAULT;
-	
-	/**
-	 * @var boolean indicates whether to use justified button groups
-	 */
-	public $justified = false;
+	public $type;
 
 	/**
 	 * @var string the button size.
@@ -88,22 +80,16 @@ class TbButtonGroup extends CWidget {
 	 *
 	 * Initializes the widget.
 	 */
-	public function init() {
-		
-		$classes = [];
-		
+	public function init()
+	{
+		$classes = array('btn-group');
+
 		if ($this->stacked === true) {
 			$classes[] = 'btn-group-vertical';
-		} else {
-			$classes[] = 'btn-group';
 		}
 
 		if ($this->dropup === true) {
 			$classes[] = 'dropup';
-		}
-		
-		if ($this->justified === true) {
-			$classes[] = 'btn-group-justified';
 		}
 
 		if (!empty($classes)) {
@@ -118,7 +104,7 @@ class TbButtonGroup extends CWidget {
 		$validToggles = array(self::TOGGLE_CHECKBOX, self::TOGGLE_RADIO);
 
 		if (isset($this->toggle) && in_array($this->toggle, $validToggles)) {
-			$this->htmlOptions['data-toggle'] = 'buttons';
+			$this->htmlOptions['data-toggle'] = 'buttons-' . $this->toggle;
 		}
 	}
 
@@ -127,29 +113,20 @@ class TbButtonGroup extends CWidget {
 	 *
 	 * Runs the widget.
 	 */
-	public function run() {
-		
+	public function run()
+	{
 		echo CHtml::openTag('div', $this->htmlOptions);
 
 		foreach ($this->buttons as $button) {
 			if (isset($button['visible']) && $button['visible'] === false) {
 				continue;
 			}
-			
-			$validToggles = array(self::TOGGLE_CHECKBOX, self::TOGGLE_RADIO);
-			if (isset($this->toggle) && in_array($this->toggle, $validToggles)) {
-				$this->buttonType = $this->toggle;
-			}
-			
-			$justifiedNotLink = $this->justified && $this->buttonType !== TbButton::BUTTON_LINK;
-			if($justifiedNotLink)
-				echo '<div class="btn-group">';
-			
+
 			$this->controller->widget(
-				'booster.widgets.TbButton',
+				'bootstrap.widgets.TbButton',
 				array(
 					'buttonType' => isset($button['buttonType']) ? $button['buttonType'] : $this->buttonType,
-					'context' => isset($button['context']) ? $button['context'] : $this->context,
+					'type' => isset($button['type']) ? $button['type'] : $this->type,
 					'size' => $this->size, // all buttons in a group cannot vary in size
 					'icon' => isset($button['icon']) ? $button['icon'] : null,
 					'label' => isset($button['label']) ? $button['label'] : null,
@@ -161,13 +138,8 @@ class TbButtonGroup extends CWidget {
 					'htmlOptions' => isset($button['htmlOptions']) ? $button['htmlOptions'] : array(),
 					'dropdownOptions' => isset($button['dropdownOptions']) ? $button['dropdownOptions'] : array(),
 					'encodeLabel' => isset($button['encodeLabel']) ? $button['encodeLabel'] : $this->encodeLabel,
-                    'tooltip' => isset($button['tooltip']) ? $button['tooltip'] : false,
-                    'tooltipOptions' => isset($button['tooltipOptions']) ? $button['tooltipOptions'] : array(),
 				)
 			);
-			
-			if($justifiedNotLink)
-				echo '</div>';
 		}
 		echo '</div>';
 	}

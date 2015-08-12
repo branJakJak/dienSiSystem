@@ -7,7 +7,7 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php) 
  */
 
-Yii::import('booster.widgets.TbPager');
+Yii::import('bootstrap.widgets.TbPager');
 
 /**
  *## Class TbJsonPager

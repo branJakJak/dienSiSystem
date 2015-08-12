@@ -14,11 +14,8 @@
  *
  * @package booster.widgets.forms.inputs
  */
-
-Yii::import('booster.widgets.TbBaseInputWidget');
-
-class TbDateRangePicker extends TbBaseInputWidget {
-	
+class TbDateRangePicker extends CInputWidget
+{
 	/**
 	 * @var TbActiveForm when created via TbActiveForm.
 	 * this attribute is set to the form that renders the widget
@@ -51,21 +48,20 @@ class TbDateRangePicker extends TbBaseInputWidget {
 	 *
 	 * Initializes the widget.
 	 */
-	public function init() {
-		
+	public function init()
+	{
 		$this->registerClientScript();
-		parent::init();
 	}
-	
+
 	/**
 	 *### .run()
 	 *
 	 * Runs the widget.
 	 */
-	public function run() {
-		
+	public function run()
+	{
 		if ($this->selector) {
-            $this->registerScript($this->selector, $this->options, $this->callback);
+			Yii::app()->bootstrap->registerDateRangePlugin($this->selector, $this->options, $this->callback);
 		} else {
 			list($name, $id) = $this->resolveNameID();
 
@@ -81,18 +77,9 @@ class TbDateRangePicker extends TbBaseInputWidget {
 			}
 
 			$this->setLocaleSettings();
-            $this->registerScript('#' . $id, $this->options, $this->callback);
+			Yii::app()->bootstrap->registerDateRangePlugin('#' . $id, $this->options, $this->callback);
 		}
 
-	}
-	
-	public function registerScript($selector, $options = array(), $callback = null) {
-		
-		Yii::app()->clientScript->registerScript(
-				uniqid(__CLASS__ . '#', true),
-				'$("' . $selector . '").daterangepicker(' . CJavaScript::encode($options) . ($callback
-						? ', ' . CJavaScript::encode($callback) : '') . ');'
-		);
 	}
 
 	/**
@@ -104,8 +91,8 @@ class TbDateRangePicker extends TbBaseInputWidget {
 	 *
 	 *  This method works with the local properties directly, beware.
 	 */
-	private function setLocaleSettings() {
-		
+	private function setLocaleSettings()
+	{
 		$this->setDaysOfWeekNames();
 		$this->setMonthNames();
 	}
@@ -113,8 +100,8 @@ class TbDateRangePicker extends TbBaseInputWidget {
 	/**
 	 *### .setDaysOfWeekNames()
 	 */
-	private function setDaysOfWeekNames() {
-		
+	private function setDaysOfWeekNames()
+	{
 		if (empty($this->options['locale']['daysOfWeek'])) {
 			$this->options['locale']['daysOfWeek'] = Yii::app()->locale->getWeekDayNames('narrow', true);
 		}
@@ -123,8 +110,8 @@ class TbDateRangePicker extends TbBaseInputWidget {
 	/**
 	 *### .setMonthNames()
 	 */
-	private function setMonthNames() {
-		
+	private function setMonthNames()
+	{
 		if (empty($this->options['locale']['monthNames'])) {
 			$this->options['locale']['monthNames'] = array_values(
 				Yii::app()->locale->getMonthNames('wide', true)
@@ -137,11 +124,10 @@ class TbDateRangePicker extends TbBaseInputWidget {
 	 *
 	 * Registers required css js files
 	 */
-	public function registerClientScript() {
-		
-        $booster = Booster::getBooster();
-        $booster->registerAssetCss('bootstrap-daterangepicker.css');
-        $booster->registerAssetJs('bootstrap.daterangepicker.js');
-        $booster->registerPackage('moment');
+	public function registerClientScript()
+	{
+		Yii::app()->bootstrap->registerAssetCss('bootstrap-daterangepicker.css');
+		Yii::app()->bootstrap->registerAssetJs('bootstrap.daterangepicker.js');
+		Yii::app()->bootstrap->registerPackage('date');
 	}
 }

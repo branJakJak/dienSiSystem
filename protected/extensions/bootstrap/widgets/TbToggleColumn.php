@@ -14,7 +14,8 @@
  *
  * @package booster.widgets.grids.columns
  */
-class TbToggleColumn extends TbDataColumn {
+class TbToggleColumn extends TbDataColumn
+{
 
 	public $value;
 
@@ -63,18 +64,18 @@ class TbToggleColumn extends TbDataColumn {
 	 * @var string the glyph icon toggle button "checked" state.
 	 * You may set this property to be false to render a text link instead.
 	 */
-	public $checkedIcon = 'ok-circle';
+	public $checkedIcon = 'icon-ok-circle';
 
 	/**
 	 * @var string the glyph icon toggle button "unchecked" state.
 	 * You may set this property to be false to render a text link instead.
 	 */
-	public $uncheckedIcon = 'remove-sign';
+	public $uncheckedIcon = 'icon-remove-sign';
 
 	/**
 	 * @var string the glyph icon toggle button "empty" state (example for null value)
 	 */
-	public $emptyIcon = 'question-sign';
+	public $emptyIcon = 'icon-question-sign';
 
 	/**
 	 * @var boolean display button with text or only icon with label tooltip
@@ -171,7 +172,7 @@ class TbToggleColumn extends TbDataColumn {
 		}
 
 		$this->button = array(
-			'url' => 'Yii::app()->controller->createUrl("' . $this->toggleAction . '",array("pk"=>$data->primaryKey,"attribute"=>"' . $this->name . '"))',
+			'url' => 'Yii::app()->controller->createUrl("' . $this->toggleAction . '",array("id"=>$data->primaryKey,"attribute"=>"' . $this->name . '"))',
 			'htmlOptions' => array('class' => $this->name . '_toggle' . $this->uniqueClassSuffix),
 		);
 
@@ -230,8 +231,8 @@ function() {
 	 * @param integer $row the row number (zero-based)
 	 * @param mixed $data the data associated with the row
 	 */
-	protected function renderDataCellContent($row, $data) {
-		
+	protected function renderDataCellContent($row, $data)
+	{
 		$checked = ($this->value === null)
 			? CHtml::value($data, $this->name)
 			: $this->evaluateExpression($this->value, array('data' => $data, 'row' => $row));
@@ -245,21 +246,20 @@ function() {
 
 		if (!$this->displayText) {
 			$button['htmlOptions']['title'] = $this->getButtonLabel($checked);
-            if (!isset($button['htmlOptions']['data-toggle'])) {
-                $button['htmlOptions']['data-toggle'] = 'tooltip';
-            }
-			echo CHtml::link('<span class="glyphicon glyphicon-' . $button['icon'] . '"></span>', $button['url'], $button['htmlOptions']);
+			$button['htmlOptions']['rel'] = 'tooltip';
+			echo CHtml::link('<i class="' . $button['icon'] . '"></i>', $button['url'], $button['htmlOptions']);
 		} else {
 			$button['label'] = $this->getButtonLabel($checked);
-			$button['class'] = 'booster.widgets.TbButton';
+			$button['class'] = 'bootstrap.widgets.TbButton';
 			$widget = Yii::createComponent($button);
 			$widget->init();
 			$widget->run();
 		}
 	}
 
-	private function getButtonLabel($value) {
-		
-		return $value === null ? $this->emptyButtonLabel : ($value ? $this->checkedButtonLabel : $this->uncheckedButtonLabel);
+	private function getButtonLabel($value)
+	{
+		return $value === null ? $this->emptyButtonLabel
+			: ($value ? $this->checkedButtonLabel : $this->uncheckedButtonLabel);
 	}
 }

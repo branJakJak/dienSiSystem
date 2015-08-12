@@ -15,7 +15,6 @@ return array(
     // preloading 'log' component
     'preload' => array('log'),
     'aliases' => array(
-        'booster' =>dirname(__FILE__).'/../extensions/yiibooster',
         'bootstrap'=>dirname(__FILE__).'/../extensions/bootstrap',
         'yiiwheels'=>dirname(__FILE__).'/../extensions/yiiwheels'
     ),
@@ -23,7 +22,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-		// 'ext.YiiMailer.YiiMailer',
+        'bootstrap.helpers.TbHtml',
+        'bootstrap.helpers.TbArray',
+        'bootstrap.behaviors.TbWidget',
 	),
 
 	'modules'=>array(
@@ -47,8 +48,8 @@ return array(
             'class' => 'bootstrap.components.TbApi',
         ),
         'yiiwheels' => array(
-            'class' => 'yiiwheels.YiiWheels',   
-        ),        
+            'class' => 'ext.yiiwheels.YiiWheels',
+        ),
 		'user'=>array(
 			// enable cookie-based authentication
 			'allowAutoLogin'=>true,
@@ -86,7 +87,7 @@ return array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
 				array(
-					'class'=>'CFileLogRoute',
+					'class'=>'CWebLogRoute',
 					'levels'=>'error, warning',
 				),
 				// uncomment the following to show log messages on web pages

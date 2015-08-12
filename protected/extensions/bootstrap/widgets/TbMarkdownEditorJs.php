@@ -14,7 +14,6 @@
  * @see <https://github.com/arhpreston/jquery-markdown>
  *
  * @package booster.widgets.forms.inputs.wysiwyg
- * @deprecated replaced with TbMarkdownEditor
  */
 class TbMarkdownEditorJS extends CInputWidget
 {
@@ -63,11 +62,10 @@ class TbMarkdownEditorJS extends CInputWidget
 	 */
 	public function registerClientScript($id)
 	{
-        $booster = Booster::getBooster();
-        $booster->registerAssetCss('markdown.editor.css');
-        $booster->registerAssetJs('markdown.converter.js', CClientScript::POS_HEAD);
-        $booster->registerAssetJs('markdown.sanitizer.js', CClientScript::POS_HEAD);
-        $booster->registerAssetJs('markdown.editor.js', CClientScript::POS_HEAD);
+		Yii::app()->bootstrap->registerAssetCss('markdown.editor.css');
+		Yii::app()->bootstrap->registerAssetJs('markdown.converter.js', CClientScript::POS_HEAD);
+		Yii::app()->bootstrap->registerAssetJs('markdown.sanitizer.js', CClientScript::POS_HEAD);
+		Yii::app()->bootstrap->registerAssetJs('markdown.editor.js', CClientScript::POS_HEAD);
 		Yii::app()->clientScript->registerScript(
 			$id,
 			"var converter = Markdown.getSanitizingConverter();

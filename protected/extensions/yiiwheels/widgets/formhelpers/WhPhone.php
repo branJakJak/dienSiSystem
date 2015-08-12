@@ -1,109 +1,46 @@
 <?php
 /**
- * WhPhone widget class
  *
+ * WhCountries.php
+ *
+ * Date: 06/09/14
+ * Time: 14:17
  * @author Antonio Ramirez <amigo.cobos@gmail.com>
- * @copyright Copyright &copy; 2amigos.us 2013-
- * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package YiiWheels.widgets.formhelpers
- * @uses YiiStrap.helpers.TbArray
+ * @link http://www.ramirezcobos.com/
+ * @link http://www.2amigos.us/
  */
-Yii::import('bootstrap.helpers.TbArray');
+Yii::import('yiiwheels.widgets.formhelpers.WhInputWidget');
 
-class WhPhone extends CInputWidget
+class WhPhone extends WhInputWidget
 {
+    /**
+     * @var string the formatting options
+     */
+    public $format = false;
 
-	/**
-	 * @var string the formatting options
-	 */
-	public $format = false;
+    public function init()
+    {
+        parent::init();
+        TbHtml::addCssClass('bfh-phone', $this->htmlOptions);
 
-	/**
-	 * @var bool whether to display the language selection read only or not.
-	 */
-	public $readOnly = false;
+        $this->htmlOptions['data-format'] = $this->format;
 
-	/**
-	 * @var array
-	 */
-	public $pluginOptions = array();
+        unset($this->htmlOptions['data-name'], $this->htmlOptions['data-value']);
+    }
 
+    public function run()
+    {
+        if (!$this->readOnly) {
+            echo $this->hasModel()
+                ? CHtml::activeTextField($this->model, $this->attribute, $this->htmlOptions)
+                : CHtml::textField($this->name, $this->value, $this->htmlOptions);
+        } else {
+            $this->htmlOptions['data-number'] = $this->hasModel()
+                ? $this->model->{$this->attribute}
+                : $this->value;
+            echo CHtml::tag('span', $this->htmlOptions, '');
+        }
 
-	/**
-	 * Widget's initialization method
-	 * @throws CException
-	 */
-	public function init()
-	{
-
-		$this->attachBehavior('ywplugin', array('class' => 'yiiwheels.behaviors.WhPlugin'));
-
-		TbHtml::addCssClass('bfh-phone', $this->htmlOptions);
-		$this->htmlOptions['data-format'] = $this->format;
-		if ($this->readOnly) {
-			$this->htmlOptions['data-number'] = $this->hasModel()
-				? $this->model->{$this->attribute}
-				: $this->value;
-		} else {
-			$this->pluginOptions['format'] = $this->format;
-			$this->pluginOptions['value'] = $this->hasModel()
-				? $this->model->{$this->attribute}
-				: $this->value;
-		}
-
-	}
-
-	/**
-	 * Runs the widget.
-	 */
-	public function run()
-	{
-		$this->renderField();
-		$this->registerClientScript();
-	}
-
-	/**
-	 * Renders the input file field
-	 */
-	public function renderField()
-	{
-		list($name, $id) = $this->resolveNameID();
-
-		TbArray::defaultValue('id', $id, $this->htmlOptions);
-		TbArray::defaultValue('name', $name, $this->htmlOptions);
-
-
-		if (!$this->readOnly) {
-			if ($this->hasModel()) {
-				echo CHtml::activeTextField($this->model, $this->attribute, $this->htmlOptions);
-			} else {
-				echo CHtml::textField($name, $this->value, $this->htmlOptions);
-			}
-		} else {
-			echo CHtml::tag('span', $this->htmlOptions);
-		}
-	}
-
-	/**
-	 * Registers client script
-	 */
-	public function registerClientScript()
-	{
-		/* publish assets dir */
-		$path = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'assets';
-		$assetsUrl = $this->getAssetsUrl($path);
-
-		/* @var $cs CClientScript */
-		$cs = Yii::app()->getClientScript();
-
-		$cs->registerCssFile($assetsUrl . '/css/bootstrap-formhelpers.css');
-		$cs->registerScriptFile($assetsUrl . '/js/bootstrap-formhelpers-phone.js');
-
-		/* initialize plugin */
-		if(!$this->readOnly)
-		{
-			$selector = '#' . TbArray::getValue('id', $this->htmlOptions, $this->getId());
-			$this->getApi()->registerPlugin('bfhphone', $selector, $this->pluginOptions);
-		}
-	}
+        $this->registerPlugin('bfhphone');
+    }
 }

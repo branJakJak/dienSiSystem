@@ -7,7 +7,7 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php) 
  */
 
-Yii::import('booster.widgets.TbGridView');
+Yii::import('bootstrap.widgets.TbGridView');
 
 /**
  *## TbExtendedGridView is an extended version of TbGridView.
@@ -24,8 +24,8 @@ Yii::import('booster.widgets.TbGridView');
  *
  * @package booster.widgets.grids
  */
-class TbExtendedGridView extends TbGridView {
-	
+class TbExtendedGridView extends TbGridView
+{
 	/**
 	 * @var bool $fixedHeader if set to true will keep the header fixed  position
 	 */
@@ -205,7 +205,8 @@ class TbExtendedGridView extends TbGridView {
 	 *
 	 * Widget initialization
 	 */
-	public function init(){
+	public function init()
+	{
 
 		if (preg_match(
 			'/extendedsummary/i',
@@ -220,17 +221,12 @@ class TbExtendedGridView extends TbGridView {
 		}
 		if ($this->bulkActions !== array() && isset($this->bulkActions['actionButtons'])) {
 			if (!isset($this->bulkActions['class'])) {
-				$this->bulkActions['class'] = 'booster.widgets.TbBulkActions';
+				$this->bulkActions['class'] = 'bootstrap.widgets.TbBulkActions';
 			}
 
 			$this->bulk = Yii::createComponent($this->bulkActions, $this);
 			$this->bulk->init();
 		}
-		// if(isset($this->bulkActions['selectableEqualsChecked']) && $this->bulkActions['selectableEqualsChecked'] === true) {
-			$this->selectionChanged = 'js:function(id) {
-				$("#"+id+" input[type=checkbox]").change();
-			}';
-		// }
 		parent::init();
 	}
 
@@ -254,7 +250,7 @@ class TbExtendedGridView extends TbGridView {
 	{
 		$data = $this->dataProvider->getData();
 		
-		if (!$this->sortableRows || (isset($data[0]) && !isset($data[0]->attributes[(string)$this->sortableAttribute]))) {
+		if (!$this->sortableRows || !$this->getAttribute($data[0], (string)$this->sortableAttribute)) {
 			parent::renderKeys();
 		}
 
@@ -320,7 +316,7 @@ class TbExtendedGridView extends TbGridView {
 			$key = $this->dataProvider->keyAttribute === null ? $data->getPrimaryKey() : $data->{$this->dataProvider->keyAttribute};
 			return is_array($key) ? implode(',', $key) : $key;
 		}
-		if (($this->dataProvider instanceof CArrayDataProvider || $this->dataProvider instanceof CSqlDataProvider) && !empty($this->dataProvider->keyField)) {
+		if ($this->dataProvider instanceof CArrayDataProvider || $this->dataProvider instanceof CSqlDataProvider) {
 			return is_object($data) ? $data->{$this->dataProvider->keyField}
 				: $data[$this->dataProvider->keyField];
 		}
@@ -333,8 +329,8 @@ class TbExtendedGridView extends TbGridView {
 	 *
 	 * Renders grid header
 	 */
-	public function renderTableHeader() {
-		
+	public function renderTableHeader()
+	{
 		$this->renderChart();
 		parent::renderTableHeader();
 	}
@@ -373,10 +369,8 @@ class TbExtendedGridView extends TbGridView {
 	/**
 	 *### .renderBulkActions()
 	 */
-	public function renderBulkActions() {
-		
-        Booster::getBooster()->registerAssetJs('jquery.saveselection.gridview.js');
-        $this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.afterUpdateGrid('".$this->id."');";
+	public function renderBulkActions()
+	{
 		echo '<tr><td colspan="' . count($this->columns) . '">';
 		$this->bulk->renderButtons();
 		echo '</td></tr>';
@@ -389,8 +383,8 @@ class TbExtendedGridView extends TbGridView {
 	 * Renders chart
 	 * @throws CException
 	 */
-	public function renderChart() {
-		
+	public function renderChart()
+	{
 		if (!$this->displayChart || $this->dataProvider->getItemCount() <= 0) {
 			return;
 		}
@@ -416,7 +410,7 @@ class TbExtendedGridView extends TbGridView {
 		// render switch buttons
 		$buttons = Yii::createComponent(
 			array(
-				'class' => 'booster.widgets.TbButtonGroup',
+				'class' => 'bootstrap.widgets.TbButtonGroup',
 				'toggle' => 'radio',
 				'buttons' => array(
 					array(
@@ -433,15 +427,14 @@ class TbExtendedGridView extends TbGridView {
 				'htmlOptions' => array('style' => 'margin-bottom:5px')
 			)
 		);
-		echo '<div>';
+		echo '<div class="row">';
 		$buttons->init();
 		$buttons->run();
 		echo '</div>';
 
 		$chartId = preg_replace('[-\\ ?]', '_', 'exgvwChart' . $this->getId()); // cleaning out most possible characters invalid as javascript variable identifiers.
 
-		$this->componentsReadyScripts[] = '$(document).on("click",".' . $this->getId() . '-grid-control", function() {
-			$(this).parent().find("input[type=\"radio\"]").parent().toggleClass("active");
+		$this->componentsReadyScripts[] = '$(document).on("click",".' . $this->getId() . '-grid-control", function(){
 			if ($(this).hasClass("grid") && $("#' . $this->getId() . ' #' . $chartId . '").is(":visible"))
 			{
 				$("#' . $this->getId() . ' #' . $chartId . '").hide();
@@ -454,16 +447,6 @@ class TbExtendedGridView extends TbGridView {
 			}
 			return false;
 		});';
-		
-		$this->componentsAfterAjaxUpdate[] = '
-			if($("label.grid.'.$this->getId().'-grid-control").hasClass("active")) {
-				$("#' . $this->getId() . ' #' . $chartId . '").hide();
-				$("#' . $this->getId() . ' table.items").show();
-			} else {
-				$("#' . $this->getId() . ' table.items").hide();
-				$("#' . $this->getId() . ' #' . $chartId . '").show();
-			}
-		';
 		// end switch buttons
 		// ****************************************
 
@@ -492,48 +475,18 @@ class TbExtendedGridView extends TbGridView {
 			++$cnt;
 		}
 
-		$xAxisData = [];
-		
-		$xAxisData[] = array('categories'=>array());
-		if(!empty($this->chartOptions['data']['xAxis'])){
-			$xAxis = $this->chartOptions['data']['xAxis'];
-			$categories = $xAxis['categories'];
-			if(is_array($categories)) {
-				$xAxisData['categories'] = $categories;
-			} else { // field name
-				for ($row = 0; $row < $count; ++$row) {
-					$column = $this->getColumnByName($categories);
-					if (!is_null($column) && $column->value !== null) {
-						$xAxisData['categories'][] = $this->evaluateExpression(
-								$column->value,
-								array('data' => $data[$row], 'row' => $row)
-						);
-					} else {
-						$value = CHtml::value($data[$row], $categories);
-						$xAxisData['categories'][] = $value;
-					}
-				}
-			}
-		}
-		
 		// ****************************************
 		// render chart
 		$options = CMap::mergeArray(
 			$this->chartOptions['config'],
-			array('series' => $seriesData, 'xAxis' => $xAxisData)
+			array('series' => $seriesData)
 		);
 		$this->chartOptions['htmlOptions'] = isset($this->chartOptions['htmlOptions'])
 			? $this->chartOptions['htmlOptions'] : array();
-		
-		// sorry but use a class to provide styles, we need this
-		if(empty($this->chartOptions['htmlOptions']['style']))
-			$this->chartOptions['htmlOptions']['style'] = 'width: 100%; height: 100%;';
-		else
-			$this->chartOptions['htmlOptions']['style'] = $this->chartOptions['htmlOptions']['style'].'; width: 100%; height: 100%;';
-		
+		$this->chartOptions['htmlOptions']['style'] = 'display:none'; // sorry but use a class to provide styles, we need this
 		// build unique ID
 		// important!
-		echo '<div>';
+		echo '<div class="row">';
 		if ($this->ajaxUpdate !== false) {
 			if (isset($options['chart']) && is_array($options['chart'])) {
 				$options['chart']['renderTo'] = $chartId;
@@ -549,16 +502,11 @@ class TbExtendedGridView extends TbGridView {
 			echo "<div id='{$chartId}' " . CHtml::renderAttributes(
 				$this->chartOptions['htmlOptions']
 			) . " data-config='{$jsOptions}'></div>";
-			
-			/* fix for chart dimensions changing after ajax */
-			$this->componentsAfterAjaxUpdate[] = "
-				$('#".$chartId."').width($('#".$this->id." table').width());
-				$('#".$chartId."').height($('#".$this->id." table').height() + 150);
-				highchart{$chartId} = new Highcharts.Chart($('#{$chartId}').data('config'));
-			";
+
+			$this->componentsAfterAjaxUpdate[] = "highchart{$chartId} = new Highcharts.Chart($('#{$chartId}').data('config'));";
 		}
 		$configChart = array(
-			'class' => 'booster.widgets.TbHighCharts',
+			'class' => 'bootstrap.widgets.TbHighCharts',
 			'id' => $chartId,
 			'options' => $options,
 			'htmlOptions' => $this->chartOptions['htmlOptions']
@@ -569,23 +517,6 @@ class TbExtendedGridView extends TbGridView {
 		echo '</div>';
 		// end chart display
 		// ****************************************
-		
-		// check if the chart should appear by default
-		if(isset($this->chartOptions['defaultView']) && $this->chartOptions['defaultView'] === true) {
-			$this->componentsReadyScripts[] = '
-				$(".' . $this->getId() . '-grid-control.grid").removeClass("active");
-				$(".' . $this->getId() . '-grid-control.chart").addClass("active");
-				$("#' . $this->getId() . ' table.items").hide();
-				$("#' . $this->getId() . ' #' . $chartId . '").show();
-			';
-		} else {
-			$this->componentsReadyScripts[] = '
-				$(".' . $this->getId() . '-grid-control.grid").addClass("active");
-				$(".' . $this->getId() . '-grid-control.chart").removeClass("active");
-				$("#' . $this->getId() . ' table.items").show();
-				$("#' . $this->getId() . ' #' . $chartId . '").hide();
-			';
-		}
 	}
 
 	/**
@@ -688,7 +619,7 @@ class TbExtendedGridView extends TbGridView {
 
 		$fixedHeaderJs = '';
 		if ($this->fixedHeader) {
-            Booster::getBooster()->registerAssetJs('jquery.stickytableheaders' . (!YII_DEBUG ? '.min' : '') . '.js');
+			Yii::app()->bootstrap->registerAssetJs('jquery.stickytableheaders' . (!YII_DEBUG ? '.min' : '') . '.js');
 			$fixedHeaderJs = "$('#{$this->id} table.items').stickyTableHeaders({fixedOffset:{$this->headerOffset}});";
 			$this->componentsAfterAjaxUpdate[] = $fixedHeaderJs;
 		}
@@ -709,7 +640,7 @@ class TbExtendedGridView extends TbGridView {
 
 			$this->selectableRows = 1;
 			$cs->registerCoreScript('jquery.ui');
-            Booster::getBooster()->registerAssetJs('jquery.sortable.gridview.js');
+			Yii::app()->bootstrap->registerAssetJs('jquery.sortable.gridview.js');
 
 			if ($this->sortableAjaxSave && $this->sortableAction !== null) {
 				$sortableAction = Yii::app()->createUrl(
@@ -721,29 +652,26 @@ class TbExtendedGridView extends TbGridView {
 			}
 
 			$afterSortableUpdate = CJavaScript::encode($afterSortableUpdate);
-			if (Yii::app()->request->enableCsrfValidation)
-			{
-				$csrfTokenName = Yii::app()->request->csrfTokenName;
-				$csrfToken = Yii::app()->request->csrfToken;
-				$csrf = "{'$csrfTokenName':'$csrfToken' }";
-			} else
-				$csrf = '{}';
-
-			$this->componentsReadyScripts[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate}, $csrf);";
-			$this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate}, $csrf);";
+			$this->componentsReadyScripts[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate});";
+			$this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.sortable('{$this->id}', '{$sortableAction}', {$afterSortableUpdate});";
 		}
 
 		if ($this->selectableCells) {
 			$afterSelectableCells = '';
 			if ($this->afterSelectableCells !== null) {
-				if (!($this->afterSelectableCells instanceof CJavaScriptExpression) && strpos($this->afterSelectableCells,'js:') !== 0) {
+				echo strpos($this->afterSelectableCells, 'js:');
+				if (!($this->afterSelectableCells instanceof CJavaScriptExpression) && strpos(
+					$this->afterSelectableCells,
+					'js:'
+				) !== 0
+				) {
 					$afterSelectableCells = new CJavaScriptExpression($this->afterSelectableCells);
 				} else {
 					$afterSelectableCells = $this->afterSelectableCells;
 				}
 			}
 			$cs->registerCoreScript('jquery.ui');
-            Booster::getBooster()->registerAssetJs('jquery.selectable.gridview.js');
+			Yii::app()->bootstrap->registerAssetJs('jquery.selectable.gridview.js');
 			$afterSelectableCells = CJavaScript::encode($afterSelectableCells);
 			$this->componentsReadyScripts[] = "$.fn.yiiGridView.selectable('{$this->id}','{$this->selectableCellsFilter}',{$afterSelectableCells});";
 			$this->componentsAfterAjaxUpdate[] = "$.fn.yiiGridView.selectable('{$this->id}','{$this->selectableCellsFilter}', {$afterSelectableCells});";
@@ -752,7 +680,7 @@ class TbExtendedGridView extends TbGridView {
 		$cs->registerScript(
 			__CLASS__ . '#' . $this->id . 'Ex',
 			'
-			var $grid = $("#' . $this->id . '");
+					   $grid = $("#' . $this->id . '");
 			' . $fixedHeaderJs . '
 			if ($(".' . $this->extendedSummaryCssClass . '", $grid).length)
 			{
@@ -763,26 +691,23 @@ class TbExtendedGridView extends TbGridView {
 				var qs = $.deparam.querystring(options.url);
 				if (qs.hasOwnProperty("ajax") && qs.ajax == "' . $this->id . '")
 				{
-				    if (typeof (options.realsuccess) == "undefined" || options.realsuccess !== options.success)
-				    {
-                        options.realsuccess = options.success;
-                        options.success = function(data)
-                        {
-                            if (options.realsuccess) {
-                                options.realsuccess(data);
-                                var $data = $("<div>" + data + "</div>");
-                                // we need to get the grid again... as it has been updated
-                                if ($(".' . $this->extendedSummaryCssClass . '", $("#' . $this->id . '")))
-                                {
-                                    $(".' . $this->extendedSummaryCssClass . '", $("#' . $this->id . '")).html($("#' . $this->id . '-extended-summary", $data).html());
-                                }
-                                ' . (count($this->componentsAfterAjaxUpdate) ? implode(
-                    PHP_EOL,
-                    $this->componentsAfterAjaxUpdate
-                ) : '') . '
-                            }
-                        }
-				    }
+					options.realsuccess = options.success;
+					options.success = function(data)
+					{
+						if (options.realsuccess) {
+							options.realsuccess(data);
+							var $data = $("<div>" + data + "</div>");
+							// we need to get the grid again... as it has been updated
+							if ($(".' . $this->extendedSummaryCssClass . '", $("#' . $this->id . '")))
+							{
+								$(".' . $this->extendedSummaryCssClass . '", $("#' . $this->id . '")).html($("#' . $this->id . '-extended-summary", $data).html());
+							}
+							' . (count($this->componentsAfterAjaxUpdate) ? implode(
+				PHP_EOL,
+				$this->componentsAfterAjaxUpdate
+			) : '') . '
+						}
+					}
 				}
 			});'
 		);
@@ -1214,8 +1139,8 @@ class TbPercentOfTypeGooglePieOperation extends TbPercentOfTypeOperation
 	 * @see TbOperation
 	 * @return mixed|void
 	 */
-	public function displaySummary() {
-		
+	public function displaySummary()
+	{
 		$this->data[] = array('Label', 'Percent');
 
 		foreach ($this->types as $type) {
@@ -1242,7 +1167,7 @@ class TbPercentOfTypeGooglePieOperation extends TbPercentOfTypeOperation
 	{
 		$chart = Yii::createComponent(
 			array(
-				'class' => 'booster.widgets.TbGoogleVisualizationChart',
+				'class' => 'bootstrap.widgets.TbGoogleVisualizationChart',
 				'visualization' => 'PieChart',
 				'containerId' => $this->getId(),
 				'data' => $this->data,
@@ -1333,9 +1258,8 @@ class TbPercentOfTypeEasyPieOperation extends TbPercentOfTypeOperation
 	 */
 	protected function registerClientScripts()
 	{
-        $booster = Booster::getBooster();
-        $booster->registerAssetCss('easy-pie-chart.css');
-        $booster->registerAssetJs('jquery.easy.pie.chart.js');
+		Yii::app()->bootstrap->registerAssetCss('easy-pie-chart.css');
+		Yii::app()->bootstrap->registerAssetJs('jquery.easy.pie.chart.js');
 
 		$options = CJavaScript::encode($this->chartOptions);
 		Yii::app()->getClientScript()->registerScript(

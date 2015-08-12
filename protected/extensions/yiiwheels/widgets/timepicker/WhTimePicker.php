@@ -54,6 +54,8 @@ class WhTimePicker extends CInputWidget
     public function init()
     {
         $this->attachBehavior('ywplugin', array('class' => 'yiiwheels.behaviors.WhPlugin'));
+
+        TbHtml::addCssClass('form-control', $this->htmlOptions);
     }
 
     /**
@@ -77,13 +79,14 @@ class WhTimePicker extends CInputWidget
         TbArray::defaultValue('id', $id, $this->htmlOptions);
         TbArray::defaultValue('name', $name, $this->htmlOptions);
 
-        echo '<span class="bootstrap-timepicker">';
+        echo '<div class="input-group">';
+        echo '<div class="input-group-addon"><span class="glyphicon glyphicon-time"></span></div>';
         if ($this->hasModel()) {
             echo CHtml::activeTextField($this->model, $this->attribute, $this->htmlOptions);
         } else {
             echo CHtml::textField($name, $this->value, $this->htmlOptions, array('style' => 'width:100%'));
         }
-        echo '</span>';
+        echo '</div>';
     }
 
     /**

@@ -7,7 +7,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
-Yii::import('booster.widgets.TbButtonColumn');
+Yii::import('bootstrap.widgets.TbButtonColumn');
 
 /**
  *## JsonButtomColumn widget
@@ -16,7 +16,7 @@ Yii::import('booster.widgets.TbButtonColumn');
  *
  * @property TbJsonGridView $grid
  *
- * @package booster.widgets.grids.columns.json
+ * @package booster.widgets.grids.columns
  */
 class TbJsonButtonColumn extends TbButtonColumn
 {
@@ -46,41 +46,18 @@ class TbJsonButtonColumn extends TbButtonColumn
 	public function renderDataCell($row)
 	{
 		if ($this->grid->json) {
-            $data = $this->grid->dataProvider->data[$row];
-            $options = $this->htmlOptions;
-            if ($this->cssClassExpression !== null) {
-                $class = $this->evaluateExpression($this->cssClassExpression, array('row' => $row, 'data' => $data));
-                if (!empty($class)) {
-                    if (isset($options['class'])) {
-                        $options['class'] .= ' ' . $class;
-                    } else {
-                        $options['class'] = $class;
-                    }
-                }
-            }
-
-            return array(
-                'attrs' => CHtml::renderAttributes($options),
-                'content' => $this->renderDataCellContent($row, $data),
-            );
+			$data = $this->grid->dataProvider->data[$row];
+			$col = array();
+			ob_start();
+			$this->renderDataCellContent($row, $data);
+			$col['content'] = ob_get_contents();
+			ob_end_clean();
+			$col['attrs'] = '';
+			return $col;
 		}
 
 		parent::renderDataCell($row);
 	}
-
-    protected function renderDataCellContent($row, $data)
-    {
-        ob_start();
-        parent::renderDataCellContent($row, $data);
-        $html = ob_get_contents();
-        ob_end_clean();
-
-        if ($this->grid->json) {
-            return $html;
-        }
-
-        echo $html;
-    }
 
 	/**
 	 * Initializes the default buttons (view, update and delete).

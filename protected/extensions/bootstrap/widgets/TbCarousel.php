@@ -6,10 +6,6 @@
  * @copyright Copyright &copy; Christoffer Niska 2011-
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php) 
  * @since 0.9.10
- * 
- * @author Amr Bedair <amr.bedair@gmail.com>
- * @since v4.0.0 - modified to work with bootstrap 3.1.1
- * 
  */
 
 /**
@@ -19,17 +15,17 @@
  *
  * @package booster.widgets.grouping
  */
-class TbCarousel extends CWidget {
-	
+class TbCarousel extends CWidget
+{
 	/**
 	 * @var string the previous button label. Defaults to '&lsaquo;'.
 	 */
-	public $prevLabel = '<span class="glyphicon glyphicon-chevron-left"></span>';
+	public $prevLabel = '&lsaquo;';
 
 	/**
 	 * @var string the next button label. Defaults to '&rsaquo;'.
 	 */
-	public $nextLabel = '<span class="glyphicon glyphicon-chevron-right"></span>';
+	public $nextLabel = '&rsaquo;';
 
 	/**
 	 * @var boolean indicates whether the carousel should slide items.
@@ -66,8 +62,8 @@ class TbCarousel extends CWidget {
 	 *
 	 * Initializes the widget.
 	 */
-	public function init() {
-		
+	public function init()
+	{
 		if (!isset($this->htmlOptions['id'])) {
 			$this->htmlOptions['id'] = $this->getId();
 		}
@@ -93,12 +89,11 @@ class TbCarousel extends CWidget {
 	 *
 	 * Runs the widget.
 	 */
-	public function run() {
-		
+	public function run()
+	{
 		$id = $this->htmlOptions['id'];
 
 		echo CHtml::openTag('div', $this->htmlOptions);
-		$this->renderIndicators();
 		echo '<div class="carousel-inner">';
 		$this->renderItems($this->items);
 		echo '</div>';
@@ -120,19 +115,6 @@ class TbCarousel extends CWidget {
 			$cs->registerScript(__CLASS__ . '#' . $id . '_' . $name, "jQuery('#{$id}').on('{$name}', {$handler});");
 		}
 	}
-	
-	/**
-	 * 
-	 */
-	protected function renderIndicators() {
-		
-		echo '<ol class="carousel-indicators">';
-		$count = count($this->items);
-		for ($i = 0; $i < $count; $i++) {
-			echo '<li data-target="#'.$this->id.'" data-slide-to="'.$i.'" class="'.($i===0?'active':'').'"></li>';
-		}
-		echo '</ol>';
-	}
 
 	/**
 	 *### .renderItems()
@@ -141,8 +123,8 @@ class TbCarousel extends CWidget {
 	 *
 	 * @param array $items the item configuration.
 	 */
-	protected function renderItems($items) {
-		
+	protected function renderItems($items)
+	{
 		foreach ($items as $i => $item) {
 			if (!is_array($item)) {
 				continue;
@@ -182,33 +164,7 @@ class TbCarousel extends CWidget {
 					$item['imageOptions'] = array();
 				}
 
-                /**
-                 * Is this image should be a link?
-                 * @since 2.1.0
-                 */
-                if (isset($item['link'])) {
-                    // Any kind of link options
-                    if (!isset($item['linkOptions']) || !is_array($item['linkOptions'])) {
-                        $item['linkOptions'] = array();
-                    }
-
-                    // URL
-                    if(is_array($item['link'])) {
-                        $route = isset($item['link'][0]) ? $item['link'][0] : '';
-                        $item['linkOptions']['href'] = Yii::app()->createUrl($route, array_splice($item['link'], 1));
-                    } else {
-                        $item['linkOptions']['href'] = $item['link'];
-                    }
-
-                    // Print out 'A' tag
-                    echo CHtml::openTag('a', $item['linkOptions']);
-                }
-
 				echo CHtml::image($item['image'], $item['alt'], $item['imageOptions']);
-
-                if (isset($item['link'])) {
-                    echo '</a>';
-                }
 			}
 
 			if (!empty($item['caption']) && (isset($item['label']) || isset($item['caption']))) {
@@ -225,7 +181,7 @@ class TbCarousel extends CWidget {
 				echo CHtml::openTag('div', $item['captionOptions']);
 
 				if (isset($item['label'])) {
-					echo '<h3>' . $item['label'] . '</h3>';
+					echo '<h4>' . $item['label'] . '</h4>';
 				}
 
 				if (isset($item['caption'])) {

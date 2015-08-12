@@ -1,76 +1,64 @@
 <?php
 /**
- *## TbHeroUnit class file.
- *
- * @author Christoffer Niska <ChristofferNiska@gmail.com>
- * @copyright  Copyright &copy; Christoffer Niska 2011-
- * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
- * @since 0.9.10
+ * TbHeroUnit class file.
+ * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2013-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package bootstrap.widgets
  */
 
+Yii::import('bootstrap.helpers.TbHtml');
+
 /**
- *## Class TbHeroUnit
- *
- * Modest bootstrap hero unit widget.
- * Thanks to Christphe Boulain for suggesting content capturing.
- * @see <http://twitter.github.com/bootstrap/components.html#typography>
- *
- * @package booster.widgets.decoration
+ * Bootstrap hero unit widget.
+ * @see http://twitter.github.com/bootstrap/javascript.html#affix
  */
 class TbHeroUnit extends CWidget
 {
-	/**
-	 * @var string the heading text.
-	 */
-	public $heading;
+    /**
+     * @var string the heading text.
+     */
+    public $heading;
+    /**
+     * @var array the HTML attributes for the heading.
+     */
+    public $headingOptions = array();
+    /**
+     * @var string the content text.
+     */
+    public $content;
+    /**
+     * @var string the path to a partial view.
+     */
+    public $view;
+    /**
+     * @var array the HTML attributes for the container tag.
+     */
+    public $htmlOptions = array();
+    /**
+     * @var array additional data to be passed to the view.
+     */
+    public $viewData = array();
 
-	/**
-	 * @var boolean indicates whether to encode the heading.
-	 */
-	public $encodeHeading = true;
+    /**
+     * Initializes the widget.
+     */
+    public function init()
+    {
+        if (isset($this->view)) {
+            $controller = $this->getController();
+            if (isset($controller) && $controller->getViewFile($this->view) !== false) {
+                $this->content = $this->controller->renderPartial($this->view, $this->viewData, true);
+            }
+        }
+        $this->htmlOptions['headingOptions'] = $this->headingOptions;
+    }
 
-	/**
-	 * @var array the HTML attributes for the widget container.
-	 */
-	public $htmlOptions = array();
-
-	/**
-	 * @var array the HTML attributes for the heading element.
-	 * @since 1.0.0
-	 */
-	public $headingOptions = array();
-
-	/**
-	 *### .init()
-	 *
-	 * Initializes the widget.
-	 */
-	public function init()
-	{
-		if (isset($this->htmlOptions['class'])) {
-			$this->htmlOptions['class'] .= ' hero-unit';
-		} else {
-			$this->htmlOptions['class'] = 'hero-unit';
-		}
-
-		echo CHtml::openTag('div', $this->htmlOptions);
-
-		if ($this->encodeHeading) {
-			$this->heading = CHtml::encode($this->heading);
-		}
-
-		if (isset($this->heading)) {
-			echo CHtml::tag('h1', $this->headingOptions, $this->heading);
-		}
-	}
-
-	/**
-	 *### .run()
-	 *
-	 * Runs the widget.
-	 */
-	public function run()
-	{
-		echo CHtml::closeTag('div');
-	}
+    /**
+     * Runs the widget.
+     */
+    public function run()
+    {
+        echo TbHtml::heroUnit($this->heading, $this->content, $this->htmlOptions);
+    }
 }

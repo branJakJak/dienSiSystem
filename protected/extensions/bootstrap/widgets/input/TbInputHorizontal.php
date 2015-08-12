@@ -7,7 +7,7 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
-Yii::import('booster.widgets.input.TbInput');
+Yii::import('bootstrap.widgets.input.TbInput');
 
 /**
  *## TbInputHorizontal class
@@ -26,7 +26,7 @@ class TbInputHorizontal extends TbInput
 	{
 		echo CHtml::openTag('div', array('class' => 'control-group ' . $this->getContainerCssClass()));
 		parent::run();
-		echo CHtml::closeTag('div');
+		echo '</div>';
 	}
 
 	/**
@@ -55,12 +55,9 @@ class TbInputHorizontal extends TbInput
 	protected function checkBox()
 	{
 		$attribute = $this->attribute;
-		list($hidden, $checkbox) = $this->getSeparatedSelectableInput();
-
 		echo '<div class="controls">';
-		echo ($hidden) ? $hidden . PHP_EOL : '';
 		echo '<label class="checkbox" for="' . $this->getAttributeId($attribute) . '">';
-		echo $checkbox . PHP_EOL;
+		echo $this->form->checkBox($this->model, $attribute, $this->htmlOptions) . PHP_EOL;
 		echo $this->model->getAttributeLabel($attribute);
 		echo $this->getError() . $this->getHint();
 		echo '</label></div>';
@@ -85,7 +82,7 @@ class TbInputHorizontal extends TbInput
 
 		echo $this->getLabel();
 		echo '<div class="controls">';
-		$this->widget('booster.widgets.TbToggleButton', $options);
+		$this->widget('bootstrap.widgets.TbToggleButton', $options);
 		echo $this->getError() . $this->getHint();
 		echo '</div>';
 	}
@@ -183,54 +180,15 @@ class TbInputHorizontal extends TbInput
 	}
 
 	/**
-	 * Renders a Pass*Field field.
-	 * @return string the rendered content
-	 * @author Hrumpa
-	 */
-	protected function passfieldField()
-	{
-		if (isset($this->htmlOptions['options'])) {
-			$options = $this->htmlOptions['options'];
-			unset($this->htmlOptions['options']);
-		}
-
-		if (isset($this->htmlOptions['events'])) {
-			$events = $this->htmlOptions['events'];
-			unset($this->htmlOptions['events']);
-		}
-
-		echo $this->getLabel();
-		echo '<div class="controls">';
-		echo $this->getPrepend();
-		$this->widget(
-			'booster.widgets.TbPassfield',
-			array(
-				'model' => $this->model,
-				'attribute' => $this->attribute,
-				'options' => isset($options) ? $options : array(),
-				'events' => isset($events) ? $events : array(),
-				'htmlOptions' => $this->htmlOptions,
-			)
-		);
-		echo $this->getAppend();
-		echo $this->getError() . $this->getHint();
-		echo '</div>';
-	}
-
-	/**
 	 * Renders a radio button.
 	 * @return string the rendered content
 	 */
 	protected function radioButton()
 	{
 		$attribute = $this->attribute;
-		list($hidden, $radioButton) = $this->getSeparatedSelectableInput();
-
 		echo '<div class="controls">';
-		echo ($hidden) ? $hidden . PHP_EOL : '';
 		echo '<label class="radio" for="' . $this->getAttributeId($attribute) . '">';
-		echo $radioButton . PHP_EOL;
-		//echo $this->form->radioButton($this->model, $attribute, $this->htmlOptions) . PHP_EOL;
+		echo $this->form->radioButton($this->model, $attribute, $this->htmlOptions) . PHP_EOL;
 		echo $this->model->getAttributeLabel($attribute);
 		echo $this->getError() . $this->getHint();
 		echo '</label></div>';
@@ -243,10 +201,10 @@ class TbInputHorizontal extends TbInput
 	protected function radioButtonList()
 	{
 		echo $this->getLabel();
-		echo '<div class="controls"><span id="' . $this->getAttributeId($this->attribute) . '">';
+		echo '<div class="controls">';
 		echo $this->form->radioButtonList($this->model, $this->attribute, $this->data, $this->htmlOptions);
 		echo $this->getError() . $this->getHint();
-		echo '</span></div>';
+		echo '</div>';
 	}
 
 	/**
@@ -378,42 +336,7 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="controls">';
 		echo $this->getPrepend();
 		$this->widget(
-			'booster.widgets.TbDatePicker',
-			array(
-				'model' => $this->model,
-				'attribute' => $this->attribute,
-				'options' => isset($options) ? $options : array(),
-				'events' => isset($events) ? $events : array(),
-				'htmlOptions' => $this->htmlOptions,
-			)
-		);
-		echo $this->getAppend();
-		echo $this->getError() . $this->getHint();
-		echo '</div>';
-	}
-
-	/**
-	 * Renders a datetimepicker field.
-	 * @return string the rendered content
-	 * @author Hrumpa
-	 */
-	protected function datetimepickerField()
-	{
-		if (isset($this->htmlOptions['options'])) {
-			$options = $this->htmlOptions['options'];
-			unset($this->htmlOptions['options']);
-		}
-
-		if (isset($this->htmlOptions['events'])) {
-			$events = $this->htmlOptions['events'];
-			unset($this->htmlOptions['events']);
-		}
-
-		echo $this->getLabel();
-		echo '<div class="controls">';
-		echo $this->getPrepend();
-		$this->widget(
-			'booster.widgets.TbDateTimePicker',
+			'bootstrap.widgets.TbDatePicker',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -449,7 +372,7 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="controls">';
 		echo $this->getPrepend();
 		$this->widget(
-			'booster.widgets.TbColorPicker',
+			'bootstrap.widgets.TbColorPicker',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -484,7 +407,7 @@ class TbInputHorizontal extends TbInput
 		echo $this->getLabel();
 		echo '<div class="controls">';
 		$this->widget(
-			'booster.widgets.TbRedactorJs',
+			'bootstrap.widgets.TbRedactorJs',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -518,7 +441,7 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="wmd-panel">';
 		echo '<div id="wmd-button-bar" class="btn-toolbar"></div>';
 		$this->widget(
-			'booster.widgets.TbMarkdownEditorJs',
+			'bootstrap.widgets.TbMarkdownEditorJs',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -555,7 +478,7 @@ class TbInputHorizontal extends TbInput
 		echo $this->getLabel();
 		echo '<div class="controls">';
 		$this->widget(
-			'booster.widgets.TbHtml5Editor',
+			'bootstrap.widgets.TbHtml5Editor',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -584,7 +507,7 @@ class TbInputHorizontal extends TbInput
 		echo $this->getLabel();
 		echo '<div class="controls">';
 		$this->widget(
-			'booster.widgets.TbCKEditor',
+			'bootstrap.widgets.TbCKEditor',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -617,7 +540,7 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="controls">';
 		echo $this->getPrepend();
 		$this->widget(
-			'booster.widgets.TbDateRangePicker',
+			'bootstrap.widgets.TbDateRangePicker',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -649,10 +572,10 @@ class TbInputHorizontal extends TbInput
 		}
 
 		echo $this->getLabel();
-		echo '<div class="controls">';
+		echo '<div class="controls bootstrap-timepicker">';
 		echo $this->getPrepend();
 		$this->widget(
-			'booster.widgets.TbTimePicker',
+			'bootstrap.widgets.TbTimePicker',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -697,7 +620,7 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="controls">';
 		echo $this->getPrepend();
 		$this->widget(
-			'booster.widgets.TbSelect2',
+			'bootstrap.widgets.TbSelect2',
 			array(
 				'model' => $this->model,
 				'attribute' => $this->attribute,
@@ -739,21 +662,6 @@ class TbInputHorizontal extends TbInput
 		echo '<div class="controls">';
 		echo $this->getPrepend();
 		echo $this->form->numberField($this->model, $this->attribute, $this->htmlOptions);
-		echo $this->getAppend();
-		echo $this->getError() . $this->getHint();
-		echo '</div>';
-	}
-
-	/**
-	 * Renders a pre-rendered custom field.
-	 * @return string the rendered content
-	 */
-	protected function customField()
-	{
-		echo $this->getLabel();
-		echo '<div class="controls">';
-		echo $this->getPrepend();
-		echo $this->htmlOptions['input'];
 		echo $this->getAppend();
 		echo $this->getError() . $this->getHint();
 		echo '</div>';

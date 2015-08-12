@@ -8,13 +8,12 @@
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
 
-Yii::import('booster.widgets.TbMenu');
+Yii::import('bootstrap.widgets.TbMenu');
 
 /**
- *## Twitter Bootstrap Wizard widget
+ *## Bootstrap Javascript tabs widget.
  *
- * @see <https://github.com/VinceG/twitter-bootstrap-wizard>
- * @see <http://vadimg.com/twitter-bootstrap-wizard-example/>
+ * @see <http://twitter.github.com/bootstrap/javascript.html#tabs>
  *
  * @package booster.widgets.grouping
  */
@@ -135,7 +134,7 @@ class TbWizard extends CWidget
 			echo '<div class="navbar"><div class="navbar-inner">';
 		}
 		$this->controller->widget(
-			'booster.widgets.TbMenu',
+			'bootstrap.widgets.TbMenu',
 			array(
 				'stacked' => $this->stacked,
 				'type' => $this->type,
@@ -161,9 +160,7 @@ class TbWizard extends CWidget
 
 		/** @var CClientScript $cs */
 		$cs = Yii::app()->getClientScript();
-
-		$cs->registerPackage('bootstrap.wizard');
-
+		Yii::app()->bootstrap->registerAssetJs('jquery.bootstrap.wizard.js');
 		// Override options
 		if ($this->type && !isset($this->options['class'])) {
 			$this->options['class'] = $this->type;

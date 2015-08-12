@@ -59,18 +59,18 @@ class WhToggleColumn extends TbDataColumn
      * @var string the glyph icon toggle button "checked" state.
      * You may set this property to be false to render a text link instead.
      */
-    public $checkedIcon = 'icon-ok-circle';
+    public $checkedIcon = 'glyphicon-ok-circle';
 
     /**
      * @var string the glyph icon toggle button "unchecked" state.
      * You may set this property to be false to render a text link instead.
      */
-    public $uncheckedIcon = 'icon-remove-sign';
+    public $uncheckedIcon = 'glyphicon-remove-sign';
 
     /**
      * @var string the glyph icon toggle button "empty" state (example for null value)
      */
-    public $emptyIcon = 'icon-question-sign';
+    public $emptyIcon = 'glyphicon-question-sign';
 
     /**
      * @var boolean display button with text or only icon with label tooltip

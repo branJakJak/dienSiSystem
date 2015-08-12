@@ -131,5 +131,13 @@ class BlackListedMobile extends CActiveRecord
 		}
 		return $count;
 	}
+	public function thisWeekSubmittion()
+	{
+		$criteria=new CDbCriteria();
+        $criteria->addBetweenCondition("date_created", date("Y-m-d H:i:s", strtotime("monday this week")), date("Y-m-d H:i:s", strtotime("sunday this week")));
+		return new CActiveDataProvider($this, array(
+			'criteria'=>$criteria,
+		));		
+	}
 
 }

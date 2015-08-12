@@ -6,15 +6,29 @@
  * @copyright  Copyright &copy; Christoffer Niska 2011-
  * @license [New BSD License](http://www.opensource.org/licenses/bsd-license.php)
  */
-Yii::import('booster.widgets.TbWidget');
+
 /**
- *## Bootstrap label widget.
+ *## Class TbLabel
  *
+ * Bootstrap label widget.
  * @see <http://twitter.github.com/bootstrap/components.html#labels>
  *
  * @package booster.widgets.decoration
  */
-class TbLabel extends TbWidget {
+class TbLabel extends CWidget
+{
+	const TYPE_SUCCESS = 'success';
+	const TYPE_WARNING = 'warning';
+	const TYPE_IMPORTANT = 'important';
+	const TYPE_INFO = 'info';
+	const TYPE_INVERSE = 'inverse';
+
+	/**
+	 * @var string the label type.
+	 *
+	 * Valid types are 'success', 'warning', 'important', 'info' and 'inverse'.
+	 */
+	public $type;
 
 	/**
 	 * @var string the label text.
@@ -34,14 +48,23 @@ class TbLabel extends TbWidget {
 	/**
 	 *### .init()
 	 *
-     * At the start of widget we collect the attributes for badge tag.
+	 * Initializes the widget.
 	 */
-	public function init() {
-		
+	public function init()
+	{
 		$classes = array('label');
 
-		if($this->isValidContext())
-			$classes[] = 'label-' . $this->getContextClass();
+		$validTypes = array(
+			self::TYPE_SUCCESS,
+			self::TYPE_WARNING,
+			self::TYPE_IMPORTANT,
+			self::TYPE_INFO,
+			self::TYPE_INVERSE
+		);
+
+		if (isset($this->type) && in_array($this->type, $validTypes)) {
+			$classes[] = 'label-' . $this->type;
+		}
 
 		if (!empty($classes)) {
 			$classes = implode(' ', $classes);
@@ -60,10 +83,10 @@ class TbLabel extends TbWidget {
 	/**
 	 *### .run()
 	 *
-     * Upon completing the badge we write the span tag with collected attributes to document.
+	 * Runs the widget.
 	 */
-	public function run() {
-		
+	public function run()
+	{
 		echo CHtml::tag('span', $this->htmlOptions, $this->label);
 	}
 }

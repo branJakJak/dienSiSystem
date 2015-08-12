@@ -14,7 +14,7 @@
  *
  * To use this widget, you may insert the following code in a view:
  * <pre>
- * $this->widget('booster.widgets.TbHighCharts', array(
+ * $this->widget('bootstrap.widgets.TbHighCharts', array(
  *    'options'=>array(
  *       'title' => array('text' => 'Fruit Consumption'),
  *       'xAxis' => array(
@@ -74,24 +74,20 @@ class TbHighCharts extends CWidget
 	 */
 	protected function registerClientScript()
 	{
-		$assets = Booster::getBooster()->cs;
-
-		$assets->registerPackage('highcharts');
-
-		$baseUrl = $assets->packages['highcharts']['baseUrl'];
+		Yii::app()->bootstrap->registerAssetJs('highcharts/highcharts.js');
 
 		$this->options = CMap::mergeArray(array('exporting' => array('enabled' => true)), $this->options);
 
 		if (isset($this->options['exporting']) && @$this->options['exporting']['enabled']) {
-			$assets->registerScriptFile($baseUrl . '/modules/exporting.js');
+			Yii::app()->bootstrap->registerAssetJs('highcharts/modules/exporting.js');
 		}
 		if (isset($this->options['theme'])) {
-			$assets->registerScriptFile($baseUrl . '/themes/' . $this->options['theme'] . '.js');
+			Yii::app()->bootstrap->registerAssetJs('highcharts/themes/' . $this->options['theme'] . '.js');
 		}
 
-		$options = CJavaScript::encode($this->options);
+		$options = CJavaScript::jsonEncode($this->options);
 
-		$assets->registerScript(
+		Yii::app()->getClientScript()->registerScript(
 			__CLASS__ . '#' . $this->getId(),
 			"var highchart{$this->getId()} = new Highcharts.Chart({$options});"
 		);

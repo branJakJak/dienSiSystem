@@ -7,8 +7,8 @@
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  */
 
-Yii::import('booster.widgets.TbGridView');
-Yii::import('booster.widgets.TbJsonDataColumn');
+Yii::import('bootstrap.widgets.TbGridView');
+Yii::import('bootstrap.widgets.TbJsonDataColumn');
 
 /**
  *## Class TbJsonGridView
@@ -50,14 +50,9 @@ class TbJsonGridView extends TbGridView
 
 	/**
 	 * @var array the configuration for the pager.
-	 * Defaults to <code>array('class'=>'ext.booster.widgets.TbPager')</code>.
+	 * Defaults to <code>array('class'=>'ext.bootstrap.widgets.TbPager')</code>.
 	 */
-	public $pager = array('class' => 'booster.widgets.TbJsonPager');
-
-	/**
-	 * @var bool true when there is an AJAX request and having in template summary
-	 */
-	protected $_showSummary;
+	public $pager = array('class' => 'bootstrap.widgets.TbJsonPager');
 
 	/**
 	 * Initializes $json property to find out whether ajax request or not
@@ -67,7 +62,6 @@ class TbJsonGridView extends TbGridView
 		// parse request to find out whether is an ajax request or not, if so, then return $dataProvider JSON formatted
 		$this->json = Yii::app()->getRequest()->getIsAjaxRequest();
 		if ($this->json) {
-			$this->_showSummary = (strpos($this->template, '{summary}')) ? true : false;
 			$this->template = '{items}';
 		} // going to render only items!
 
@@ -128,7 +122,7 @@ class TbJsonGridView extends TbGridView
 	{
 		foreach ($this->columns as $i => $column) {
 			if (is_array($column) && !isset($column['class'])) {
-				$this->columns[$i]['class'] = 'booster.widgets.TbJsonDataColumn';
+				$this->columns[$i]['class'] = 'bootstrap.widgets.TbJsonDataColumn';
 			}
 		}
 
@@ -163,28 +157,6 @@ class TbJsonGridView extends TbGridView
 		}
 	}
 
-	public function renderSummary()
-	{
-		if (!$this->json)
-		{
-			parent::renderSummary();
-			return true;
-		}
-
-		if (!$this->_showSummary)
-		{
-			return null;
-		}
-
-		ob_start();
-		parent::renderSummary();
-		$summary = ob_get_clean();
-		return array(
-			'class' => $this->summaryCssClass,
-			'text' => $summary
-		);
-
-	}
 	/**
 	 * Renders the required templates for the client engine (jqote2 used)
 	 */
@@ -196,17 +168,12 @@ class TbJsonGridView extends TbGridView
 			'<tr class="<%=this.class%>"><% var t = "#' . $this->id . '-col-template"; out += $.jqote(t, this.cols);%></tr>'
 		);
 		echo $this->renderTemplate($this->id . '-keys-template', '<span><%=this%></span>');
-
-		echo $this->renderTemplate(
-			$this->id . '-pager-template',
-			'<li class="<%=this.class%>"><a href="<%=this.url%>"><%=this.text%></a></li>'
-		);
-
-		echo $this->renderTemplate(
-			$this->id . '-summary-template',
-			'<div class="<%=this.class%>"><%=this.text%></div>'
-		);
-
+		if ($this->enablePagination) {
+			echo $this->renderTemplate(
+				$this->id . '-pager-template',
+				'<li class="<%=this.class%>"><a href="<%=this.url%>"><%=this.text%></a></li>'
+			);
+		}
 	}
 
 	/**
@@ -261,16 +228,14 @@ class TbJsonGridView extends TbGridView
 		$tbody = array(
 			'headers' => array(),
 			'rows' => array(),
-			'keys' => array(),
-			'summary' => array()
+			'keys' => array()
 		);
 		foreach ($this->columns as $column) {
 			/** @var CGridColumn $column */
-			// TODO: what is this?
-			// if (property_exists($column, 'json')) {
-				// $column->json = $this->json;
+			if (property_exists($column, 'json')) {
+				$column->json = $this->json;
 				$tbody['headers'][] = $column->renderHeaderCell();
-			// }
+			}
 		}
 
 		if ($rows > 0) {
@@ -296,7 +261,7 @@ class TbJsonGridView extends TbGridView
 		}
 		$tbody['pager'] = $this->renderPager();
 		$tbody['url'] = Yii::app()->getRequest()->getUrl();
-		$tbody['summary'] = $this->renderSummary();
+
 		return $tbody;
 	}
 
@@ -402,7 +367,6 @@ class TbJsonGridView extends TbGridView
 			'ajaxUpdate' => $ajaxUpdate,
 			'ajaxVar' => $this->ajaxVar,
 			'pagerClass' => $this->pagerCssClass,
-			'summaryClass' => $this->summaryCssClass,
 			'loadingClass' => $this->loadingCssClass,
 			'filterClass' => $this->filterCssClass,
 			'tableClass' => $this->itemsCssClass,
@@ -438,9 +402,17 @@ class TbJsonGridView extends TbGridView
 		if ($this->enableHistory) {
 			$cs->registerCoreScript('history');
 		}
+		$assetsUrl = Yii::app()->bootstrap->getAssetsUrl();
 
-		$cs->registerPackage('json-grid-view');
-
+		$cs->registerScriptFile(
+			$assetsUrl . '/js/jquery.jqote2.min.js',
+			CClientScript::POS_END
+		); // jqote2 template engine
+		$cs->registerScriptFile($assetsUrl . '/js/jquery.ajax.cache.js', CClientScript::POS_END); // ajax cache
+		$cs->registerScriptFile(
+			$assetsUrl . '/js/jquery.json.yiigridview.js',
+			CClientScript::POS_END
+		); // custom yiiGridView
 		$cs->registerScript(__CLASS__ . '#' . $id, "jQuery('#$id').yiiJsonGridView($options);");
 	}
 }

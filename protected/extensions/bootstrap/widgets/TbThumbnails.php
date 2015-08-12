@@ -1,51 +1,73 @@
 <?php
 /**
- *## TbThumbnails class file.
- *
- * @author Christoffer Niska <ChristofferNiska@gmail.com>
- * @copyright Copyright &copy; Christoffer Niska 2011-
+ * TbThumbnails class file.
+ * @author Christoffer Niska <christoffer.niska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2013-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package bootstrap.widgets
  */
 
-Yii::import('booster.widgets.TbListView');
+Yii::import('bootstrap.helpers.TbHtml');
+Yii::import('bootstrap.widgets.TbListView');
 
 /**
- *## Bootstrap thumbnails widget.
- *
- * @see http://twitter.github.com/bootstrap/components.html#thumbnails
- *
- * @package booster.widgets.grouping
+ * Bootstrap thumbnails widget.
+ * http://twitter.github.com/bootstrap/components.html#thumbnails
  */
-class TbThumbnails extends TbListView {
-	
-	/**
-	 * Renders the data items for the view.
-	 * Each item is corresponding to a single data model instance.
-	 * Child classes should override this method to provide the actual item rendering logic.
-	 */
-	public function renderItems() {
-		
-		echo CHtml::openTag($this->itemsTagName, array('class' => $this->itemsCssClass)) . "\n";
+class TbThumbnails extends TbListView
+{
+    /**
+     * @var mixed a PHP expression that is evaluated for every item and whose result is used
+     * as the URL for the thumbnail.
+     */
+    public $url;
+    /**
+     * @var integer the number of grid columns that the thumbnails spans over.
+     */
+    public $span;
 
-		$data = $this->dataProvider->getData();
+    /**
+     * Initializes the widget
+     */
+    public function init()
+    {
+        parent::init();
 
-		if (!empty($data)) {
-			echo CHtml::openTag('div', array('class' => 'row'));
-			$owner = $this->getOwner();
-			$render = $owner instanceof CController ? 'renderPartial' : 'render';
-			foreach ($data as $i => $item) {
-				$data = $this->viewData;
-				$data['index'] = $i;
-				$data['data'] = $item;
-				$data['widget'] = $this;
-				$owner->$render($this->itemView, $data);
-			}
+        if (isset($this->itemsCssClass)) {
+            TbHtml::addCssClass($this->itemsCssClass, $this->htmlOptions);
+        }
+    }
 
-			echo '</div>';
-		} else {
-			$this->renderEmptyText();
-		}
+    /**
+     * Renders the data items for the view.
+     * Each item is corresponding to a single data model instance.
+     */
+    public function renderItems()
+    {
+        $thumbnails = array();
+        $data = $this->dataProvider->getData();
 
-		echo CHtml::closeTag($this->itemsTagName);
-	}
+        if (!empty($data)) {
+            $owner = $this->getOwner();
+            $render = $owner instanceof CController ? 'renderPartial' : 'render';
+            foreach ($data as $i => $row) {
+                $thumbnail = array();
+                $d = $this->viewData;
+                $d['index'] = $i;
+                $d['data'] = $row;
+                $d['widget'] = $this;
+                $thumbnail['caption'] = $owner->$render($this->itemView, $d, true);
+                if (isset($this->url)) {
+                    $thumbnail['url'] = $this->evaluateExpression($this->url, array('data' => $row));
+                }
+                if (isset($this->span)) {
+                    $thumbnail['span'] = $this->span;
+                }
+                $thumbnails[] = $thumbnail;
+            }
+            echo TbHtml::thumbnails($thumbnails, $this->htmlOptions);
+        } else {
+            $this->renderEmptyText();
+        }
+    }
 }
