@@ -7,12 +7,13 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		Yii::import('application.modules.dnc.components.*');
+		$allowedDispo = array("FISH","SCR","DNC");
 		$jsonMessage = array();
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
 			$status = $_GET['dispo'];
-			$status = strtolower($status);
+			$status = strtoupper($status);
 			$phone_number = $_GET['phone_number'];
-			if ( $status == 'dnc' ) {
+			if ( in_array($status, $allowedDispo)	 ) {
 				$res = VicidialReportSend::send($phone_number);
 				$jsonMessage['vici_res'] = $res;
 				$mdl = new BlackListedMobile;
