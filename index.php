@@ -2,7 +2,7 @@
 
 
 // remove the following lines when in production mode
-defined('YII_DEBUG') or define('YII_DEBUG',true);
+// defined('YII_DEBUG') or define('YII_DEBUG',true);
 //defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
 //error_reporting(E_ALL);
 //ini_set("display_errors", 1);
@@ -16,8 +16,8 @@ defined('YII_DEBUG') or define('YII_DEBUG',true);
 
 // change the following paths if necessary
 $yii = __DIR__.'/../yii/framework/yii.php';
-// $config=dirname(__FILE__).'/protected/config/main.php';
-$config = __DIR__.'/protected/config/development.php';
+$config=dirname(__FILE__).'/protected/config/main.php';
+// $config = __DIR__.'/protected/config/development.php';
 
 
 require_once($yii);
