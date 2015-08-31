@@ -46,7 +46,7 @@ class DefaultController extends Controller
             $whiteListjob->status = WhitelistJobQueue::$JOBQUEUE_STATUS_DONE; //status to done
             if ($whiteListjob->save()) {
                 //insert queueid sa file firstColumn,
-                $tempDump = tempnam(__DIR__, "temp");
+                $tempDump = tempnam(sys_get_temp_dir(), "temp");
                 $insertQueueidColCommand = "gawk '{print \"$whiteListjob->queue_id,0\"$0}' $tempName > $tempDump";
                 exec($insertQueueidColCommand);
                 exec("mv \"$tempDump\" \"$tempName\"  ");

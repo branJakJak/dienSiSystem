@@ -32,8 +32,9 @@ return array(
 	),
 
 	'modules'=>array(
-	'redirect',
-	'remoteDedupe',
+		'remotecheck',
+		'redirect',
+		'remoteDedupe',
         'client_portal',
         'whitelist',
         'blacklist',
@@ -43,8 +44,8 @@ return array(
 			'class'=>'system.gii.GiiModule',
 			'password'=>'hitman052529',
 		 	// If removed, Gii defaults to localhost only. Edit carefully to taste.
-			// 'ipFilters'=>array('127.0.0.1','::1'),
-			'ipFilters'=>array('*.*.*.*'),
+			'ipFilters'=>array('127.0.0.1','::1'),
+			// 'ipFilters'=>array('*.*.*.*'),
 		),
 	),
 
