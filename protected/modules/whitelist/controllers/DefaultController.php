@@ -85,7 +85,7 @@ EOL;
             $whileListjob->status = WhitelistJobQueue::$JOBQUEUE_STATUS_DONE; //status to done
             if ($whileListjob->save()) {
                 //insert queueid sa file firstColumn,
-                $tempDump = tempnam(__DIR__, "temp");
+                $tempDump = tempnam(sys_get_temp_dir(), "temp");
                 exec("head -1500000 $newFileLocation > $tempDump"); //cut first 1m 500 k
                 exec("gawk '{print \"$whileListjob->queue_id,0\"$0}' $tempDump > $newFileLocation"); //insert queueid
 
