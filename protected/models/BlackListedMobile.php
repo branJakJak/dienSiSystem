@@ -90,7 +90,7 @@ class BlackListedMobile extends CActiveRecord
 		$criteria=new CDbCriteria;
 		$criteria->compare('rec_id',$this->rec_id);
 		$criteria->compare('queue_id',$this->queue_id);
-		$criteria->addSearchCondition("mobile_number"  , $this->mobile_number);
+		$criteria->addSearchCondition("mobile_number"  , doubleval($this->mobile_number));
 		$criteria->compare('ip_address',$this->ip_address);
 		$criteria->compare('date_created',$this->date_created,true);
 		$criteria->compare('date_updated',$this->date_updated,true);
