@@ -7,7 +7,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5press");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS");
 		$jsonMessage = array();
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
 			$status = $_GET['dispo'];
@@ -25,7 +25,7 @@ class DataController extends CController
                     $optOutVici->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $optOutVici->send();
 					/*end of optout dispo*/
-				}else if ($status == "") {
+				}else if ($status == "5PRESS") {
                     $vicipresObj = new ViciPressRemote($phone_number);
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $vicipresObj->send();
