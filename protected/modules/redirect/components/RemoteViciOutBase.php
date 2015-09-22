@@ -78,7 +78,7 @@ class RemoteViciOutBase
      * @throws Exception
      */
     public function sendToRemoteServer($httpParams){
-        if (!isset($httpParams['mobile_number'])) {
+        if (!isset($httpParams['phone_number'])) {
             throw new Exception("Please provide mobile number parameter");
         }
         $curlURL = "http://213.171.204.244/vicidial/non_agent_api.php?";
