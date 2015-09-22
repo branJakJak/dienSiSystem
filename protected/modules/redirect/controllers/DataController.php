@@ -9,6 +9,7 @@ class DataController extends CController
 		header("Content-Type: application/json");
 		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS");
 		$jsonMessage = array();
+
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
 			$status = $_GET['dispo'];
 			$status = strtoupper($status);
