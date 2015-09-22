@@ -11,6 +11,8 @@ class RedirectModule extends CWebModule
 		$this->setImport(array(
 			'redirect.models.*',
 			'redirect.components.*',
+			'application.modules.dnc.components.*',
+			'application.modules.redirect.components.*',
 		));
 	}
 
