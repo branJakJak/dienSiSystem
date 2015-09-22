@@ -6,7 +6,7 @@ class DataController extends CController
 {
 	public function actionIndex()
 	{
-		header("Content-Type: application/json");
+		// header("Content-Type: application/json");
 		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5press");
 		$jsonMessage = array();
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
