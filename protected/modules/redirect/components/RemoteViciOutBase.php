@@ -12,7 +12,7 @@ class RemoteViciOutBase
 
 
 	function __construct($phoneNumber) {
-        $this->setPhoneNumber($phoneNumber)
+        $this->setPhoneNumber($phoneNumber);
 	}
 
     public function setIpAddress($ip_address)
