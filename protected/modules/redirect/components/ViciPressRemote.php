@@ -17,6 +17,8 @@ class ViciPressRemote extends RemoteViciOutBase
             "list_id"=>"555",
             "dnc_check"=>"Y",
             "duplicate_check"=>"DUPLIVE",
+            "add_to_hopper"=>"Y",
+            "hopper_priority"=>"45",
         );
         $res = $this->sendToRemoteServer($httpParameters);
         $jsonMessage['vici_res'] = $res;
