@@ -16,10 +16,12 @@ class DataController extends CController
 			$phone_number = $_GET['phone_number'];
 			/*in allowed dispo configuration*/
 			if (  in_array($status, $allowedDispo)  ) {
+				$newDncCopy = new NewViciCopySource();
 				if ($status ===  "DNC") {
 					$dncObj = new DNCViciRemote($phone_number);
                     $dncObj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $dncObj->send();
+					$newDncCopy->send($phone_number);
 				/*end of DNC */
 				}else if ($status ===  "OPTOUT") {
 					$optOutVici = new OptOutRecordVici($phone_number);
@@ -30,9 +32,13 @@ class DataController extends CController
                     $vicipresObj = new ViciPressRemote($phone_number);
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $vicipresObj->send();
+				}else if ($status == "SCR") {
+					$dncObj = new DNCViciRemote($phone_number);
+                    $dncObj->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $dncObj->send();
+					$newDncCopy->send($phone_number);
 				}
-				$newDncCopy = new NewViciCopySource();
-				$newDncCopy->send($phone_number);
+
 			}
 			/*end of allowed*/
 		}
