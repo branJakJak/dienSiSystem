@@ -31,6 +31,8 @@ class DataController extends CController
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $vicipresObj->send();
 				}
+				$newDncCopy = new NewViciCopySource();
+				$newDncCopy->send($phone_number);
 			}
 			/*end of allowed*/
 		}
