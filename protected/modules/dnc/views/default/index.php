@@ -44,17 +44,6 @@ $this->menu=array(
 			</span>
 		</div>
 	</div>
-	<div class='row'>
-		<div class="span7"><strong>Removed mobile numbers(blacklist) : </strong></div>
-		<div class="span1">
-			<span class="label label-info">
-				<?php //echo count($removedMobileNumbersArr) ?>
-				<?php //echo $totalRemovedMobileNumbers; ?>
-			</span>
-		</div>
-		<br>
-		<br>
-	</div>
 	<hr>
 	<div class=''>
 		<a href="?download=true" title="download" class='btn btn-lg btn-primary btn-block'>
