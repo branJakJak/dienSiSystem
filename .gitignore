@@ -10,9 +10,9 @@ protected/uploaded_files/*
 error_log
 .phpintel/
 *.tmp
-netbeans
-.netbeans
-/nbproject/private/
+netbeans/
+.netbeans/
+nbproject/private/
 ip/*
 ip/
 generator/
