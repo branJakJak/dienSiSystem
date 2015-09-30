@@ -37,9 +37,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		// renders the view file 'protected/views/site/index.php'
-		// using the default layout 'protected/views/layouts/main.php'
-		//but first lets check if he/she/it is allowed in our system
 		$criteria = new CDbCriteria;
 		$criteria->compare('ip_address',$_SERVER['REMOTE_ADDR']);
 		$inRecord = Ip::model()->exists($criteria);
