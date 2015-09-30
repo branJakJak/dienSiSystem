@@ -6,7 +6,7 @@ assets/*
 *.bat
 protected/data/*
 .idea/
-protedted/uploaded_files/*
+protected/uploaded_files/*
 error_log
 .phpintel/
 *.tmp
