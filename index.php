@@ -17,8 +17,8 @@
 
 // change the following paths if necessary
 $yii = __DIR__.'/../yii/framework/yii.php';
-// $config=dirname(__FILE__).'/protected/config/main.php';
-$config = __DIR__.'/protected/config/development.php';
+$config=dirname(__FILE__).'/protected/config/main.php';
+// $config = __DIR__.'/protected/config/development.php';
 
 
 require_once($yii);

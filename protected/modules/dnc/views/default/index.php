@@ -48,7 +48,7 @@ $this->menu=array(
 		<div class="span7"><strong>Removed mobile numbers(blacklist) : </strong></div>
 		<div class="span1">
 			<span class="label label-info">
-				<?php echo count($removedMobileNumbersArr) ?>
+				<?php //echo count($removedMobileNumbersArr) ?>
 				<?php //echo $totalRemovedMobileNumbers; ?>
 			</span>
 		</div>
@@ -65,11 +65,4 @@ $this->menu=array(
 		</a>
 	</div>
 	<br />
-</div>
-<div class="span5">
-	<h3>
-		Removed mobile numbers
-	</h3>
-	<div class="span5">
-		<textarea style="margin: 0px 0px 9px; width: 227px; height: 205px;"><?php if (isset($removedMobileNumbersArr)): ?><?php foreach ($removedMobileNumbersArr as $key => $value): ?><?php echo $value['mobile_number']."\n" ?><?php endforeach ?><?php endif ?></textarea>	</div>
 </div>
