@@ -14,5 +14,6 @@ netbeans
 .netbeans
 /nbproject/private/
 ip/*
-ip
+ip/
 generator/
+freevoip/
