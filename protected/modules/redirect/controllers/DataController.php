@@ -7,7 +7,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT");
 		$jsonMessage = array();
 
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
@@ -37,8 +37,11 @@ class DataController extends CController
                     $dncObj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $dncObj->send();
 					$newDncCopy->send($phone_number);
+				}else if ($status == "5FLAT") {
+					$fiveFlatRemoteObj = new FiveFlatRemote($phone_number);
+                    $fiveFlatRemoteObj->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $fiveFlatRemoteObj->send();
 				}
-
 			}
 			/*end of allowed*/
 		}
