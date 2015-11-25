@@ -9,11 +9,32 @@ class RemoteViciOutBase
 	protected $phoneNumber;
 	protected $jsonMessage;
     protected $ip_address;
+    protected $additionalParameters = array();
 
 
 	function __construct($phoneNumber) {
         $this->setPhoneNumber($phoneNumber);
 	}
+
+    /**
+     * Additional parameters to be sent to 213.171.204.244 dialer
+     *
+     * @return mixed Parameters to be prepended
+     */
+    public function getAdditionalParameters() {
+        return $this->additionalParameters;
+    }
+    
+    /**
+     * Sets the additional parameters to be prepended
+     *
+     * @param Mixed $newadditionalParameters Parameters to be prepended
+     */
+    public function setAdditionalParameters($additionalParameters) {
+        $this->additionalParameters = $additionalParameters;
+    
+        return $this;
+    }
 
     public function setIpAddress($ip_address)
     {

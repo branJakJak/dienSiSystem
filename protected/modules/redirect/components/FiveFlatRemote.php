@@ -20,6 +20,7 @@ class FiveFlatRemote extends RemoteViciOutBase
             "add_to_hopper"=>"Y",
             "hopper_priority"=>"45",
         );
+        $httpParameters = array_merge($httpParameters, $this->getAdditionalParameters());
         $res = $this->sendToRemoteServer($httpParameters);
         $jsonMessage['vici_res'] = $res;
         return $jsonMessage;

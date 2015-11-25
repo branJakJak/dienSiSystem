@@ -16,6 +16,8 @@ class OptOutRecordVici extends RemoteViciOutBase
             "dnc_check"=>"Y",
             "phone_number"=>$this->getPhoneNumber()
         );
+        $httpParameters = array_merge($httpParameters, $this->getAdditionalParameters());
+        
         $res = $this->sendToRemoteServer($httpParameters);
         $jsonMessage['vici_res'] = $res;
 		$mdl = new BlackListedMobile;
