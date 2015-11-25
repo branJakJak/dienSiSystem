@@ -32,7 +32,7 @@ class DataController extends CController
 					$optOutVici = new OptOutRecordVici($phone_number);
 
 					if (isset($_GET['list_id'])) {
-						$dncObj->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
+						$optOutVici->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
 					}					
 
                     $optOutVici->setIpAddress($_SERVER['REMOTE_ADDR']);
@@ -42,7 +42,7 @@ class DataController extends CController
                     $vicipresObj = new ViciPressRemote($phone_number);
 
 					if (isset($_GET['list_id'])) {
-						$dncObj->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
+						$vicipresObj->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
 					}
 
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
@@ -58,7 +58,7 @@ class DataController extends CController
 				}else if ($status == "5FLAT") {
 					$fiveFlatRemoteObj = new FiveFlatRemote($phone_number);
 					if (isset($_GET['list_id'])) {
-						$dncObj->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
+						$fiveFlatRemoteObj->setAdditionalParameters(array("list_id"=>$_GET['list_id']));
 					}
                     $fiveFlatRemoteObj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $fiveFlatRemoteObj->send();
