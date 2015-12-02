@@ -62,6 +62,13 @@ class DataController extends CController
 					}
                     $fiveFlatRemoteObj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $fiveFlatRemoteObj->send();
+				}else if ($status === "5PPBA") {
+					$pbavb6Obj = new PBAVB6($phone_number);
+					if (isset($_GET['lead_id'])) {
+						$pbavb6Obj->setAdditionalParameters(array("source_id"=>$_GET['lead_id']));
+					}
+                    $pbavb6Obj->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $pbavb6Obj->send();
 				}
 			}
 			/*end of allowed*/
