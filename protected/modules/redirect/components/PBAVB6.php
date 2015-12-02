@@ -8,7 +8,7 @@ class PBAVB6 extends RemoteViciOutBase
     public function send()
     {
         $httpParameters = array(
-            "source"=>"5PRESSPBA",
+            "source"=>"5ppba",
             "user"=>"apiuserwill",
             "pass"=>"mentalapipassword",
             "function"=>"add_lead",
