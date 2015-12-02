@@ -5,7 +5,6 @@
 */
 class OptOutRecordVici extends RemoteViciOutBase
 {
-
 	public function send()
 	{
         $httpParameters = array(
