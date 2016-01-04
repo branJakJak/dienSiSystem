@@ -10,6 +10,7 @@ class RemoteViciOutBase
 	protected $jsonMessage;
     protected $ip_address;
     protected $additionalParameters = array();
+    const SERVER_IP_ADDDRESS = '149.202.73.207';//213.171.204.244
 
 
 	function __construct($phoneNumber) {
@@ -102,7 +103,7 @@ class RemoteViciOutBase
         if (!isset($httpParams['phone_number'])) {
             throw new Exception("Please provide mobile number parameter");
         }
-        $curlURL = "http://213.171.204.244/vicidial/non_agent_api.php?";
+        $curlURL = "http://".RemoteViciOutBase::SERVER_IP_ADDDRESS."/vicidial/non_agent_api.php?";
         $curlURL .= http_build_query($httpParams);
         $curlres = curl_init($curlURL);
         curl_setopt($curlres, CURLOPT_RETURNTRANSFER, true);
