@@ -14,7 +14,7 @@ class ViciPressRemote extends RemoteViciOutBase
             "function"=>"add_lead",
             "phone_number"=>$this->getPhoneNumber(),
             "phone_code"=>"44",
-            "list_id"=>"005555",
+            "list_id"=>"555",
             "dnc_check"=>"Y",
             "duplicate_check"=>"DUPLIVE",
             "add_to_hopper"=>"Y",
