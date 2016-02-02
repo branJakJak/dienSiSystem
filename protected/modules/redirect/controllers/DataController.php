@@ -7,7 +7,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM");
 		$jsonMessage = array();
 
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
@@ -63,7 +63,13 @@ class DataController extends CController
                     $fiveFlatRemoteObj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $fiveFlatRemoteObj->send();
 				}else if ($status == "5PPBA") {
-					/*asdasdasd*/
+					$pbavb6Obj = new PBAVB6($phone_number);
+					if (isset($_GET['list_id'])) {
+						$pbavb6Obj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
+                    $pbavb6Obj->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $pbavb6Obj->send();
+				}else if ($status == "5PRDM") {
 					$pbavb6Obj = new PBAVB6($phone_number);
 					if (isset($_GET['list_id'])) {
 						$pbavb6Obj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
