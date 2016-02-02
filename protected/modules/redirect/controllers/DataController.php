@@ -70,7 +70,7 @@ class DataController extends CController
                     $pbavb6Obj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $pbavb6Obj->send();
 				}else if ($status == "5PRDM") {
-					$pbavb6Obj = new PBAVB6($phone_number);
+					$pbavb6Obj = new PRDM5($phone_number);
 					if (isset($_GET['list_id'])) {
 						$pbavb6Obj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
