@@ -41,9 +41,9 @@ class DataController extends CController
 				}else if ($status == "5PRESS") {
                     $vicipresObj = new ViciPressRemote($phone_number);
 
-					if (isset($_GET['list_id'])) {
-						$vicipresObj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
-					}
+					// if (isset($_GET['list_id'])) {
+					$vicipresObj->setAdditionalParameters(array("source_id"=>"5555"));
+					// }
 
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $vicipresObj->send();
@@ -70,12 +70,12 @@ class DataController extends CController
                     $pbavb6Obj->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $pbavb6Obj->send();
 				}else if ($status == "5PRDM") {
-					$pbavb6Obj = new PRDM5($phone_number);
+					$prd5 = new PRDM5($phone_number);
 					if (isset($_GET['list_id'])) {
-						$pbavb6Obj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+						$prd5->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
-                    $pbavb6Obj->setIpAddress($_SERVER['REMOTE_ADDR']);
-					$jsonMessage = $pbavb6Obj->send();
+                    $prd5->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $prd5->send();
 				}
 			}
 			/*end of allowed*/
