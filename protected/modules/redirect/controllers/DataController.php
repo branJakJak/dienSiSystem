@@ -41,9 +41,9 @@ class DataController extends CController
 				}else if ($status == "5PRESS") {
                     $vicipresObj = new ViciPressRemote($phone_number);
 
-					// if (isset($_GET['list_id'])) {
-					$vicipresObj->setAdditionalParameters(array("source_id"=>"5555"));
-					// }
+					if (isset($_GET['list_id'])) {
+						$vicipresObj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
 
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
                     $jsonMessage = $vicipresObj->send();
