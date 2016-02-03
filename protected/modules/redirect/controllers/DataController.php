@@ -7,7 +7,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ");
 		$jsonMessage = array();
 
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
@@ -71,6 +71,13 @@ class DataController extends CController
 					$jsonMessage = $pbavb6Obj->send();
 				}else if ($status == "5PRDM") {
 					$prd5 = new PRDM5($phone_number);
+					if (isset($_GET['list_id'])) {
+						$prd5->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
+                    $prd5->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $prd5->send();
+				}else if ($status == "5BAZ") {
+					$prd5 = new Baz5($phone_number);
 					if (isset($_GET['list_id'])) {
 						$prd5->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
