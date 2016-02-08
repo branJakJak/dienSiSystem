@@ -84,13 +84,12 @@ class DataController extends CController
                     $prd5->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $prd5->send();
 				}else if (  $status == "5PDLY"  ) {
-					$prd5 = new Pdly5($phone_number);
+					$pdly = new Pdly5($phone_number);
 					if (isset($_GET['list_id'])) {
-						$prd5->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+						$pdly->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
-                    $prd5->setIpAddress($_SERVER['REMOTE_ADDR']);
-					$jsonMessage = $prd5->send();
-					
+                    $pdly->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $pdly->send();
 				}
 			}
 			/*end of allowed*/
