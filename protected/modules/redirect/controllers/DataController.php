@@ -7,7 +7,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB");
 		$jsonMessage = array();
 
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
@@ -90,6 +90,13 @@ class DataController extends CController
 					}
                     $pdly->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $pdly->send();
+				}else if (  $status == "5PLB"  ) {
+					$plb = new Plbd5($phone_number);
+					if (isset($_GET['list_id'])) {
+						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
+                    $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $plb->send();
 				}
 			}
 			/*end of allowed*/
