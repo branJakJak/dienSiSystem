@@ -1,9 +1,6 @@
 <?php
-
-
 class ViciPressRemote extends RemoteViciOutBase
 {
-
     public function send()
     {
         
