@@ -25,7 +25,7 @@ class SiteController extends Controller
     public function filters()
     {
         return array(
-            array('application.filters.IpAddressFilter + login'),
+            // array('application.filters.IpAddressFilter + login'),
 
         );
     }
