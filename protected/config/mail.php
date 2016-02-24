@@ -30,11 +30,11 @@ return array(
 		'variable_set' => Yii::t('YiiMailer', 'Cannot set or reset variable: ')
 	),
 // if you want to use SMTP, uncomment and configure lines below to your needs
-//	'Mailer' => 'smtp',
-//	'Host' => 'smtp.gmail.com',
-//	'Port' => 465,
-//	'SMTPSecure' => 'ssl',
-//	'SMTPAuth' => true,
-//	'Username' => 'your_email@gmail.com',
-//	'Password' => 'your_password',
+	'Mailer' => 'smtp',
+	'Host' => 'smtp.gmail.com',
+	'Port' => 465,
+	'SMTPSecure' => 'ssl',
+	'SMTPAuth' => true,
+	'Username' => 'infoConsultancyTeam@gmail.com',
+	'Password' => 'Newuser123!',
 );
