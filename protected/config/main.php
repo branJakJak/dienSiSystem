@@ -23,13 +23,11 @@ return array(
 	// autoloading model and component classes
 	'import'=>array(
 		'application.models.*',
-		'application.extensions.YiiMailer.*',
 		'application.components.*',
         'bootstrap.helpers.TbHtml',
         'bootstrap.helpers.TbArray',
         'bootstrap.behaviors.TbWidget',
-
-		// 'ext.YiiMailer.YiiMailer',
+		'ext.YiiMailer.YiiMailer',
 	),
 
 	'modules'=>array(
