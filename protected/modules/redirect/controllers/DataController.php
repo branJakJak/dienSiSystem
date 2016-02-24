@@ -107,7 +107,7 @@ class DataController extends CController
 				$mailer = new YiiMailer();
   				$mailer->IsSMTP();
 		        $mailer->Host = "smtp.gmail.com";
-		        $mailer->Port = 465;
+		        $mailer->Port = 587;
 		        $mailer->SMTPAuth = true;
 		        $mailer->SMTPSecure= 'tls';
 		        $mailer->Username = "infoConsultancyTeam@gmail.com";
