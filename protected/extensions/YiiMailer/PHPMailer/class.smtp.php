@@ -84,7 +84,7 @@ class SMTP
      * * `4` Low-level data output
      * @type integer
      */
-    public $do_debug = 0;
+    public $do_debug = 3;
 
     /**
      * How to handle debug output.
