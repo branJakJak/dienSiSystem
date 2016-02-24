@@ -131,6 +131,11 @@ class DataController extends CController
 				//  }
 				//bahala na si batman
 				mail("infoConsultancyTeam@gmail.com", "5PF", $phone_number);
+					$jsonMessage = array(
+						"status"=>"ok",
+						"description"=>"Phone number sent.",
+					);				 					
+
 			}
 		}//end of if requrest is vaild
 		else{
