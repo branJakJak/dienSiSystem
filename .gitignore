@@ -1,3 +1,4 @@
+protected/vendor/*
 protected/components/UserIdentity.php
 protected/runtime/*
 protected/data/*

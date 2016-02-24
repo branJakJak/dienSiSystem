@@ -111,6 +111,10 @@ class DataController extends CController
 				$mailer->setTo("infoConsultancyTeam@gmail.com");
 				$mailer->setBody($phone_number);
 				$mailer->save();
+				$jsonMessage = array(
+					"status"=>"ok",
+					"description"=>"Phone number sent.",
+				);
 			}
 		}//end of if requrest is vaild
 		else{
