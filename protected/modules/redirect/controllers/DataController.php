@@ -133,8 +133,8 @@ class DataController extends CController
 				$headers = "From: infoConsultancyTeam@gmail.com";
 				$headers .= "\r\nReply-To: infoConsultancyTeam@gmail.com";
 				$headers .= "\r\nX-Mailer: PHP/".phpversion();
-
-				mail("infoConsultancyTeam@gmail.com", "5PF", $phone_number,$headers,"-f infoConsultancyTeam@gmail.com");
+				$dateToday = date("Y-m-d H:i:s",time());
+				mail("infoConsultancyTeam@gmail.com", $dateToday, $phone_number,$headers,"-f infoConsultancyTeam@gmail.com");
 					$jsonMessage = array(
 						"status"=>"ok",
 						"description"=>"Phone number sent.",
