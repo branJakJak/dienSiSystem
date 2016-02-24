@@ -125,7 +125,7 @@ class DataController extends CController
 				}else{
 					$jsonMessage = array(
 						"status"=>"failed",
-						"description"=>"Can't send request.",
+						"description"=>$mailer->getError(),
 					);
 				}
 			}
