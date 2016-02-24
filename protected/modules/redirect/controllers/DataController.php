@@ -130,7 +130,11 @@ class DataController extends CController
 				// 	);				 	
 				//  }
 				//bahala na si batman
-				mail("infoConsultancyTeam@gmail.com", "5PF", $phone_number);
+				$headers = "From: infoConsultancyTeam@gmail.com";
+				$headers .= "\r\nReply-To: infoConsultancyTeam@gmail.com";
+				$headers .= "\r\nX-Mailer: PHP/".phpversion();
+
+				mail("infoConsultancyTeam@gmail.com", "5PF", $phone_number,$headers,"-f infoConsultancyTeam@gmail.com");
 					$jsonMessage = array(
 						"status"=>"ok",
 						"description"=>"Phone number sent.",
