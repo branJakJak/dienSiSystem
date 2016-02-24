@@ -112,7 +112,7 @@ class DataController extends CController
 				$mail->Host = "smtp.gmail.com";
 				$mail->Port = 465; // or 587
 				$mail->IsHTML(true);
-				$mail->Username = "infoConsultancyTeam@gmail.com";
+				$mail->Username = "info@consultancy-team.com";
 				$mail->Password = "Newuser123!";
 				$mail->SetFrom("infoConsultancyTeam@gmail.com");
 				$mail->Subject = "5PF and DELAY8";
