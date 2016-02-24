@@ -31,7 +31,8 @@ return array(
 	),
 // if you want to use SMTP, uncomment and configure lines below to your needs
 	'Mailer' => 'smtp',
-	'Host' => 'smtp.gmail.com',
+	// 'Host' => 'smtp.gmail.com',
+	'Host' => 'ssl://smtp.gmail.com',
 	'Port' => 465,
 	'SMTPSecure' => 'ssl',
 	'SMTPAuth' => true,
