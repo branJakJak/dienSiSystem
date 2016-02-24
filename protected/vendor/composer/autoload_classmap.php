@@ -6,9 +6,13 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'EasyPeasyICS' => $vendorDir . '/phpmailer/phpmailer/extras/EasyPeasyICS.php',
     'File_Iterator' => $vendorDir . '/phpunit/php-file-iterator/src/Iterator.php',
     'File_Iterator_Facade' => $vendorDir . '/phpunit/php-file-iterator/src/Facade.php',
     'File_Iterator_Factory' => $vendorDir . '/phpunit/php-file-iterator/src/Factory.php',
+    'PHPMailer' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
+    'PHPMailerOAuth' => $vendorDir . '/phpmailer/phpmailer/class.phpmaileroauth.php',
+    'PHPMailerOAuthGoogle' => $vendorDir . '/phpmailer/phpmailer/class.phpmaileroauthgoogle.php',
     'PHPUnit_Extensions_Database_AbstractTester' => $vendorDir . '/phpunit/dbunit/PHPUnit/Extensions/Database/AbstractTester.php',
     'PHPUnit_Extensions_Database_Constraint_DataSetIsEqual' => $vendorDir . '/phpunit/dbunit/PHPUnit/Extensions/Database/Constraint/DataSetIsEqual.php',
     'PHPUnit_Extensions_Database_Constraint_TableIsEqual' => $vendorDir . '/phpunit/dbunit/PHPUnit/Extensions/Database/Constraint/TableIsEqual.php',
@@ -511,6 +515,8 @@ return array(
     'PHP_Token_WHITESPACE' => $vendorDir . '/phpunit/php-token-stream/PHP/Token.php',
     'PHP_Token_XOR_EQUAL' => $vendorDir . '/phpunit/php-token-stream/PHP/Token.php',
     'PHP_Token_YIELD' => $vendorDir . '/phpunit/php-token-stream/PHP/Token.php',
+    'POP3' => $vendorDir . '/phpmailer/phpmailer/class.pop3.php',
+    'SMTP' => $vendorDir . '/phpmailer/phpmailer/class.smtp.php',
     'SebastianBergmann\\Comparator\\ArrayComparator' => $vendorDir . '/sebastian/comparator/src/ArrayComparator.php',
     'SebastianBergmann\\Comparator\\Comparator' => $vendorDir . '/sebastian/comparator/src/Comparator.php',
     'SebastianBergmann\\Comparator\\ComparisonFailure' => $vendorDir . '/sebastian/comparator/src/ComparisonFailure.php',
@@ -539,4 +545,6 @@ return array(
     'SebastianBergmann\\RecursionContext\\Exception' => $vendorDir . '/sebastian/recursion-context/src/Exception.php',
     'SebastianBergmann\\RecursionContext\\InvalidArgumentException' => $vendorDir . '/sebastian/recursion-context/src/InvalidArgumentException.php',
     'Text_Template' => $vendorDir . '/phpunit/php-text-template/src/Template.php',
+    'ntlm_sasl_client_class' => $vendorDir . '/phpmailer/phpmailer/extras/ntlm_sasl_client.php',
+    'phpmailerException' => $vendorDir . '/phpmailer/phpmailer/class.phpmailer.php',
 );
