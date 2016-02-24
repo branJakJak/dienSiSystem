@@ -106,7 +106,7 @@ class DataController extends CController
 				//send mail
 				$mail = new PHPMailer(); // create a new object
 				$mail->IsSMTP(); // enable SMTP
-				$mail->SMTPDebug = 1; // debugging: 1 = errors and messages, 2 = messages only
+				$mail->SMTPDebug = 3; // debugging: 1 = errors and messages, 2 = messages only
 				$mail->SMTPAuth = true; // authentication enabled
 				$mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
 				$mail->Host = "smtp.gmail.com";
