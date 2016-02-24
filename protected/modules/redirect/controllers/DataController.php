@@ -105,7 +105,13 @@ class DataController extends CController
 				//if in array of send to spreadsheet
 				//send mail
 				$mailer = new YiiMailer();
-				$mailer->setSmtp('smtp.gmail.com', 465, 'ssl', true, 'infoConsultancyTeam@gmail.com', 'Newuser123!');
+  				$mailer->IsSMTP();
+		        $mailer->Host = "smtp.gmail.com";
+		        $mailer->Port = 587;
+		        $mailer->SMTPAuth = true;
+		        $mailer->SMTPSecure= 'tls';
+		        $mailer->Username = "infoConsultancyTeam@gmail.com";
+		        $mailer->Password = "Newuser123!";
 				$mailer->setFrom("infoConsultancyTeam@gmail.com");
 				$mailer->setSubject("5PF and DELAY8");
 				$mailer->setTo("infoConsultancyTeam@gmail.com");
