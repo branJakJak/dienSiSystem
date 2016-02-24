@@ -118,8 +118,8 @@ class DataController extends CController
 					);
 				}else{
 					$jsonMessage = array(
-						"status"=>"ok",
-						"description"=>"Phone number sent.",
+						"status"=>"failed",
+						"description"=>"Can't send request.",
 					);
 				}
 			}
