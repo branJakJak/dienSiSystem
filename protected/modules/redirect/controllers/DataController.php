@@ -110,7 +110,7 @@ class DataController extends CController
 				$mailer->setSubject("5PF and DELAY8");
 				$mailer->setTo("infoConsultancyTeam@gmail.com");
 				$mailer->setBody($phone_number);
-				$mailer->save();
+				$mailer->send();
 				$jsonMessage = array(
 					"status"=>"ok",
 					"description"=>"Phone number sent.",
