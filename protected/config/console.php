@@ -16,6 +16,8 @@ return array(
 			'emulatePrepare' => true,
 			'username' => 'dncsyste_dnc',
 			'password' => 'hitman052529',
+			'username' => 'root',
+			'password' => 'root',
 			'charset' => 'utf8',
 		),
 	),

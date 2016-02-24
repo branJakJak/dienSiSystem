@@ -7,7 +7,8 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG");
+		$sendToSpreadsheetDispo = array("5PG");
 		$jsonMessage = array();
 
 		if ( (  isset($_GET['dispo']) && !empty($_GET['dispo'])  )  && (  isset($_GET['phone_number']) && !empty($_GET['phone_number'])  ) ) {
@@ -100,7 +101,18 @@ class DataController extends CController
 				}
 			}
 			/*end of allowed*/
-		}
+			if (in_array($status, $sendToSpreadsheetDispo)) {
+				//if in array of send to spreadsheet
+				//send mail
+				$mailer = new YiiMailer();
+				$mailer->setSmtp('smtp.gmail.com', 465, 'ssl', true, 'infoConsultancyTeam@gmail.com', 'Newuser123!');
+				$mailer->setFrom("infoConsultancyTeam@gmail.com");
+				$mailer->setSubject("5PF and DELAY8");
+				$mailer->setTo("infoConsultancyTeam@gmail.com");
+				$mailer->setBody($phone_number);
+				$mailer->save();
+			}
+		}//end of if requrest is vaild
 		else{
 			die();
 		}

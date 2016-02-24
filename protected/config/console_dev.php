@@ -11,7 +11,7 @@ return array(
     // application components
     'components'=>array(
         'db'=>array(
-            'connectionString' => 'mysql:host=localhost;dbname=server5_ds',
+            'connectionString' => 'mysql:host=localhost;dbname=dncsyste_dnc',
             'emulatePrepare' => true,
             'username' => 'root',
             'password' => 'root',
