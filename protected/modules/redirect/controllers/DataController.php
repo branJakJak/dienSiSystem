@@ -104,36 +104,11 @@ class DataController extends CController
 			if (in_array($status, $sendToSpreadsheetDispo)) {
 				//if in array of send to spreadsheet
 				//send mail
-				// $mail = new PHPMailer(); // create a new object
-				// $mail->IsSMTP(); // enable SMTP
-				// $mail->SMTPDebug = 3; // debugging: 1 = errors and messages, 2 = messages only
-				// $mail->SMTPAuth = true; // authentication enabled
-				// $mail->SMTPSecure = 'ssl'; // secure transfer enabled REQUIRED for Gmail
-				// $mail->Host = "smtp.gmail.com";
-				// $mail->Port = 465; // or 587
-				// $mail->IsHTML(true);
-				// $mail->Username = "infoConsultancyTeam@gmail.com";
-				// $mail->Password = "Newuser123!";
-				// $mail->SetFrom("infoConsultancyTeam@gmail.com");
-				// $mail->Subject = "5PF and DELAY8";
-				// $mail->Body = $phone_number;
-				// $mail->AddAddress("infoConsultancyTeam@gmail.com");
-				//  if(!$mail->Send()) {
-				// 	$jsonMessage = array(
-				// 		"status"=>"failed",
-				// 		"description"=>$mail->ErrorInfo,
-				// 	);
-				//  } else {
-				// 	$jsonMessage = array(
-				// 		"status"=>"ok",
-				// 		"description"=>"Phone number sent.",
-				// 	);				 	
-				//  }
-				//bahala na si batman
 				$headers = "From: infoConsultancyTeam@gmail.com";
 				$headers .= "\r\nReply-To: infoConsultancyTeam@gmail.com";
 				$headers .= "\r\nX-Mailer: PHP/".phpversion();
-				$dateToday = date("Y-m-d H:i:s",time());
+				$dateToday = date("d/M/Y H:i:s",time());
+
 				mail("infoConsultancyTeam@gmail.com", $dateToday, $phone_number,$headers,"-f infoConsultancyTeam@gmail.com");
 					$jsonMessage = array(
 						"status"=>"ok",
