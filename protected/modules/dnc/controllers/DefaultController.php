@@ -57,9 +57,9 @@ class DefaultController extends Controller
 		if ($model) {
 
 			$totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
-			// $removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
-			// $removedMobileNumbersArr = array_filter($removedMobileNumbersArr);
-			// $removedMobileNumbers = count($removedMobileNumbersArr);
+			$removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
+			$removedMobileNumbersArr = array_filter($removedMobileNumbersArr);
+			$removedMobileNumbers = count($removedMobileNumbersArr);
 			$totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
 			$totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
 
