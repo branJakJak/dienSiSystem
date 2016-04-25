@@ -62,8 +62,6 @@ class DefaultController extends Controller
 			$removedMobileNumbers = count($removedMobileNumbersArr);
 			$totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
 			$totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
-
-
 			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , "removedMobileNumbersArr"=>$removedMobileNumbersArr , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
 		}
 	}

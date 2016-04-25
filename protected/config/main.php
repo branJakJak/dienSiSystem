@@ -6,7 +6,6 @@
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
 Yii::setPathOfAlias('booster',dirname(__FILE__.'/../extensions/booster'));
-
 return array(
 	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
 	'name'=>'DNC',
@@ -17,7 +16,6 @@ return array(
         'booster' =>dirname(__FILE__).'/../extensions/yiibooster',
         'bootstrap'=>dirname(__FILE__).'/../extensions/bootstrap',
         'yiiwheels'=>dirname(__FILE__).'/../extensions/yiiwheels',
-
     ),
 
 	// autoloading model and component classes
@@ -105,12 +103,12 @@ return array(
 			),
 		),
 	),
-
 	// application-level parameters that can be accessed
 	// using Yii::app()->params['paramName']
 	'params'=>array(
 		// this is used in contact page
 		'adminEmail'=>'webmaster@example.com',
-		'isUnderConstruction'=>true,
+		'isUnderConstruction'=>false,
+		'SERVER_IP_ADDDRESS'=>'81.138.138.57',
 	),
 );
