@@ -4,10 +4,13 @@
 */
 class DataController extends CController
 {
+	/**
+	 * @TODO Refactor this code.
+	 */
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL","PBF5");
 		$sendToSpreadsheetDispo = array("5PG");
 		$jsonMessage = array();
 
@@ -105,9 +108,18 @@ class DataController extends CController
 					}
                     $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $plb->send();
+				}else if ( $status == "PBF5") {
+					$plb = new PBF5($phone_number);
+					if (isset($_GET['list_id'])) {
+						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
+                    $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $plb->send();
 				}
 			}
 			/*end of allowed*/
+
+
 			if (in_array($status, $sendToSpreadsheetDispo)) {
 				//if in array of send to spreadsheet
 				//send mail
@@ -122,11 +134,10 @@ class DataController extends CController
 						"status"=>"ok",
 						"description"=>"Phone number sent.",
 					);				 					
-
 			}
 		}//end of if requrest is vaild
 		else{
-			die();
+			Yii::app()->end();
 		}
         echo json_encode($jsonMessage);
 	}
