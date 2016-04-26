@@ -13,7 +13,7 @@ class PIF5 extends RemoteViciOutBase
             "function"=>"add_lead",
             "phone_number"=>$this->getPhoneNumber(),
             "phone_code"=>"44",
-            // "list_id"=>"550", //dont blame me
+            "list_id"=>"550", //dont blame me
             // "dnc_check"=>"Y",
             // "duplicate_check"=>"DUPLIVE",
             "add_to_hopper"=>"Y",
