@@ -110,16 +110,12 @@ class DataController extends CController
 					$jsonMessage = $plb->send();
 				}else if ( $status == "PBF5") {
 					$plb = new PBF5($phone_number);
-					if (isset($_GET['list_id'])) {
-						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
-					}
+					$plb->setAdditionalParameters($_GET);
                     $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $plb->send();
 				}else if (  $status == "PIF5") {
 					$plb = new PIF5($phone_number);
-					if (isset($_GET['list_id'])) {
-						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
-					}
+					$plb->setAdditionalParameters($_GET);
                     $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $plb->send();
 				}
