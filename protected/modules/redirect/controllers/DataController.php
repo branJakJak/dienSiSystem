@@ -10,7 +10,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL","PBF5");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL","PBF5","PIF5");
 		$sendToSpreadsheetDispo = array("5PG");
 		$jsonMessage = array();
 
@@ -110,6 +110,13 @@ class DataController extends CController
 					$jsonMessage = $plb->send();
 				}else if ( $status == "PBF5") {
 					$plb = new PBF5($phone_number);
+					if (isset($_GET['list_id'])) {
+						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
+					}
+                    $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $plb->send();
+				}else if (  $status == "PIF5") {
+					$plb = new PIF5($phone_number);
 					if (isset($_GET['list_id'])) {
 						$plb->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
