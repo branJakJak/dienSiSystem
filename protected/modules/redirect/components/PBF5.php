@@ -8,7 +8,7 @@ class PBF5 extends RemoteViciOutBase
     public function send()
     {
         $httpParameters = array(
-            "source"=>"PBF5",
+            "source"=>"5PRESS",
             "user"=>"apiuserwill",
             "pass"=>"mentalapipassword",
             "function"=>"add_lead",
