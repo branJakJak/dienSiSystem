@@ -21,6 +21,7 @@ class PIF5 extends RemoteViciOutBase
             "hopper_priority"=>"45"
         );
         $httpParameters = array_merge($this->getAdditionalParameters() , $httpParameters);
+        $httpParameters['source_id'] = $httpParameters['list_id'];
         // $httpParameters['add_to_hopper'] = "Y";
         // $httpParameters['hopper_priority'] = "45";
         // $httpParameters['source'] = intval($httpParameters['list_id']);
