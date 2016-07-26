@@ -165,7 +165,7 @@ OFFSET ' . $offset . '
         return ($totalCount - $totalWithoutDuplicates);
     }
 
-    public function getTotalDataToDownload($queue_id)
+    public static function getTotalDataToDownload($queue_id)
     {
         $totalDataToDownload = Yii::app()->db->createCommand("
 			select count(distinct a.mobile_number)
