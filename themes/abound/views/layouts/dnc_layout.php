@@ -37,7 +37,6 @@
 
         <div class="">
             <?php $this->widget('zii.widgets.CListView', array(
-
                 'dataProvider'=>$dataprovider,
                 'template'=>'{summary}{sorter}{pager}{items}{pager}',
                 'itemView'=>'application.modules.dnc.views.default._view',

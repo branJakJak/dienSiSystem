@@ -55,7 +55,6 @@ class DefaultController extends Controller
 			die();
 		}
 		if ($model) {
-
 			$totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
 			$removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
 			$removedMobileNumbersArr = array_filter($removedMobileNumbersArr);

@@ -83,14 +83,14 @@ class DncUtilities
     public static function printCleanMobileNumbers($queue_id)
     {
 
-$sqlCountStr = <<<EOL
+        $sqlCountStr = <<<EOL
 select count(p1.mobile_number)
 FROM white_listed_mobile as p1
 left join black_listed_mobile as p2 ON p1.mobile_number = p2.mobile_number
 where p1.queue_id = $queue_id 
 and p2.mobile_number is null
 EOL;
-$numOfCount = Yii::app()->db->createCommand($sqlCountStr)->queryScalar();
+        $numOfCount = Yii::app()->db->createCommand($sqlCountStr)->queryScalar();
 
         $offset = 0;
         $limit = 10000;

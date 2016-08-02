@@ -133,10 +133,10 @@ class DataController extends CController
 				$dateToday = date("m/d/Y H:i:s",time());
 
 				mail("infoConsultancyTeam@gmail.com", $dateToday, $phone_number,$headers,"-f infoConsultancyTeam@gmail.com");
-					$jsonMessage = array(
-						"status"=>"ok",
-						"description"=>"Phone number sent.",
-					);				 					
+				$jsonMessage = array(
+					"status"=>"ok",
+					"description"=>"Phone number sent.",
+				);				 					
 			}
 		}//end of if requrest is vaild
 		else{
