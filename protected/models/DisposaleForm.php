@@ -36,6 +36,7 @@ class DisposaleForm extends CFormModel{
         }
         $criteria = new CDbCriteria();
         $criteria->compare("phone_number", $this->$attribute);
+        $criteria->order = "date_created DESC";
         $dispoModel = Disposale::model()->find($criteria);
         $isValid = true;
         if($dispoModel && !empty($dispoModel) ){
@@ -45,8 +46,9 @@ class DisposaleForm extends CFormModel{
             $dt2Obj = new DateTime($dt2Str);
             $dateDifference = $dt2Obj->diff($dt1Obj)->format("%a");
             $dateDifference = intval($dateDifference);
-            if($dateDifference <= 90){
-                $this->addError($attribute, "Sorry we cant process your data . You must wait 90 days before we accept your submittion");
+            $limitDays = intval(\Yii::app()->params['time_limit']);
+            if($dateDifference <= $limitDays){
+                $this->addError($attribute, "Sorry we cant process your data . You must wait {$limitDays} days before we accept your submittion");
             }
         }
         return $isValid;

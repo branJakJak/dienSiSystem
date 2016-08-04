@@ -78,8 +78,8 @@ return array(
 			'emulatePrepare' => true,
 			'username' => 'dncsyste_dnc',
 			'password' => 'hitman052529',
-			// 'username' => 'root',
-			// 'password' => 'root',
+//			 'username' => 'root',
+//			 'password' => 'root',
 			'charset' => 'utf8',
 		),
 		
@@ -110,5 +110,6 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		'isUnderConstruction'=>false,
 		'SERVER_IP_ADDDRESS'=>'81.138.138.57',
+        'time_limit'=>182
 	),
 );
