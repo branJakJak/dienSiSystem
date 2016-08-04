@@ -19,11 +19,58 @@ class DisposaleFormTest extends CDbTestCase {
         \Disposale::model()->deleteAll();
     }
 
-
-    protected function tearDown()
+    public function testResumitAfterLimitDays()
     {
-        \Disposale::model()->deleteAll();
+        $p = new CHtmlPurifier();
+        $_POST['dispo_name'] = "something";
+        $_POST['phone_number'] = "07321654987";
+        $_POST['first_name'] = "juan";
+        $_POST['last_name'] = "dela cruz";
+
+        $disposaleForm = new DisposaleForm();
+        $disposaleForm->dispo_name = $p->purify(@$_POST['dispo_name']);
+        $disposaleForm->phone_number = $p->purify(@$_POST['phone_number']);
+        $disposaleForm->posted_data = json_encode(@$_POST);
+        $this->assertTrue($disposaleForm->validate(), "the disposale should validate and would'nt fail");
+
+        /*Create record initial*/
+        $this->assertTrue($disposaleForm->save() , "The disposale should save");
+        //update the last record inserted - move date created to limit days passed + 1
+        /**
+         * @var $model \Disposale
+         */
+        $criteria = new \CDbCriteria();
+        $criteria->order = "date_created DESC";
+        $model = \Disposale::model()->find($criteria);
+        $limitDays = intval(\Yii::app()->params['time_limit']) + 1;
+        $pastLimitdays = strtotime("-{$limitDays} days");
+        $model->date_created = date("Y-m-d H:i:s", $pastLimitdays);
+        $this->assertTrue($model->update(), "Persisting the update to database");
+        $criteria = new \CDbCriteria();
+        $criteria->order = "date_created DESC";
+        $model = \Disposale::model()->find($criteria);//get the latest inserted record
+        $this->assertEquals(date("Y-m-d H:i:s", $pastLimitdays), $model->date_created , "The date created should be equal now");
+
+        /*insert another same record after limit days*/
+        $disposaleFormAfterLimit = new DisposaleForm();
+        $disposaleFormAfterLimit->dispo_name = $p->purify(@$_POST['dispo_name']);
+        $disposaleFormAfterLimit->phone_number = $p->purify(@$_POST['phone_number']);
+        $disposaleFormAfterLimit->posted_data = json_encode(@$_POST);
+        $this->assertTrue($disposaleFormAfterLimit->validate(), "the disposale is valid and validation would'nt fail : " . \CHtml::errorSummary($disposaleFormAfterLimit));
+        /*should insert*/
+        $this->assertTrue($disposaleForm->save() , "The disposale should save");
+
+        /*insert another same record - insertion should fail*/
+        $disposaleFormSameData = new DisposaleForm();
+        $disposaleFormSameData->dispo_name = $p->purify(@$_POST['dispo_name']);
+        $disposaleFormSameData->phone_number = $p->purify(@$_POST['phone_number']);
+        $disposaleFormSameData->posted_data = json_encode(@$_POST);
+        $this->assertFalse($disposaleFormSameData->validate(), "the disposale should validate and return false ");
+        /*should not insert*/
+        $this->assertFalse($disposaleForm->save() , "The disposale should not save");
     }
+
+
     public function testTestViaCurl()
     {
         $URL_TARGET = "http://localhost:8000/disposale/save";
@@ -153,5 +200,13 @@ class DisposaleFormTest extends CDbTestCase {
         $disposaleForm->posted_data = json_encode(@$_POST);
         $this->assertFalse($disposaleForm->validate(), "Testing to see if empty phone_number would save ");
     }
+
+
+
+    protected function tearDown()
+    {
+        \Disposale::model()->deleteAll();
+    }
+
 
 }

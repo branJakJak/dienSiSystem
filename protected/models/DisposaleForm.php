@@ -47,8 +47,10 @@ class DisposaleForm extends CFormModel{
             $dateDifference = $dt2Obj->diff($dt1Obj)->format("%a");
             $dateDifference = intval($dateDifference);
             $limitDays = intval(\Yii::app()->params['time_limit']);
+            /*After 182 days , if equal to 182 still not valid*/
             if($dateDifference <= $limitDays){
-                $this->addError($attribute, "Sorry we cant process your data . You must wait {$limitDays} days before we accept your submittion");
+                $lastInsertData = $dispoModel->date_created;
+                $this->addError($attribute, "Sorry we cant process your data . You must wait {$limitDays} days before we accept your submittion. Last insert was $lastInsertData. Difference is $dateDifference and limit is $limitDays");
             }
         }
         return $isValid;
