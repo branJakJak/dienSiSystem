@@ -94,9 +94,9 @@ EOL;
         $numOfCount = Yii::app()->db->createCommand($sqlCountStr)->queryScalar();
 
         $offset = 0;
-        $limit = 10000;
-        if ($limit < 10000) {
-            $limit = 10000;
+        $limit = 50000;
+        if ($limit < 50000) {
+            $limit = 50000;
         }
         do {
 
