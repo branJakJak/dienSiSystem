@@ -116,7 +116,7 @@ OFFSET ' . $offset . '
 	    shuffle($allResults);
 
         foreach ($allResults as $curVal) {
-            fwrite($fileRes, $curVal);
+            fwrite($fileRes, $curVal['mobile_number']);
             //echo $curVal['mobile_number'] . "\r\n";
         }
             $offset += $limit;
