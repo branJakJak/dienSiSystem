@@ -1,0 +1,34 @@
+
+
+
+
+@TODO  : 
+after uploading the file 
+record the 
+
+$totalUploadedMobileNumbers
+$removedMobileNumbersArr
+$removedMobileNumbersArr
+$removedMobileNumbers
+$totalDuplicatesRemoved
+$totalDataToDownload
+
+so it wont be calculated everytime
+
+
+
+
+@TODO - add to gitignore
+
+acct/
+bak_emailclient/
+client/
+clientemail/
+data/
+emailclient/
+ipAccess.txt
+mautic/
+pollsite/
+
+
+@TODO - performance

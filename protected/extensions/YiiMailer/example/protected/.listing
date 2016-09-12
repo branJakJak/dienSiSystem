@@ -1,0 +1,7 @@
+drwxr-xr-x    6 ezfastlo   ezfastlo         4096 Jul 25 15:40 .
+drwxr-xr-x    5 ezfastlo   ezfastlo         4096 Jul 25 15:39 ..
+drwxr-xr-x    2 ezfastlo   ezfastlo         4096 Jul 25 15:40 commands
+drwxr-xr-x    2 ezfastlo   ezfastlo         4096 Jul 25 15:40 config
+drwxr-xr-x    2 ezfastlo   ezfastlo         4096 Jul 25 15:40 controllers
+drwxr-xr-x    5 ezfastlo   ezfastlo         4096 Jul 25 15:39 views
+-rw-r--r--    1 ezfastlo   ezfastlo          789 Jul  9 18:47 yiic.php
