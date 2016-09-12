@@ -50,7 +50,8 @@ class DefaultController extends Controller
 			header("Content-Type: text/plain");
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
 			echo "Mobile Number"."\r\n";
-	        DncUtilities::printCleanMobileNumbers($model->queue_id);
+	        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
+	        echo file_get_contents($tempFileContainer);
 	        Yii::app()->end();
 			die();
 		}

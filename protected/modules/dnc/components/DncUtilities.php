@@ -82,7 +82,8 @@ class DncUtilities
 
     public static function printCleanMobileNumbers($queue_id)
     {
-
+        $tempFileContainer = tempnam(sys_get_temp_dir());
+        $fileRes = fopen($tempFileContainer, "w+");
         $sqlCountStr = <<<EOL
 select count(p1.mobile_number)
 FROM white_listed_mobile as p1
@@ -94,8 +95,8 @@ EOL;
 
         $offset = 0;
         $limit = 10000;
-        if ($limit < 1000) {
-            $limit = 1000;
+        if ($limit < 10000) {
+            $limit = 10000;
         }
         do {
 
@@ -112,12 +113,15 @@ OFFSET ' . $offset . '
             $allResults = Yii::app()->db->createCommand($sqlQuery)->queryAll();
 
 	    shuffle($allResults);
+
         foreach ($allResults as $curVal) {
-            echo $curVal['mobile_number'] . "\r\n";
+            fwrite($fileRes, $curVal);
+            //echo $curVal['mobile_number'] . "\r\n";
         }
             $offset += $limit;
         } while ($offset < $numOfCount);
-
+        fclose($fileRes);
+        return $tempFileContainer;
     }
     public static function getCleanMobileNumberIncDups($queue_id){
         $queue_id = intval($queue_id);
