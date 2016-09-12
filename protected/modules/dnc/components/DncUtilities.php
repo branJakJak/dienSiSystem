@@ -82,7 +82,8 @@ class DncUtilities
 
     public static function printCleanMobileNumbers($queue_id)
     {
-        $tempFileContainer = tempnam(sys_get_temp_dir());
+
+        $tempFileContainer = tempnam(sys_get_temp_dir(),"asdasd");
         $fileRes = fopen($tempFileContainer, "w+");
         $sqlCountStr = <<<EOL
 select count(p1.mobile_number)
