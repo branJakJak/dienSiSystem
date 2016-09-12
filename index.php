@@ -24,7 +24,7 @@ $autoload = __DIR__.'/protected/vendor/autoload.php';
 
 $yii =__DIR__ . '/protected/vendor/yiisoft/yii/framework/yii.php';
 
-if (LOCAL_MODE) {
+if (defined(LOCAL_MODE)) {
 	$config = __DIR__.'/protected/config/development.php';
 } else {
 	$config=dirname(__FILE__).'/protected/config/main.php';
