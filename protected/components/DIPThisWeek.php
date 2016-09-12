@@ -21,8 +21,6 @@ class DIPThisWeek
 		}
 		return $totalContainer;
 	}
-
-
 }
 
 ?>

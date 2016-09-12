@@ -1,13 +1,14 @@
 <?php
-defined('YII_DEBUG') or define('YII_DEBUG',true);
-defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
-defined('LOCAL_MODE') or define('LOCAL_MODE',true);
+// defined('YII_DEBUG') or define('YII_DEBUG',true);
+// defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
+// defined('LOCAL_MODE') or define('LOCAL_MODE',true);
 
 //	administrator
 //  r4l535*y980g9v1O
 //  wee
 
 /* if https is enabled */
+defined('HTTPS_MODE') or define('HTTPS_MODE',false);
 defined('HTTPS_MODE') or define('HTTPS_MODE',false);
 
 if (HTTPS_MODE) {
