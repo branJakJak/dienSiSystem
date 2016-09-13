@@ -85,6 +85,7 @@ class DncUtilities
 
         $tempFileContainer = tempnam(sys_get_temp_dir(),"asdasd");
         $fileRes = fopen($tempFileContainer, "w+");
+        /*Count all the output result */
         $sqlCountStr = <<<EOL
 select count(p1.mobile_number)
 FROM white_listed_mobile as p1
@@ -94,6 +95,8 @@ and p2.mobile_number is null
 EOL;
         $numOfCount = Yii::app()->db->createCommand($sqlCountStr)->queryScalar();
 
+
+        /*Retrieve the data chunk by chunk */
         $offset = 0;
         $limit = 50000;
         if ($limit < 50000) {
@@ -111,13 +114,11 @@ b.mobile_number IS NULL
 LIMIT ' . $limit . '
 OFFSET ' . $offset . '
             ';
-            $allResults = Yii::app()->db->createCommand($sqlQuery)->queryAll();
-
+        $allResults = Yii::app()->db->createCommand($sqlQuery)->queryAll();
 	    shuffle($allResults);
-
         foreach ($allResults as $curVal) {
             fwrite($fileRes, $curVal['mobile_number'] . "\r\n");
-            //echo $curVal['mobile_number'] . "\r\n";
+            // echo $curVal['mobile_number'] . "\r\n";
         }
             $offset += $limit;
         } while ($offset < $numOfCount);

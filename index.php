@@ -1,11 +1,10 @@
 <?php
-// defined('YII_DEBUG') or define('YII_DEBUG',true);
-// defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
-// defined('LOCAL_MODE') or define('LOCAL_MODE',true);
+defined('YII_DEBUG') or define('YII_DEBUG',true);
+defined('YII_TRACE_LEVEL') or define('YII_TRACE_LEVEL',3);
+defined('LOCAL_MODE') or define('LOCAL_MODE',true);
 
 //	administrator
-//  r4l535*y980g9v1O
-//  wee
+//  admin
 
 /* if https is enabled */
 defined('HTTPS_MODE') or define('HTTPS_MODE',false);
@@ -25,7 +24,7 @@ $autoload = __DIR__.'/protected/vendor/autoload.php';
 $yii =__DIR__ . '/protected/vendor/yiisoft/yii/framework/yii.php';
 
 $config = "";
-if (defined(LOCAL_MODE)) {
+if (defined('LOCAL_MODE')) {
 	$config = __DIR__.'/protected/config/development.php';
 } else {
 	$config=dirname(__FILE__).'/protected/config/main.php';

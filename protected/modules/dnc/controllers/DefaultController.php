@@ -49,11 +49,14 @@ class DefaultController extends Controller
 			$fileName = $model->queue_name.'-cleaneddata';
 			header("Content-Type: text/plain");
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
+
 			echo "Mobile Number"."\r\n";
+
 	        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
-	        echo file_get_contents($tempFileContainer);
+	        $cleaneddataFinal = `sort {$tempFileContainer} | uniq -u`;
+	        echo $cleaneddataFinal;
+	        
 	        Yii::app()->end();
-			die();
 		}
 		if (isset($_GET['download'])) {
 			Yii::app()->end();
@@ -62,7 +65,7 @@ class DefaultController extends Controller
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
 			echo "Mobile Number"."\r\n";
 	        DncUtilities::printCleanMobileNumbers($model->queue_id);
-			die();
+			Yii::app()->end();
 		}
 		if ($model) {
 			// $totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);

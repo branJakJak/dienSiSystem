@@ -24,10 +24,10 @@ $totalDncRecords = BlackListedMobile::model()->count();
                             'items' => array(
                                 array('label'=>'Dashboard','url'=>array('/site/index'), 'visible' => Yii::app()->user->getId() === 'administrator'  ),
     			    array('label'=>'DNC Records '.'<span class="label label-info">'.$totalDncRecords.'</span>' , 'url'=>array('/blackListedMobile/admin') , 'visible'=>Yii::app()->user->getId() === 'administrator'  ),
-                                array('label'=>'Client Portal','url'=>array('/client_portal/default'), 'visible' => !Yii::app()->user->isGuest ),
+                                // array('label'=>'Client Portal','url'=>array('/client_portal/default'), 'visible' => !Yii::app()->user->isGuest ),
         			            array('label'=>'De-dup Records '.'<span class="label label-success">'.WhitelistJobQueue::model()->count().'</span>','url'=>array('/de-dupe') , 'visible' => Yii::app()->user->getId() === 'administrator'),
-                                array('label' => 'IP Firewall', 'url' => "http://ip.dncsystem.website/", 'visible' => Yii::app()->user->getId() === 'administrator'),
-                                array('label' => 'Message board', 'url' => array('/messageBoard/updateStatus'), 'visible' => Yii::app()->user->getId() === 'administrator'),
+                                // array('label' => 'IP Firewall', 'url' => "http://ip.dncsystem.website/", 'visible' => Yii::app()->user->getId() === 'administrator'),
+                                // array('label' => 'Message board', 'url' => array('/messageBoard/updateStatus'), 'visible' => Yii::app()->user->getId() === 'administrator'),
                                 array('label' => 'Login', 'url' => array('/site/login'), 'visible' => Yii::app()->user->isGuest),
                                 array('label' => 'Logout (' . Yii::app()->user->name . ')', 'url' => array('/site/logout'), 'visible' => !Yii::app()->user->isGuest),
                             ),
