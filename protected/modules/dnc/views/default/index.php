@@ -69,7 +69,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 <script type="text/javascript">
 	function checkExportStatus (queue_id) {
 		 jQuery.ajax({
-		   url: '/whitelist/default/exportStatus',
+		   url: '/dnc/default/exportStatus',
 		   type: 'GET',
 		   dataType: 'json',
 		   data: {
