@@ -133,9 +133,11 @@ OFFSET ' . $offset . '
     public static function exportCleanToFile($exportFileLocation,$queue_id)
     {
         
-        if (!isset($exportFileLocation)) {
+        if (!file_exists($exportFileLocation)) {
             /*create temp file*/
-            $exportFileLocation = tempnam(sys_get_temp_dir(), "tempfile");
+            $exportFileLocation = Yii::getPathOfAlias("application.data").'/'.$exportFileLocation;
+            $fileRes = fopen($exportFileLocation, "w+");
+            fclose($fileRes);            
         }
         if (!isset($queue_id)) {
             throw new Exception("Please pass queueid to export");
