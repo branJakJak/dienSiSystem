@@ -53,7 +53,7 @@ class DefaultController extends Controller
 
 			/*check if the file exists*/
 
-			$exportFileLocation = Yii::getPathOfAlias("application.data").'/'.$model->queue_name.'-cleandata';
+			$exportFileLocation = Yii::getPathOfAlias("application.data").'/cleandata-'.$model->queue_name;
 			if (file_exists($exportFileLocation)) {
 				echo file_get_contents($exportFileLocation);
 			} else {
