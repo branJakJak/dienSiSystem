@@ -148,7 +148,8 @@ IGNORE 0 LINES
 EOL;
 
                 $sqlCommand = sprintf($sqlCommand, $newFileLocation, ',', '\n');
-                $mainCommand = "mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand'";
+ 
+                $mainCommand = "nohup mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand' > /dev/null 2>&1 &";
                 $result = exec($mainCommand);
                 //unlink($tempDump);
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whileListjob->queue_id;
