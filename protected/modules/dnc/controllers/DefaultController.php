@@ -14,7 +14,6 @@ class DefaultController extends Controller
             array('application.filters.IpAddressFilter'),
             array('application.filters.UnderConstructionFilter'),
             'accessControl',
-
         );
     }
 	/**
@@ -26,12 +25,12 @@ class DefaultController extends Controller
 	{
 		return array(
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
-				'actions'=>array('index','list'),
-				'users'=>array('*'),
+				'actions'=>array('index','list','exportStatus'),
+				'users'=>array('@'),
 			),
 			array('allow',
 				'actions'=>array('download'),
-				'users'=>array('*')
+				'users'=>array('@')
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),
@@ -45,59 +44,57 @@ class DefaultController extends Controller
         /* @var $model WhitelistJobQueue */
 		$model = WhitelistJobQueue::model()->findByPk($id);
 		if ($model) {
-			/*Temporary solution to download the file immediately*/
-			$fileName = $model->queue_name.'-cleaneddata';
-			header("Content-Type: text/plain");
-			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
-			echo "Mobile Number"."\r\n";
-
 			/*check if the file exists*/
-
 			$exportFileLocation = Yii::getPathOfAlias("application.data").'/cleandata-'.$model->queue_name;
-			if (file_exists($exportFileLocation)) {
+			/*count number of lines content*/
+			$lineCountRaw = `wc -l $exportFileLocation`;
+			$lineCountArr = explode(" ", $lineCountRaw);
+			$lineCountInt = intval($lineCountArr[0]);
+			if (file_exists($exportFileLocation) && $lineCountInt > 0) {
+				$fileName = $model->queue_name.'-cleaneddata';
+				header("Content-Type: text/plain");
+				header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
+				echo "Mobile Number"."\r\n";
 				echo file_get_contents($exportFileLocation);
 			} else {
-		        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
-		        $cleaneddataFinal = `sort {$tempFileContainer} | uniq -u`;
-		        echo $cleaneddataFinal;
+				/*notify the user  that the file is being exported */
+                /*prepare export file path*/
+                $exportFileLocation='cleandata-'.$model->queue_name;
+                DncUtilities::exportCleanToFile($exportFileLocation ,$model->queue_id);
+                Yii::app()->user->setFlash('success', '<strong>Please wait</strong> We are currrently processing the exported file. ');
+                /* notify our script that export status is pending*/
+                Yii::app()->clientScript->registerScript('notifyScript', 'window.EXPORT_STATUS = "pending";', CClientScript::POS_END);
+				$totalUploadedMobileNumbers = "disabled";
+				$removedMobileNumbersArr = "disabled";
+				$removedMobileNumbersArr = "disabled";
+				$removedMobileNumbers = "disabled";
+				$totalDuplicatesRemoved = "disabled";
+				$totalDataToDownload = "disabled";
+				$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , "removedMobileNumbersArr"=>$removedMobileNumbersArr , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );                
 			}
-	        Yii::app()->end();
-		}else {
+		} else {
 			throw new CHttpException(404,"Can't find $id from database", 1);
 		}
-		if (isset($_GET['download'])) {
-			/**
-			 * @todo  Refactor
-			 */
-			Yii::app()->end();
-
-			$fileName = $model->queue_name.'-cleaneddata';
-			header("Content-Type: text/plain");
-			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
-			echo "Mobile Number"."\r\n";
-	        DncUtilities::printCleanMobileNumbers($model->queue_id);
-			Yii::app()->end();
+	}
+	public function actionExportStatus($queueid)
+	{
+		header("Content-Type: application/json");
+        Yii::import("application.modules.dnc.components.*");
+        /* @var $model WhitelistJobQueue */
+		$model = WhitelistJobQueue::model()->findByPk($queueid);
+		$exportFileLocation = Yii::getPathOfAlias("application.data").'/cleandata-'.$model->queue_name;
+		/*count number of lines content*/
+		$lineCountRaw = `wc -l $exportFileLocation`;
+		$lineCountArr = explode(" ", $lineCountRaw);
+		$lineCountInt = intval($lineCountArr[0]);
+		$returnMess = array();
+		if ( $lineCountInt > 0 ) {
+			$returnMess['status']='ok';
+		}else{
+			$returnMess['status']='pending';
 		}
-		if ($model) {
-			/**
-			 * @todo Extract the information from the file name
-			 */
-			// $totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
-			// $removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
-			// $removedMobileNumbersArr = array_filter($removedMobileNumbersArr);
-			// $removedMobileNumbers = count($removedMobileNumbersArr);
-			// $totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
-			// $totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
-
-			$totalUploadedMobileNumbers = "disable";
-			$removedMobileNumbersArr = "disable";
-			$removedMobileNumbersArr = "disable";
-			$removedMobileNumbers = "disable";
-			$totalDuplicatesRemoved = "disable";
-			$totalDataToDownload = "disable";
-
-			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , "removedMobileNumbersArr"=>$removedMobileNumbersArr , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
-		}
+		echo CJSON::encode($returnMess);
+		Yii::app()->end();
 	}
 	public function actionList()
 	{

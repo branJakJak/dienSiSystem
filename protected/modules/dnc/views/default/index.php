@@ -7,12 +7,26 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Back to upload', 'url'=>  Yii::app()->getBaseUrl(true)."/whitelist/default" ),
 );
+Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model->queue_id .';', CClientScript::POS_END);
 ?>
 <div class="span6">
 	<h3>
 		<?php echo CHtml::encode($model->queue_name); ?>
 	</h3>
 	<hr>
+	<div class="row">
+        <?php
+            $this->widget('bootstrap.widgets.TbAlert', array(
+                'fade' => true,
+                'closeText' => '×',
+                'alerts' => array(
+                    'success' => array('block' => true, 'fade' => true, 'closeText' => '×'),
+                    'error' => array('block' => true, 'fade' => true, 'closeText' => '×'),
+                ),
+                'htmlOptions' => array('class' => 'span7')
+            ));
+        ?>
+	</div>
 	<div class='row'>
 		<div class="span7"><strong>Status: </strong></div>
 		<div class="span1"><?php echo $model->status ?></div>
@@ -50,3 +64,32 @@ $this->menu=array(
 	</div>
 	<br />
 </div>
+
+
+<script type="text/javascript">
+	function checkExportStatus (queue_id) {
+		 jQuery.ajax({
+		   url: '/whitelist/default/exportStatus',
+		   type: 'GET',
+		   dataType: 'json',
+		   data: {
+				'queueid': queue_id
+		   },
+		   complete: function(xhr, textStatus) {
+		   },
+		   success: function(data, textStatus, xhr) {
+				if (data.status === 'ok') {
+					window.location.reload();
+				}else {
+					window.checkExportStatus(queue_id);
+				}
+		   },
+		   error: function(xhr, textStatus, errorThrown) {
+		     console.error(xhr);
+		     console.error(textStatus);
+		     console.error(errorThrown);
+		   }
+		 });
+	}
+	checkExportStatus(window.QUEUE_ID);
+</script>

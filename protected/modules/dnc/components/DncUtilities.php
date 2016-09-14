@@ -148,7 +148,7 @@ OFFSET ' . $offset . '
         /*check if queueid exists*/
         $selectedWhiteListQueue = WhitelistJobQueue::model()->exists($queue_id);
         if (!$selectedWhiteListQueue) {
-            throw new Exception("Cant find $queue_id from Whitelisted mobile", 1);
+            throw new Exception("Cant find $queue_id from Whitelisted mobile");
         }
         if ($selectedWhiteListQueue) {
             /**
