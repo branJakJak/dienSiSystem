@@ -92,7 +92,7 @@ IGNORE 0 LINES
 EOL;
                 $sqlCommand = sprintf($sqlCommand, $filePath, ',', '\n');
 
-                $mainCommand = "mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand'";
+                $mainCommand = "nohup mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand' > /dev/null 2>&1 &";
                 exec($mainCommand);
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whiteListjob->queue_id;
 
