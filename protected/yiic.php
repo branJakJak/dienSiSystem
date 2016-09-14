@@ -7,7 +7,7 @@
 
 // change the following paths if necessary
 $yiic=dirname(__FILE__).'/../../yii/framework/yiic.php';
-if (YII_DEBUG) {
+if (defined('YII_DEBUG')) {
 	$config=dirname(__FILE__).'/config/console_dev.php';	
 }else{
 	$config=dirname(__FILE__).'/config/console.php';
