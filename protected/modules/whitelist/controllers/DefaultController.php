@@ -35,6 +35,7 @@ class DefaultController extends Controller
 
     public function actionIndex()
     {
+        Yii::import('application.modules.dnc.components.*');
         $dncFile = CUploadedFile::getInstanceByName("dncFile");
         if (isset($_POST['manualCheck']) && !empty($_POST['manualCheck'])) {
             //write the massive input to a csv file . process it like a whitelistjobqueue
