@@ -90,9 +90,17 @@ IGNORE 0 LINES
 (queue_id,mobile_number)
 EOL;
                 $sqlCommand = sprintf($sqlCommand, $filePath, ',', '\n');
+
                 $mainCommand = "mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand'";
                 exec($mainCommand);
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whiteListjob->queue_id;
+
+                /*prepare export file path*/
+                $exportFileLocation=$whiteListjob->queue_name.'-cleandata';
+                $queue_id = $whiteListjob->queue_id;
+                DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
+                
+                //execute the nohup command here
                 Yii::app()->user->setFlash('success', '<strong>File Uploaded!</strong> Please click the link to download your cleaned mobile numbers . ' . CHtml::link('Reference Link', $referenceLink));
             } else {
                 Yii::app()->user->setFlash('error', CHtml::errorSummary($whiteListjob));

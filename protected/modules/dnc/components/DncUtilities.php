@@ -6,7 +6,6 @@
  * Time: 4:36 AM
  * To change this template use File | Settings | File Templates.
  */
-
 class DncUtilities
 {
     public static function getTotalUploadedMobileNumbers($queue_id)
@@ -124,6 +123,49 @@ OFFSET ' . $offset . '
         } while ($offset < $numOfCount);
         fclose($fileRes);
         return $tempFileContainer;
+    }
+    /**
+     * Export the cleaned data into a file
+     * @param  string $exportFileLocation The location of export file
+     * @param  string $queue_id           Id of queue to export.
+     * @return string                     The path to file containing the cleaned data
+     */
+    public static function exportCleanToFile($exportFileLocation=null ,$queue_id = null)
+    {
+        if (is_null($exportFileLocation)) {
+            /*create temp file*/
+            $exportFileLocation = tempnam(sys_get_temp_dir(), "tempfile");
+        }
+        if (is_null($queue_id)) {
+            throw new Exception("Please pass queueid to export");
+        }
+        if (!file_exists($exportFileLocation)) {
+            throw new Exception("Make sure $exportFileLocation exists");
+        }
+        /*check if queueid exists*/
+        $selectedWhiteListQueue = WhiteListedMobile::model()->find($queue_id);
+        if (!$selectedWhiteListQueue) {
+            throw new Exception("Cant find $queue_id from Whitelisted mobile", 1);
+            
+        }
+        if ($selectedWhiteListQueue) {
+            /**
+             * @todo Execute the console command in a different thread
+             * Execute the console command in a different thread
+             */
+            $sqlCommand = '';
+            $sqlCommand .= ' select a.mobile_number ';
+            $sqlCommand .= ' from white_listed_mobile as a left join black_listed_mobile as b on a.mobile_number = b.mobile_number ';
+            $sqlCommand .= ' where ';
+            $sqlCommand .= ' a.queue_id = '.$selectedWhiteListQueue->queue_id.' and ';
+            $sqlCommand .= ' b.mobile_number IS NULL ';
+            /**
+             * Write the result in $exportFileLocation
+             */
+            $mainCommand = "nohup mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand' | sed \"s/'/\\'/;s/\\t/\\\",\"/g;s/^/\\\"/;s/$/\\\"/;s/\\n//g\" > $exportFileLocation 2>&1 &";
+            exec($mainCommand);
+        }
+        return $exportFileLocation;
     }
     public static function getCleanMobileNumberIncDups($queue_id){
         $queue_id = intval($queue_id);

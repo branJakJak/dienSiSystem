@@ -7,7 +7,7 @@
 //  admin
 
 /* if https is enabled */
-defined('HTTPS_MODE') or define('HTTPS_MODE',false);
+// defined('HTTPS_MODE') or define('HTTPS_MODE',true);
 defined('HTTPS_MODE') or define('HTTPS_MODE',false);
 
 if (HTTPS_MODE) {

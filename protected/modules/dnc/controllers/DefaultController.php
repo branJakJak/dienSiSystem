@@ -49,7 +49,6 @@ class DefaultController extends Controller
 			$fileName = $model->queue_name.'-cleaneddata';
 			header("Content-Type: text/plain");
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
-
 			echo "Mobile Number"."\r\n";
 
 	        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
@@ -57,9 +56,15 @@ class DefaultController extends Controller
 	        echo $cleaneddataFinal;
 	        
 	        Yii::app()->end();
+		}else {
+			throw new CHttpException(404,"Can't find $id from database", 1);
 		}
 		if (isset($_GET['download'])) {
+			/**
+			 * @todo  Refactor
+			 */
 			Yii::app()->end();
+
 			$fileName = $model->queue_name.'-cleaneddata';
 			header("Content-Type: text/plain");
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
@@ -68,6 +73,9 @@ class DefaultController extends Controller
 			Yii::app()->end();
 		}
 		if ($model) {
+			/**
+			 * @todo Extract the information from the file name
+			 */
 			// $totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
 			// $removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
 			// $removedMobileNumbersArr = array_filter($removedMobileNumbersArr);
