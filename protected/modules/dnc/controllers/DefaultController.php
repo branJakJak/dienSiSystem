@@ -58,8 +58,7 @@ class DefaultController extends Controller
 				echo file_get_contents($exportFileLocation);
 			} else {
 		        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
-		        $removeDupsCommand = "sort {$tempFileContainer} | uniq -u";
-		        $cleaneddataFinal = shell_exec($removeDupsCommand);
+		        $cleaneddataFinal = `sort {$tempFileContainer} | uniq -u`;
 		        echo $cleaneddataFinal;
 			}
 	        Yii::app()->end();
