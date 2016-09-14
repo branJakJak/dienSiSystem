@@ -165,7 +165,8 @@ OFFSET ' . $offset . '
             /**
              * Write the result in $exportFileLocation
              */
-            $mainCommand = "nohup mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand' | sed \"s/'/\\'/;s/\\t/\\\",\"/g;s/^/\\\"/;s/$/\\\"/;s/\\n//g\" > $exportFileLocation 2>&1 &";
+            $mainCommand = "nohup mysql  --user=dncsyste_dnc --password=hitman052529 --database=dncsyste_dnc -e '$sqlCommand' | sed \"s/'/\\'/;s/\\t/\\\",\\\"/g;s/^/\\\"/;s/$/\\\"/;s/\\n//g\" > $exportFileLocation 2>&1 &";
+
             exec($mainCommand);
             /*remove duplicate lines*/
             //$exportFileLocation
