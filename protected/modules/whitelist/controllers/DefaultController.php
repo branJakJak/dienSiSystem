@@ -96,7 +96,7 @@ EOL;
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whiteListjob->queue_id;
 
                 /*prepare export file path*/
-                $exportFileLocation=$whiteListjob->queue_name.'-cleandata';
+                $exportFileLocation=$whiteListjob->queue_name.'-cleandata.csv';
                 $queue_id = $whiteListjob->queue_id;
                 DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
                 

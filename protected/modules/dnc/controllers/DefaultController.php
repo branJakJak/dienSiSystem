@@ -51,10 +51,16 @@ class DefaultController extends Controller
 			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
 			echo "Mobile Number"."\r\n";
 
-	        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
-	        $cleaneddataFinal = `sort {$tempFileContainer} | uniq -u`;
-	        echo $cleaneddataFinal;
-	        
+			/*check if the file exists*/
+
+			$exportFileLocation = Yii::getPathOfAlias("application.data").'/'.$model->queue_name.'-cleandata';
+			if (file_exists($exportFileLocation)) {
+				echo file_get_contents($exportFileLocation);
+			} else {
+		        $tempFileContainer = DncUtilities::printCleanMobileNumbers($model->queue_id);
+		        $cleaneddataFinal = `sort {$tempFileContainer} | uniq -u`;
+		        echo $cleaneddataFinal;
+			}
 	        Yii::app()->end();
 		}else {
 			throw new CHttpException(404,"Can't find $id from database", 1);
