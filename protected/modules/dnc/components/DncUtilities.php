@@ -130,13 +130,14 @@ OFFSET ' . $offset . '
      * @param  string $queue_id           Id of queue to export.
      * @return string                     The path to file containing the cleaned data
      */
-    public static function exportCleanToFile($exportFileLocation=null ,$queue_id = null)
+    public static function exportCleanToFile($exportFileLocation,$queue_id)
     {
-        if (is_null($exportFileLocation)) {
+        
+        if (!isset($exportFileLocation)) {
             /*create temp file*/
             $exportFileLocation = tempnam(sys_get_temp_dir(), "tempfile");
         }
-        if (is_null($queue_id)) {
+        if (!isset($queue_id)) {
             throw new Exception("Please pass queueid to export");
         }
         if (!file_exists($exportFileLocation)) {
