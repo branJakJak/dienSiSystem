@@ -153,7 +153,7 @@ OFFSET ' . $offset . '
         }
         if ($selectedWhiteListQueue) {
             /**
-             * @todo Execute the console command in a different thread
+             * Execute the console command in a different thread
              * Execute the console command in a different thread
              */
             $sqlCommand = '';
