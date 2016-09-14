@@ -9,7 +9,9 @@ $this->menu=array(
 );
 Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model->queue_id .';', CClientScript::POS_END);
 ?>
+
 <div class="span6">
+
 	<h3>
 		<?php echo CHtml::encode($model->queue_name); ?>
 	</h3>
@@ -23,7 +25,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
                     'success' => array('block' => true, 'fade' => true, 'closeText' => '×'),
                     'error' => array('block' => true, 'fade' => true, 'closeText' => '×'),
                 ),
-                'htmlOptions' => array('class' => 'span7')
+                'htmlOptions' => array('class' => 'alertStatusContainer')
             ));
         ?>
 	</div>
@@ -75,7 +77,8 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		   data: {
 				'queueid': queue_id
 		   },
-		   complete: function(xhr, textStatus) {
+		   beforeSend:function(a,b){
+		   		jQuery(".alertStatusContainer strong").html('<img src="/img/loading.gif">Rechecking data..');
 		   },
 		   success: function(data, textStatus, xhr) {
 				if (data.status === 'ok') {
