@@ -146,10 +146,9 @@ OFFSET ' . $offset . '
             throw new Exception("Make sure $exportFileLocation exists");
         }
         /*check if queueid exists*/
-        $selectedWhiteListQueue = WhiteListedMobile::model()->find($queue_id);
+        $selectedWhiteListQueue = WhitelistJobQueue::model()->exists($queue_id);
         if (!$selectedWhiteListQueue) {
             throw new Exception("Cant find $queue_id from Whitelisted mobile", 1);
-            
         }
         if ($selectedWhiteListQueue) {
             /**
@@ -160,7 +159,7 @@ OFFSET ' . $offset . '
             $sqlCommand .= ' select a.mobile_number ';
             $sqlCommand .= ' from white_listed_mobile as a left join black_listed_mobile as b on a.mobile_number = b.mobile_number ';
             $sqlCommand .= ' where ';
-            $sqlCommand .= ' a.queue_id = '.$selectedWhiteListQueue->queue_id.' and ';
+            $sqlCommand .= ' a.queue_id = '.$queue_id.' and ';
             $sqlCommand .= ' b.mobile_number IS NULL ';
             /**
              * Write the result in $exportFileLocation
