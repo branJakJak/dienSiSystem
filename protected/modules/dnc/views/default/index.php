@@ -7,7 +7,7 @@ $this->breadcrumbs=array(
 $this->menu=array(
 	array('label'=>'Back to upload', 'url'=>  Yii::app()->getBaseUrl(true)."/whitelist/default" ),
 );
-Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model->queue_id .';', CClientScript::POS_END);
+Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model->queue_id .';', CClientScript::POS_HEAD);
 ?>
 
 <div class="span6">

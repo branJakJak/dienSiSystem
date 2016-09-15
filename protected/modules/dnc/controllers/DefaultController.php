@@ -63,7 +63,7 @@ class DefaultController extends Controller
                 DncUtilities::exportCleanToFile($exportFileLocation ,$model->queue_id);
                 Yii::app()->user->setFlash('success', '<strong>Please wait</strong> We are currrently processing the exported file. ');
                 /* notify our script that export status is pending*/
-                Yii::app()->clientScript->registerScript('notifyScript', 'window.EXPORT_STATUS = "pending";', CClientScript::POS_END);
+                Yii::app()->clientScript->registerScript('notifyScript', 'window.EXPORT_STATUS = "pending";', CClientScript::POS_HEAD);
 				$totalUploadedMobileNumbers = "disabled";
 				$removedMobileNumbersArr = "disabled";
 				$removedMobileNumbersArr = "disabled";
