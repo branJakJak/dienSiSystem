@@ -94,7 +94,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		   }
 		 });
 	}
-	function getStatusLabel () {
+	function getStatusLabel (queue_id) {
 		 jQuery.ajax({
 		   url: '/dnc/exportInformation/'+queue_id,
 		   type: 'GET',
@@ -112,5 +112,5 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		 });
 	}
 	checkExportStatus(window.QUEUE_ID);
-	getStatusLabel();
+	getStatusLabel(window.QUEUE_ID);
 </script>
