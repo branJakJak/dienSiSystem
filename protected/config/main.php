@@ -64,7 +64,7 @@ return array(
                 '/blacklist/default'=>'blacklist',
                 '/underconstruction'=>'site/underconstruction',
                 'de-dupe'=>'dnc/default/list',
-                'dnc/exportInformation'=>'dnc/default/exportInformation',
+                'dnc/exportInformation/<queue_id:\d+>'=>'dnc/default/exportInformation',
                 'dnc/exportStatus/<queue_id:\d+>'=>'dnc/default/exportStatus',
                 'dnc/<id:\d+>'=>'dnc/default/index',
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',

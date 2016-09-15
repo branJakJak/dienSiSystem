@@ -155,11 +155,15 @@ EOL;
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whileListjob->queue_id;
 
                 /*prepare export file path*/
-                $exportFileLocation='cleandata-'.$whileListjob->queue_name;
-                $queue_id = $whileListjob->queue_id;
-                DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
+
+                // $exportFileLocation='cleandata-'.$whileListjob->queue_name;
+                // $queue_id = $whileListjob->queue_id;
+                // DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
+
+
                 Yii::app()->user->setFlash('success', '<strong>File Uploaded!</strong> Please click the link to download your cleaned mobile numbers . ' . CHtml::link('Reference Link', $referenceLink));
-            } else {
+            } 
+            else {
                 Yii::app()->user->setFlash('error', CHtml::errorSummary($whileListjob));
             }
         }

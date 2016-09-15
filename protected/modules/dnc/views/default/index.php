@@ -38,7 +38,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 	<div class='row'>
 		<div class="span7"><strong>Total <strong>Uploaded</strong> mobile numbers : </strong></div>
 		<div class="span1">
-			<span class="label label-info">
+			<span class="label label-info" id="totalUploadedMobileNumbers">
 				<?php echo $totalUploadedMobileNumbers ?>
 			</span>
 		</div>
@@ -50,7 +50,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 			<strong>Duplicates from file : </strong>
 		</div>
 		<div class='span1'>
-			<span class="label label-info">
+			<span class="label label-info" id='totalDuplicatesRemoved'>
 				<?php echo $totalDuplicatesRemoved; ?>
 			</span>
 		</div>
@@ -59,7 +59,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 	<div class=''>
 		<a href="?download=true" title="download" class='btn btn-lg btn-primary btn-block'>
 			Download
-			<span class="label label-info">
+			<span class="label label-info" id='totaDataToDownload'>
 				<?php echo $totalDataToDownload ?>
 			</span>
 		</a>
@@ -94,32 +94,23 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		   }
 		 });
 	}
-	function getStatusLabel (whatToGet , whereToPut) {
-		 if ( !  (whereToPut instanceof jQuery) ) {
-		 	throw "Parameter whatToGet should be instance of jQuery";
-		 }
-		 if ( whereToPut.size() === 0 ) {
-		 	throw "Parameter whereToPut DOM doesnt exists";
-		 }
+	function getStatusLabel () {
 		 jQuery.ajax({
-		   url: '/dnc/exportStatus/'+queue_id,
-		   type: 'POST',
-		   dataType: 'xml/html/script/json/jsonp',
-		   data: {param1: 'value1'},
-		   complete: function(xhr, textStatus) {
-		     //called when complete
-		   },
+		   url: '/dnc/exportInformation/'+queue_id,
+		   type: 'GET',
+		   dataType: 'json',
 		   success: function(data, textStatus, xhr) {
-		     //called when successful
+		   		document.getElementById("totalUploadedMobileNumbers").innerHTML = data.totalUploadedMobileNumbers;
+		   		document.getElementById("totalDuplicatesRemoved").innerHTML = data.totalDuplicatesRemoved;
+		   		document.getElementById("totaDataToDownload").innerHTML = data.totaDataToDownload;
 		   },
 		   error: function(xhr, textStatus, errorThrown) {
-		     //called when there is an error
+		     console.error(xhr);
+		     console.error(textStatus);
+		     console.error(errorThrown);
 		   }
 		 });
-		 
-
-
 	}
 	checkExportStatus(window.QUEUE_ID);
-	// getStatusLabel(   );
+	getStatusLabel();
 </script>

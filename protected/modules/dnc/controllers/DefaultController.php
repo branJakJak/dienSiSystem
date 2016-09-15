@@ -100,17 +100,19 @@ class DefaultController extends Controller
 			throw new CHttpException(404,"$queue_id doesnt exists in the whitelist job queue");
 		}
 	}
-	public function actionExportInformation()
+	public function actionExportInformation($queue_id)
 	{
 		header("Content-Type: application/json");
-		
-		// $totalUploadedMobileNumbers = "disabled";
-		// $removedMobileNumbersArr = "disabled";
-		// $removedMobileNumbersArr = "disabled";
-		// $removedMobileNumbers = "disabled";
-		// $totalDuplicatesRemoved = "disabled";
-		// $totalDataToDownload = "disabled";
-		
+		$returnMessage = array(
+				"totalUploadedMobileNumbers"=> "disabled",
+				"totalDuplicatesRemoved"=> "disabled",
+				"totaDataToDownload"=>"disabled"
+		);
+		$returnMessage['totalUploadedMobileNumbers'] = DncUtilities::getTotalUploadedMobileNumbers($queue_id);
+		$returnMessage['totalDuplicatesRemoved']  = DncUtilities::getTotalDuplicatesRemoved($queue_id);
+		$returnMessage['totaDataToDownload']  = DncUtilities::getTotalDataToDownload($queue_id);
+		echo CJSON::encode($returnMessage);
+		Yii::app()->end();
 	}
 	public function actionList()
 	{

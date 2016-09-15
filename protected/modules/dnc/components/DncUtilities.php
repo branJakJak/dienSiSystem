@@ -24,13 +24,13 @@ class DncUtilities
     {
 
         $sqlQuery = '
-            select count(a.mobile_number)
-            from white_listed_mobile as a
-            left join black_listed_mobile as b on a.mobile_number = b.mobile_number
-            where 
-            a.queue_id = ' . $queue_id . ' and
-            b.mobile_number IS NULL
-            group by a.mobile_number;
+                select count(a.mobile_number)
+                from white_listed_mobile as a
+                left join black_listed_mobile as b on a.mobile_number = b.mobile_number
+                where 
+                a.queue_id = ' . $queue_id . ' and
+                b.mobile_number IS NULL
+                group by a.mobile_number;
             ';
 
         $commandObj = Yii::app()->db->createCommand($sqlCommand);
@@ -43,7 +43,7 @@ class DncUtilities
     public static function getRemovedMobileNumber($queue_id)
     {
         $sqlCommand = '
-            select a.mobile_number
+            select distinct a.mobile_number 
             from white_listed_mobile as a
             left join black_listed_mobile as b on a.mobile_number = b.mobile_number
             where 
@@ -172,6 +172,9 @@ OFFSET ' . $offset . '
         }
         return $exportFileLocation;
     }
+
+
+
     public static function getCleanMobileNumberIncDups($queue_id){
         $queue_id = intval($queue_id);
         $criteriaWhiteList = new CDbCriteria;
@@ -225,7 +228,7 @@ OFFSET ' . $offset . '
 			from white_listed_mobile as a
 			left join black_listed_mobile as b on a.mobile_number = b.mobile_number
 			where 
-			a.queue_id = $queue_id and b.mobile_number IS NULL
+			a.queue_id = $queue_id and b.mobile_number IS NULL 
 			")->queryScalar();
         return $totalDataToDownload;
     }
