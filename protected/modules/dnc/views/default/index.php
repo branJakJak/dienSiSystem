@@ -16,7 +16,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		<?php echo CHtml::encode($model->queue_name); ?>
 	</h3>
 	<hr>
-	<div class="row">
+	<div class="row" style="padding-bottom: 40px;">
         <?php
             $this->widget('bootstrap.widgets.TbAlert', array(
                 'fade' => true,
