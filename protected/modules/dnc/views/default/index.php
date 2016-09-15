@@ -31,7 +31,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 	</div>
 	<div class='row'>
 		<div class="span7"><strong>Status: </strong></div>
-		<div class="span1"><?php echo $model->status ?></div>
+		<div class="span1" id="statusLabel">Loading..</div>
 		<br>
 		<br>
 	</div>
@@ -71,7 +71,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 <script type="text/javascript">
 	function checkExportStatus (queue_id) {
 		 jQuery.ajax({
-		   url: '/dnc/exportStatus/'.queue_id,
+		   url: '/dnc/exportStatus/'+queue_id,
 		   type: 'GET',
 		   dataType: 'json',
 		   beforeSend:function(a,b){
@@ -83,6 +83,7 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 				}else {
 					window.checkExportStatus(queue_id);
 				}
+				document.getElementById("statusLabel").innerHTML = data.status;
 		   },
 		   error: function(xhr, textStatus, errorThrown) {
 		     console.error(xhr);
