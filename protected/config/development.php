@@ -66,6 +66,7 @@ return array(
 			'rules'=>array(
                 '/underconstruction'=>'site/underconstruction',
                 'de-dupe'=>'dnc/default/list',
+                'dnc/exportStatus/<queue_id:\d+>'=>'dnc/default/exportStatus',
                 'dnc/<id:\d+>'=>'dnc/default/index',				
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',

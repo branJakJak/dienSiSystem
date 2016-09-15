@@ -71,11 +71,11 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 <script type="text/javascript">
 	function checkExportStatus (queue_id) {
 		 jQuery.ajax({
-		   url: '/dnc/default/exportStatus?queueid='.queue_id,
+		   url: '/dnc/exportStatus/'.queue_id,
 		   type: 'GET',
 		   dataType: 'json',
 		   beforeSend:function(a,b){
-		   		jQuery(".alertStatusContainer strong").html('<img src="/img/loading.gif">Rechecking data..');
+		   		jQuery(".alertStatusContainer").html('<img src="/img/loading.gif" style="height: 41px;">Rechecking data..');
 		   },
 		   success: function(data, textStatus, xhr) {
 				if (data.status === 'ok') {

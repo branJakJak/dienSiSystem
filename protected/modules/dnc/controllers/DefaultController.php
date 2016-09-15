@@ -76,25 +76,30 @@ class DefaultController extends Controller
 			throw new CHttpException(404,"Can't find $id from database", 1);
 		}
 	}
-	public function actionExportStatus($queueid)
+	public function actionExportStatus($queue_id)
 	{
 		header("Content-Type: application/json");
         Yii::import("application.modules.dnc.components.*");
         /* @var $model WhitelistJobQueue */
-		$model = WhitelistJobQueue::model()->findByPk($queueid);
-		$exportFileLocation = Yii::getPathOfAlias("application.data").'/cleandata-'.$model->queue_name;
-		/*count number of lines content*/
-		$lineCountRaw = `wc -l $exportFileLocation`;
-		$lineCountArr = explode(" ", $lineCountRaw);
-		$lineCountInt = intval($lineCountArr[0]);
-		$returnMess = array();
-		if ( $lineCountInt > 0 ) {
-			$returnMess['status']='ok';
+		$model = WhitelistJobQueue::model()->findByPk($queue_id);
+		if ($model){
+			$exportFileLocation = Yii::getPathOfAlias("application.data").'/cleandata-'.$model->queue_name;
+			/*count number of lines content*/
+			$lineCountRaw = `wc -l $exportFileLocation`;
+			$lineCountArr = explode(" ", $lineCountRaw);
+			$lineCountInt = intval($lineCountArr[0]);
+			$returnMess = array();
+			if ( $lineCountInt > 0 ) {
+				$returnMess['status']='ok';
+			}else{
+				$returnMess['status']='pending';
+			}
+			echo CJSON::encode($returnMess);
+			Yii::app()->end();
 		}else{
-			$returnMess['status']='pending';
+			throw new CHttpException(404,"$queue_id doesnt exists in the whitelist job queue");
 		}
-		echo CJSON::encode($returnMess);
-		Yii::app()->end();
+		
 	}
 	public function actionList()
 	{
