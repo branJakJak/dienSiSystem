@@ -79,9 +79,11 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		   },
 		   success: function(data, textStatus, xhr) {
 				if (data.status === 'ok') {
+					jQuery(".alertStatusContainer").html('<h1>Done</h1>');
 					window.location.reload();
 				}else {
-					window.checkExportStatus(queue_id);
+					//add delay before getting the current status
+					setTimeout(function(){  window.checkExportStatus(queue_id); } , 500);
 				}
 				document.getElementById("statusLabel").innerHTML = data.status;
 		   },
@@ -92,5 +94,32 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 		   }
 		 });
 	}
+	function getStatusLabel (whatToGet , whereToPut) {
+		 if ( !  (whereToPut instanceof jQuery) ) {
+		 	throw "Parameter whatToGet should be instance of jQuery";
+		 }
+		 if ( whereToPut.size() === 0 ) {
+		 	throw "Parameter whereToPut DOM doesnt exists";
+		 }
+		 jQuery.ajax({
+		   url: '/dnc/exportStatus/'+queue_id,
+		   type: 'POST',
+		   dataType: 'xml/html/script/json/jsonp',
+		   data: {param1: 'value1'},
+		   complete: function(xhr, textStatus) {
+		     //called when complete
+		   },
+		   success: function(data, textStatus, xhr) {
+		     //called when successful
+		   },
+		   error: function(xhr, textStatus, errorThrown) {
+		     //called when there is an error
+		   }
+		 });
+		 
+
+
+	}
 	checkExportStatus(window.QUEUE_ID);
+	getStatusLabel(   );
 </script>

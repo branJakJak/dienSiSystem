@@ -99,6 +99,17 @@ class DefaultController extends Controller
 		}else{
 			throw new CHttpException(404,"$queue_id doesnt exists in the whitelist job queue");
 		}
+	}
+	public function actionExportInformation()
+	{
+		header("Content-Type: application/json");
+		
+		// $totalUploadedMobileNumbers = "disabled";
+		// $removedMobileNumbersArr = "disabled";
+		// $removedMobileNumbersArr = "disabled";
+		// $removedMobileNumbers = "disabled";
+		// $totalDuplicatesRemoved = "disabled";
+		// $totalDataToDownload = "disabled";
 		
 	}
 	public function actionList()

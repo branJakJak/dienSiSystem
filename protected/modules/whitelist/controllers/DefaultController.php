@@ -97,9 +97,9 @@ EOL;
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whiteListjob->queue_id;
 
                 /*prepare export file path*/
-                $exportFileLocation=$whiteListjob->queue_name.'-cleandata.csv';
-                $queue_id = $whiteListjob->queue_id;
-                DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
+                // $exportFileLocation=$whiteListjob->queue_name.'-cleandata.csv';
+                // $queue_id = $whiteListjob->queue_id;
+                // DncUtilities::exportCleanToFile($exportFileLocation ,$queue_id);
                 
                 //execute the nohup command here
                 Yii::app()->user->setFlash('success', '<strong>File Uploaded!</strong> Please click the link to download your cleaned mobile numbers . ' . CHtml::link('Reference Link', $referenceLink));

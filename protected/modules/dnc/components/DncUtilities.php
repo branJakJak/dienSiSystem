@@ -156,7 +156,7 @@ OFFSET ' . $offset . '
              * Execute the console command in a different thread
              */
             $sqlCommand = '';
-            $sqlCommand .= ' select a.mobile_number ';
+            $sqlCommand .= ' select a.mobile_number as " "';
             $sqlCommand .= ' from white_listed_mobile as a left join black_listed_mobile as b on a.mobile_number = b.mobile_number ';
             $sqlCommand .= ' where ';
             $sqlCommand .= ' a.queue_id = '.$queue_id.' and ';
