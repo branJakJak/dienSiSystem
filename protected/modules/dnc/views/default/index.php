@@ -121,5 +121,5 @@ Yii::app()->clientScript->registerScript('queueid', 'window.QUEUE_ID = '.$model-
 
 	}
 	checkExportStatus(window.QUEUE_ID);
-	getStatusLabel(   );
+	// getStatusLabel(   );
 </script>
