@@ -55,18 +55,11 @@ class DefaultController extends Controller
 			die();
 		}
 		if ($model) {
-			// $totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
-			// $removedMobileNumbersArr = DncUtilities::getRemovedMobileNumber($model->queue_id);
-			// $removedMobileNumbersArr = array_filter($removedMobileNumbersArr);
-			// $removedMobileNumbers = count($removedMobileNumbersArr);
-			// $totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
-			// $totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
-			$totalUploadedMobileNumbers = "disabled temporarily for performance gain";
-			$removedMobileNumbersArr = "disabled temporarily for performance gain";
-			$removedMobileNumbersArr = "disabled temporarily for performance gain";
-			$removedMobileNumbers = "disabled temporarily for performance gain";
-			$totalDuplicatesRemoved = "disabled temporarily for performance gain";
-			$totalDataToDownload = "refer to downloaded content";
+			$totalUploadedMobileNumbers = DncUtilities::getTotalUploadedMobileNumbers($model->queue_id);
+			$removedMobileNumbers = DncUtilities::getRemovedMobileNumber($model->queue_id);
+			$totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
+			$totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
+			
 			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , "removedMobileNumbersArr"=>$removedMobileNumbersArr , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
 		}
 	}
