@@ -47,7 +47,9 @@ return array(
 
 	// application components
 	'components'=>array(
-
+		'cache'=>array( 
+		    'class'=>'system.caching.CDbCache'
+		),
         'bootstrap' => array(
             'class' => 'bootstrap.components.TbApi',
         ),
@@ -88,7 +90,7 @@ return array(
 				// uncomment the following to show log messages on web pages
 				array(
 					'class'=>'CWebLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'error, warning , profile',
 				),
 			),
 		),

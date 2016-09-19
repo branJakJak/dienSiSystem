@@ -36,7 +36,7 @@ class DefaultController extends Controller
 			array('deny',  // deny all users
 				'users'=>array('*'),
 			),
-		);
+	);
 	}
 
 	public function actionIndex($id)
@@ -46,8 +46,8 @@ class DefaultController extends Controller
 		$model = WhitelistJobQueue::model()->findByPk($id);
 		if (isset($_GET['download'])) {
 			$fileName = $model->queue_name.'-cleaneddata';
-			// header("Content-Type: text/plain");
-			// header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
+			header("Content-Type: text/plain");
+			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
 			echo "Mobile Number"."\r\n";
             DncUtilities::printCleanMobileNumbers($model->queue_id);
 			die();

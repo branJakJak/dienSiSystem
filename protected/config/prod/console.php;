@@ -3,23 +3,23 @@
 // This is the configuration for yiic console application.
 // Any writable CConsoleApplication properties can be configured here.
 return array(
-	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
-	'name'=>'My Console Application',
-	'import'=>array(
+	'basePath' => dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	'name'     => 'My Console Application',
+	'import'   => array(
 		'ext.YiiMailer.YiiMailer',
 	),
 	// application components
-	'components'=>array(
-		'cache'=>array( 
-		    'class'=>'system.caching.CDbCache'
+	'components' => array(
+		'cache'     => array(
+			'class'    => 'system.caching.CDbCache'
 		),
 
 		// uncomment the following to use a MySQL database
-		'db'=>array(
+		'db'                => array(
 			'connectionString' => 'mysql:host=localhost;dbname=dncsyste_dnc',
-			'emulatePrepare' => true,
-			'username' => 'dncsyste_dnc',
-			'password' => 'hitman052529',
+			'emulatePrepare'   => true,
+			'username'         => 'dncsyste_dnc',
+			'password'         => 'hitman052529',
 			// 'username' => 'root',
 			// 'password' => 'root',
 			'charset' => 'utf8',

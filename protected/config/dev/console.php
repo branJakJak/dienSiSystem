@@ -10,6 +10,10 @@ return array(
 	),
 	// application components
 	'components'=>array(
+		'cache'=>array( 
+		    'class'=>'system.caching.CDbCache'
+		),
+	
 		// uncomment the following to use a MySQL database
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=dncsyste_dnc',

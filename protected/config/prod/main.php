@@ -48,7 +48,9 @@ return array(
 
 	// application components
 	'components'=>array(
-
+		'cache'=>array( 
+		    'class'=>'system.caching.CDbCache'
+		),
         'bootstrap' => array(
             'class' => 'bootstrap.components.TbApi',
         ),
