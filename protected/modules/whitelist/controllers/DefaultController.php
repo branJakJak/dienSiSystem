@@ -36,6 +36,7 @@ class DefaultController extends Controller
     public function actionIndex()
     {
         $dncFile = CUploadedFile::getInstanceByName("dncFile");
+
         if (isset($_POST['manualCheck']) && !empty($_POST['manualCheck'])) {
             //write the massive input to a csv file . process it like a whitelistjobqueue
             $criteria = new CDbCriteria();
@@ -48,6 +49,7 @@ class DefaultController extends Controller
                 Yii::app()->user->setFlash('success', '<strong>Mobile Number is Clean!</strong> The mobile number has not been opted yet.');
             }
         } else if (isset($_POST['massiveTextArea'])) {
+            //Manual input
             //write the posted manual file  to a CSV file
             $tempName = tempnam(Yii::getPathOfAlias('application.tempWrite'), "tempWrite");
             $tempName = $tempName . '.csv';
@@ -94,10 +96,14 @@ EOL;
                 exec($mainCommand);
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whiteListjob->queue_id;
                 Yii::app()->user->setFlash('success', '<strong>File Uploaded!</strong> Please click the link to download your cleaned mobile numbers . ' . CHtml::link('Reference Link', $referenceLink));
+
+                // Cache query results here
+                DncUtilities::cacheSqlQuery($whileListjob->queue_id);
             } else {
                 Yii::app()->user->setFlash('error', CHtml::errorSummary($whiteListjob));
             }
         } else if ($dncFile) {
+            //Via File up
             $newFileLocation = Yii::getPathOfAlias("application.uploaded_files") . DIRECTORY_SEPARATOR . uniqid();
             $whileListjob = new WhitelistJobQueue();
             $dncFile->saveAs($newFileLocation);
@@ -144,6 +150,9 @@ EOL;
                 //unlink($tempDump);
                 $referenceLink = Yii::app()->getBaseUrl(true) . "/dnc/" . $whileListjob->queue_id;
                 Yii::app()->user->setFlash('success', '<strong>File Uploaded!</strong> Please click the link to download your cleaned mobile numbers . ' . CHtml::link('Reference Link', $referenceLink));
+
+                // Cache query results here
+                DncUtilities::cacheSqlQuery($whileListjob->queue_id);
             } else {
                 Yii::app()->user->setFlash('error', CHtml::errorSummary($whileListjob));
             }

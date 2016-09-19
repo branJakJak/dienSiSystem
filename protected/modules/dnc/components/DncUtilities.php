@@ -11,14 +11,22 @@ class DncUtilities
 {
     public static function getTotalUploadedMobileNumbers($queue_id)
     {
-        $sqlCommand = "
-            select count(white_listed_mobile.mobile_number) from white_listed_mobile where queue_id = :queue_id and white_listed_mobile.mobile_number <> 0
-        ";
-        $commandObj = Yii::app()->db->createCommand($sqlCommand);
-        $commandObj->params = array(
-            ":queue_id" => $queue_id
-        );
-        return $commandObj->queryScalar();
+        $result = 0;
+        //get total records from attribute total_records
+
+        $model = WhitelistJobQueue::model()->findByPk($queue_id);
+        if ($model) {
+            $result = $model->total_records;
+        }
+        return $result;
+        // $sqlCommand = "
+        //     select count(white_listed_mobile.mobile_number) from white_listed_mobile where queue_id = :queue_id and white_listed_mobile.mobile_number <> 0
+        // ";
+        // $commandObj = Yii::app()->db->createCommand($sqlCommand);
+        // $commandObj->params = array(
+        //     ":queue_id" => $queue_id
+        // );
+        // return $commandObj->queryScalar();
     }
 
     public static function getTotalCleanNumbers($queue_id)
@@ -85,6 +93,9 @@ class DncUtilities
     public static function printCleanMobileNumbers($queue_id)
     {
         $queue_id = intval($queue_id);
+        $tempFileContainer = tempnam(sys_get_temp_dir(), "assd");
+        $tempFileContainerRes = fopen($tempFileContainer, "w+");
+        $queue_id = intval($queue_id);
         $sqlCountStr = <<<EOL
 select count(p1.mobile_number)
 FROM white_listed_mobile as p1
@@ -93,33 +104,34 @@ where p1.queue_id = $queue_id
 and p2.mobile_number is null
 EOL;
         $numOfCount = Yii::app()->db->createCommand($sqlCountStr)->queryScalar();
-
         $offset = 0;
-        $limit = 1000;
-        if ($limit < 1000) {
-            $limit = 1000;
+        $limit = intval($numOfCount / 10);//break to ten parts
+        //if greater than 100000 , break it 
+        if ($numOfCount < 100000) {
+            $limit = $numOfCount;
         }
         do {
-
             $sqlQuery = '
-select a.mobile_number
-from white_listed_mobile as a
-left join black_listed_mobile as b on a.mobile_number = b.mobile_number
-where
-a.queue_id = ' . $queue_id . ' and
-b.mobile_number IS NULL
-LIMIT ' . $limit . '
-OFFSET ' . $offset . '
+                select a.mobile_number
+                from white_listed_mobile as a
+                left join black_listed_mobile as b on a.mobile_number = b.mobile_number
+                where
+                a.queue_id = ' . $queue_id . ' and
+                b.mobile_number IS NULL
+                LIMIT ' . $limit . '
+                OFFSET ' . $offset . '
             ';
             $allResults = Yii::app()->db->createCommand($sqlQuery)->queryAll();
-
-	    shuffle($allResults);
+            shuffle($allResults);
             foreach ($allResults as $curVal) {
-                echo $curVal['mobile_number'] . "\r\n";
+                fwrite($tempFileContainerRes, $curVal['mobile_number'] . "\n");
+                //append to temp file container
             }
             $offset += $limit;
         } while ($offset < $numOfCount);
-
+        fclose($tempFileContainerRes);
+        echo `sort $tempFileContainer | uniq `;
+        //echo file_get_contents($tempFileContainer);
     }
     public static function getCleanMobileNumberIncDups($queue_id){
         $queue_id = intval($queue_id);
@@ -178,6 +190,20 @@ OFFSET ' . $offset . '
 			")->queryScalar();
         return $totalDataToDownload;
     }
+    /**
+     * Cache query result for faster data retrieval
+     * @param int $queue_id
+     */
+    public static function cacheSqlQuery($queue_id)
+    {
 
+        // cache total uploaded mobile numbers
+        
+        // cache total clean numbers 
+        
+        // cache total removed mobile number
+        
+        // finally  , cache the 
 
+    }
 }

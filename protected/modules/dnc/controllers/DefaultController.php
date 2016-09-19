@@ -45,11 +45,9 @@ class DefaultController extends Controller
         /* @var $model WhitelistJobQueue */
 		$model = WhitelistJobQueue::model()->findByPk($id);
 		if (isset($_GET['download'])) {
-
 			$fileName = $model->queue_name.'-cleaneddata';
-
-			header("Content-Type: text/plain");
-			header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
+			// header("Content-Type: text/plain");
+			// header("Content-Disposition: attachment; filename=\"$fileName.txt\";" );
 			echo "Mobile Number"."\r\n";
             DncUtilities::printCleanMobileNumbers($model->queue_id);
 			die();
@@ -59,7 +57,6 @@ class DefaultController extends Controller
 			$removedMobileNumbers = DncUtilities::getRemovedMobileNumber($model->queue_id);
 			$totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
 			$totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
-			
 			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
 		}
 	}

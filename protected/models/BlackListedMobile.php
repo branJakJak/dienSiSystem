@@ -137,7 +137,18 @@ class BlackListedMobile extends CActiveRecord
         $criteria->addBetweenCondition("date_created", date("Y-m-d H:i:s", strtotime("monday this week")), date("Y-m-d H:i:s", strtotime("sunday this week")));
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
-		));		
+		));
 	}
+
+	public function behaviors(){
+		return array(
+			'CTimestampBehavior' => array(
+				'class' => 'zii.behaviors.CTimestampBehavior',
+				'createAttribute' => 'date_created',
+				'updateAttribute' => 'date_updated',
+			)
+		);
+	}
+
 
 }

@@ -8,22 +8,32 @@
  */
 
 class IpAddressFilter extends CFilter{
+
     protected function preFilter($filterChain)
     {
-        $verdict = true;
-        $criteriaSettings = new CDbCriteria();
-        $criteriaSettings->compare("setting_key", "enabled");
-        $criteriaSettings->compare("setting_value", "true");
-        $ipBlockFeatureisEnabled  = Settings::model()->exists($criteriaSettings);
-        $ipAddress = Yii::app()->request->getUserHostAddress();
-        $criteria = new CDbCriteria;
-        $criteria->compare("ip_address", $ipAddress);
-        $ipExists = Ip::model()->exists($criteria);
-        if ( !$ipExists && $ipBlockFeatureisEnabled) {
-            throw new CHttpException(403, "You are unauthorized to access this site");
-            $verdict = false;
+        $isValid = true;
+        //if localhost , skip this checking
+        $localhostIp = array(
+            '127.0.0.1',
+            '::1'
+        );
+        if(in_array($_SERVER['REMOTE_ADDR'], $localhostIp)){
+            $isValid = true;
+        }else{
+            $criteriaSettings = new CDbCriteria();
+            $criteriaSettings->compare("setting_key", "enabled");
+            $criteriaSettings->compare("setting_value", "true");
+            $ipBlockFeatureisEnabled  = Settings::model()->exists($criteriaSettings);
+            $ipAddress = Yii::app()->request->getUserHostAddress();
+            $criteria = new CDbCriteria;
+            $criteria->compare("ip_address", $ipAddress);
+            $ipExists = Ip::model()->exists($criteria);
+            if ( !$ipExists && $ipBlockFeatureisEnabled) {
+                throw new CHttpException(403, "You are unauthorized to access this site");
+                $isValid = true;         
+            }
         }
-        return $verdict;
+        return $isValid;
     }
 
 

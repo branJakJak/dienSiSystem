@@ -25,8 +25,7 @@ class SiteController extends Controller
     public function filters()
     {
         return array(
-            // array('application.filters.IpAddressFilter + login'),
-
+            array('application.filters.IpAddressFilter - login, error,logout,underconstruction'),
         );
     }
 
@@ -37,14 +36,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$criteria = new CDbCriteria;
-		$criteria->compare('ip_address',$_SERVER['REMOTE_ADDR']);
-		$inRecord = Ip::model()->exists($criteria);
-		if(!$inRecord){
-			throw new CHttpException(404,'Page doesnt exist')	;
-		}else{
-			$this->redirect(array('accounts/index'));
-		}
+		$this->redirect(array('accounts/index'));
 	}
 
 	/**
