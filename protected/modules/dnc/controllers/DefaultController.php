@@ -60,7 +60,7 @@ class DefaultController extends Controller
 			$totalDuplicatesRemoved = DncUtilities::getTotalDuplicatesRemoved($model->queue_id);
 			$totalDataToDownload = DncUtilities::getTotalDataToDownload($model->queue_id);
 			
-			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , "removedMobileNumbersArr"=>$removedMobileNumbersArr , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
+			$this->render('index' ,  array('model'=>$model,'totalUploadedMobileNumbers'=>$totalUploadedMobileNumbers  , 'totalDuplicatesRemoved'=> $totalDuplicatesRemoved , 'totalDataToDownload'=>$totalDataToDownload  )   );
 		}
 	}
 	public function actionList()
