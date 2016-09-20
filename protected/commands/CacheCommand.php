@@ -4,7 +4,8 @@ class CacheCommand extends CConsoleCommand{
     public function actionIndex()
     {
         echo "Printing all cache";
-        $cacheData = 
+        $cacheData = Yii::app()->cache;
+        var_dump($cacheData);
     }
     public function actionFlush()
     {
