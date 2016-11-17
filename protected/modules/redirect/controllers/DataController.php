@@ -10,7 +10,7 @@ class DataController extends CController
 	public function actionIndex()
 	{
 		header("Content-Type: application/json");
-		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL","PBF5","PIF5");
+		$allowedDispo = array("FISH","SCR","DNC","OPTOUT","5PRESS","5FLAT","5PPBA","5PRDM","5BAZ","5PDLY","5PLB","5PG","5MSPL","PBF5","PIF5","5PMK");
 		$sendToSpreadsheetDispo = array("5PG");
 		$jsonMessage = array();
 
