@@ -3,12 +3,12 @@
 /**
 * 
 */
-class PMK5 extends RemoteViciOutBase
+class JPMK extends RemoteViciOutBase
 {
     public function send()
     {
         $httpParameters = array(
-            "source"=>"5PMK",
+            "source"=>"JPMK",
             "user"=>"apiuserwill",
             "pass"=>"mentalapipassword",
             "function"=>"add_lead",
