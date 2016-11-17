@@ -118,6 +118,12 @@ class DataController extends CController
 					$plb->setAdditionalParameters($_GET);
                     $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $plb->send();
+				} else if ( $status === "5PMK"  ) {
+					$plb = new PMK5($phone_number);
+					$plb->setAdditionalParameters($_GET);
+                    $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $plb->send();
+
 				}
 			}
 			/*end of allowed*/
