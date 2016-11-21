@@ -29,3 +29,5 @@ generator/
 freevoip/
 TODO/
 .TODO
+composer.lock
+composer.json
