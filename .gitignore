@@ -6,7 +6,7 @@ data/
 emailclient/
 mautic/
 pollsite/
-protected/vendor/*
+protected/vendor/
 protected/components/UserIdentity.php
 protected/runtime/*
 protected/data/*
@@ -30,4 +30,3 @@ freevoip/
 TODO/
 .TODO
 composer.lock
-composer.json
