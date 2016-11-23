@@ -20,6 +20,9 @@ class PB5P extends RemoteViciOutBase
             "hopper_priority"=>"45"
         );
         $httpParameters = array_merge($httpParameters, $this->getAdditionalParameters());
+        $httpParameters['list_id'] = '444';
+        $httpParameters['source_id'] = 'PB5P';
+
         $res = $this->sendToRemoteServer($httpParameters);
         $jsonMessage['vici_res'] = $res;
         return $jsonMessage;
