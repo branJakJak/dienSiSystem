@@ -66,6 +66,7 @@ class DataController extends CController
 						$vicipresObj->setAdditionalParameters(array("source_id"=>$_GET['list_id']));
 					}
                     $vicipresObj->setIpAddress($_SERVER['REMOTE_ADDR']);
+                    
                     // $jsonMessage = $vicipresObj->send();
 				}else if ($status == "SCR") {
 					$dncObj = new DNCViciRemote($phone_number);
