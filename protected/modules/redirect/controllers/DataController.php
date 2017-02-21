@@ -26,6 +26,7 @@ class DataController extends CController
 //			"5MSPL",
 			"PBF5",
 			"PIF5",
+			"PMK550",
 //			"DM5P",
 //			"JPMK",
 //			"PB5P"
@@ -150,6 +151,11 @@ class DataController extends CController
 					$plb->setAdditionalParameters($_GET);
                     $plb->setIpAddress($_SERVER['REMOTE_ADDR']);
 					$jsonMessage = $plb->send();
+				} else if ($status === 'PMK550') {
+					$pmk550 = new PMK550($phone_number);
+					$pmk550->setAdditionalParameters($_GET);
+                    $pmk550->setIpAddress($_SERVER['REMOTE_ADDR']);
+					$jsonMessage = $pmk550->send();
 				}
 			}
 			/*end of allowed*/
