@@ -11,24 +11,24 @@ class DataController extends CController
 	{
 		header("Content-Type: application/json");
 		$allowedDispo = array(
-			"FISH",
-			"SCR",
+//			"FISH",
+//			"SCR",
 			"DNC",
 			"OPTOUT",
-			"5PRESS",
-			"5FLAT",
-			"5PPBA",
-			"5PRDM",
-			"5BAZ",
-			"5PDLY",
-			"5PLB",
-			"5PG",
-			"5MSPL",
+//			"5PRESS",
+//			"5FLAT",
+//			"5PPBA",
+//			"5PRDM",
+//			"5BAZ",
+//			"5PDLY",
+//			"5PLB",
+//			"5PG",
+//			"5MSPL",
 			"PBF5",
 			"PIF5",
-			"DM5P",
-			"JPMK",
-			"PB5P"
+//			"DM5P",
+//			"JPMK",
+//			"PB5P"
 		);
 		$sendToSpreadsheetDispo = array("5PG");
 		$jsonMessage = array();
