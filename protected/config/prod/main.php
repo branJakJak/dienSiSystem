@@ -22,9 +22,9 @@ return array(
 	'import'=>array(
 		'application.models.*',
 		'application.components.*',
-        'bootstrap.helpers.TbHtml',
-        'bootstrap.helpers.TbArray',
-        'bootstrap.behaviors.TbWidget',
+	        'bootstrap.helpers.TbHtml',
+	        'bootstrap.helpers.TbArray',
+	        'bootstrap.behaviors.TbWidget',
 		'ext.YiiMailer.YiiMailer',
 	),
 
@@ -66,9 +66,9 @@ return array(
 			'urlFormat'=>'path',
 			'showScriptName'=>false,
 			'rules'=>array(
-                '/underconstruction'=>'site/underconstruction',
-                'de-dupe'=>'dnc/default/list',
-                'dnc/<id:\d+>'=>'dnc/default/index',				
+		                '/underconstruction'=>'site/underconstruction',
+		                'de-dupe'=>'dnc/default/list',
+		                'dnc/<id:\d+>'=>'dnc/default/index',				
 				'<controller:\w+>/<id:\d+>'=>'<controller>/view',
 				'<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
 				'<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
@@ -93,7 +93,7 @@ return array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
 				array(
-					'class'=>'CFileLogRoute',
+					'class'=>'CWebLogRoute',
 					'levels'=>'error, warning,info',
 				)
 				// uncomment the following to show log messages on web pages

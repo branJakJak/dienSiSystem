@@ -33,3 +33,4 @@ generator/
 freevoip/
 TODO/
 .TODO
+protected/config/runtime/

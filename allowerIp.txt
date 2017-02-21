@@ -156,3 +156,4 @@ allow from 121.54.44.93
 allow from 112.208.139.15
 allow from 121.54.44.94
 allow from 112.208.139.15
+allow from 112.208.152.122
