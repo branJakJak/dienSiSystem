@@ -13,7 +13,7 @@ class AccountsController extends Controller {
      */
     public function filters() {
         return array(
-            array('application.filters.IpAddressFilter'),
+//            array('application.filters.IpAddressFilter'),
             array('application.filters.UnderConstructionFilter'),
             'accessControl', // perform access control for CRUD operations
             'postOnly + delete', // we only allow deletion via POST request

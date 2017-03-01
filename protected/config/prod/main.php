@@ -78,10 +78,8 @@ return array(
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=dncsyste_dnc',
 			'emulatePrepare' => true,
-			'username' => 'dncsyste_dnc',
-			'password' => 'hitman052529',
-//			 'username' => 'root',
-//			 'password' => 'root',
+			'username' => 'dncsyste_db',
+			'password' => 'K6xMtEoZlHdGwqsOTD8P',
 			'charset' => 'utf8',
 		),
 		
