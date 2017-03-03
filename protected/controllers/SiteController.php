@@ -36,6 +36,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+	echo "dsa";die();
 		$this->redirect(array('accounts/index'));
 	}
 

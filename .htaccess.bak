@@ -1,3 +1,6 @@
+RedirectMatch 404 /\.git
+RedirectMatch 404 /error_log
+RedirectMatch 404 /allowerIp\.txt
 # index file can be index.php, home.php, default.php etc.
 DirectoryIndex index.php
 
