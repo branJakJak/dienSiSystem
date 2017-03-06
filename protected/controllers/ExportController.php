@@ -1,6 +1,6 @@
 <?php
 
-class ExportController extends Controller
+class ExportController extends CController
 {
 	/**
 	 * @return array action filters

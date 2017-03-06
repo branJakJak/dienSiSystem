@@ -1,5 +1,5 @@
 <?php
-class SiteController extends Controller
+class SiteController extends CController
 {
 	/**
 	 * Declares class-based actions.
@@ -36,7 +36,6 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
-	echo "dsa";die();
 		$this->redirect(array('accounts/index'));
 	}
 
