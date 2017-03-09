@@ -1,6 +1,6 @@
 <?php
 
-class ImportController extends CController
+class ImportController extends Controller
 {
 	public function actionIndex()
 	{

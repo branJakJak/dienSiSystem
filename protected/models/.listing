@@ -1,8 +1,0 @@
-drwxr-xr-x    2 ezfastlo   ezfastlo         4096 Aug 15 14:59 .
-drwxr-xr-x   11 ezfastlo   ezfastlo         4096 Jun  3 10:53 ..
--rw-r--r--    1 ezfastlo   ezfastlo         3956 Sep 11 10:23 Accounts.php
--rw-rw-rw-    1 ezfastlo   ezfastlo         3605 Sep 11 10:19 Claimsettings.php
--rw-r--r--    1 ezfastlo   ezfastlo          969 Jun  3 08:52 ContactForm.php
--rw-r--r--    1 ezfastlo   ezfastlo         1779 Jun  3 08:52 LoginForm.php
--rw-r--r--    1 ezfastlo   ezfastlo         4745 Sep 23 11:54 Records.php
--rw-r--r--    1 ezfastlo   ezfastlo         2672 Jun  3 08:52 TblUser.php
