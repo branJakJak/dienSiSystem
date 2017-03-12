@@ -1,6 +1,7 @@
 <?php
-class SiteController extends Controller
+class SiteController extends DncMainController
 {
+    public $breadcrumbs = array();
 	/**
 	 * Declares class-based actions.
 	 */

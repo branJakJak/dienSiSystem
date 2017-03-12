@@ -1,6 +1,6 @@
 <?php
 
-class WhitelistJobQueueController extends CController
+class WhitelistJobQueueController extends DncMainController
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

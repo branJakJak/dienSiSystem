@@ -5,17 +5,17 @@
 
 // This is the main Web application configuration. Any writable
 // CWebApplication properties can be configured here.
-Yii::setPathOfAlias('booster',dirname(__FILE__.'/../extensions/booster'));
+Yii::setPathOfAlias('booster',dirname(__FILE__.'/../../extensions/booster'));
 return array(
-	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'..',
+	'basePath'=>dirname(__FILE__).DIRECTORY_SEPARATOR.'../..',
 	'name'=>'DNC',
 	'theme'=>'abound',
 	// preloading 'log' component
 	'preload'=>array('log'),
     'aliases' => array(
-        'booster' =>dirname(__FILE__).'/../extensions/yiibooster',
-        'bootstrap'=>dirname(__FILE__).'/../extensions/bootstrap',
-        'yiiwheels'=>dirname(__FILE__).'/../extensions/yiiwheels',
+        'booster' =>dirname(__FILE__).'/../../extensions/yiibooster',
+        'bootstrap'=>dirname(__FILE__).'/../../extensions/bootstrap',
+        'yiiwheels'=>dirname(__FILE__).'/../../extensions/yiiwheels',
     ),
 
 	// autoloading model and component classes
@@ -76,16 +76,16 @@ return array(
 		),
 		// uncomment the following to use a MySQL database
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=dncsyste_dnc',
+			'connectionString' => 'mysql:host=localhost;dbname=dncsyste_db',
 			'emulatePrepare' => true,
 			'username' => 'dncsyste_db',
 			'password' => 'K6xMtEoZlHdGwqsOTD8P',
 			'charset' => 'utf8',
 		),
 		
-//		'errorHandler'=>array(
-//	            'errorAction'=>'site/error',
-//	        ),
+		'errorHandler'=>array(
+	            'errorAction'=>'site/error',
+	        ),
 		'log'=>array(
 			'class'=>'CLogRouter',
 			'routes'=>array(
@@ -109,6 +109,6 @@ return array(
 		'adminEmail'=>'webmaster@example.com',
 		'isUnderConstruction'=>false,
 		'SERVER_IP_ADDDRESS'=>'81.138.138.57',
-        'time_limit'=>182
+	        'time_limit'=>182
 	),
 );

@@ -1,6 +1,6 @@
 <?php
 
-class AccountsController extends CController {
+class AccountsController extends DncMainController {
 
     /**
      * @var string the default layout for the views. Defaults to '//layouts/column2', meaning

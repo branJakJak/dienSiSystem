@@ -1,6 +1,6 @@
 <?php
 
-class ExportController extends CController
+class ExportController extends DncMainController
 {
 	/**
 	 * @return array action filters
